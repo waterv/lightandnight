@@ -2,13 +2,11 @@
   <navbar title="光夜小工具" />
 
   <van-notice-bar left-icon="clock-o" color="#1989fa" background="#ecf9ff">
-    <van-swipe vertical class="notice-swipe" :autoplay="3000" :show-indicators="false">
       <template v-for="v in events" :key="v">
-        <van-swipe-item v-if="v.status">
-          {{v.name}}约在 <van-count-down class="countdown" :time="v.countdown" /> 后{{v.status == 1 ? '开始' : '结束'}}。
-        </van-swipe-item>
+        <template v-if="v.status">
+          {{v.name}}将在约<van-count-down class="countdown" :time="v.countdown" format=" DD 天 HH 小时" />后{{v.status == 1 ? '开始' : '结束'}}。
+        </template>
       </template>
-    </van-swipe>
   </van-notice-bar>
 
   <van-divider>通用工具</van-divider>
@@ -26,7 +24,7 @@
 </template>
 
 <script>
-import { CountDown, Swipe, SwipeItem } from 'vant'
+import { CountDown } from 'vant'
 import Navbar from '@/components/Navbar.vue'
 
 let dayjs = require('dayjs')
@@ -36,8 +34,6 @@ export default {
   components: {
     Navbar,
     [CountDown.name]: CountDown,
-    [Swipe.name]: Swipe,
-    [SwipeItem.name]: SwipeItem,
   },
   data () {
     let events = [

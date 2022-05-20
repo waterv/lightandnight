@@ -227,7 +227,7 @@ export default {
       return poolDetail
     },
     possibility () {
-      return this.waterLevel <= 60 ? 2 : Math.min(2 + (this.waterLevel - 60) * 10, 100)
+      return this.waterLevel < 60 ? 2 : Math.min(12 + (this.waterLevel - 60) * 10, 100)
     },
     starPossibility () {
       return {
@@ -297,6 +297,8 @@ export default {
         this.starCount[6] += 1
         if (random2 <= p && this.pool.up && this.pool.up['6'])
           return { star: 6, index: getFromList(this.pool.up['6']) }
+        else if (this.pool.addcommon && this.pool.addcommon['6'])
+          return { star: 6, index: getFromList(data.common[this.pool.common]['6'].concat(this.pool.addcommon['6']))}
         else
           return { star: 6, index: getFromList(data.common[this.pool.common]['6']) }
       }
@@ -312,6 +314,8 @@ export default {
       this.starCount[5] += 1
       if (random2 <= p && this.pool.up && this.pool.up['5'])
         return { star: 5, index: getFromList(this.pool.up['5']) }
+      else if (this.pool.addcommon && this.pool.addcommon['5'])
+        return { star: 5, index: getFromList(data.common[this.pool.common]['5'].concat(this.pool.addcommon['5']))}
       else
         return { star: 5, index: getFromList(data.common[this.pool.common]['5']) }
     },
