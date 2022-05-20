@@ -11,8 +11,11 @@ import { ConfigProvider } from 'vant'
 let dayjs = require('dayjs')
 require('dayjs/locale/zh-cn')
 dayjs.locale('zh-cn')
-var isBetween = require('dayjs/plugin/isBetween')
-dayjs.extend(isBetween)
+var utc = require('dayjs/plugin/utc')
+var timezone = require('dayjs/plugin/timezone')
+dayjs.extend(utc)
+dayjs.extend(timezone)
+dayjs.tz.setDefault('Asia/Shanghai')
 
 const app = createApp(App)
 

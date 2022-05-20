@@ -77,7 +77,7 @@ export default {
     },
     calculate () {
       try {
-        let getValue = (v, def) => Number(v !== undefined ? v : def)
+        let getValue = (v, def) => Number(v ? v : def)
         let price = getValue(this.price, 0)
         let gem = getValue(this.gem, 0)
         let coin = getValue(this.coin, 0)

@@ -53,12 +53,13 @@ export default {
     ]
 
     for (let i in events) {
-      if (dayjs().isBefore(events[i].start)) {
+      let date = dayjs()
+      if (date.isBefore(events[i].start)) {
         events[i].status = 1
-        events[i].countdown = dayjs(events[i].start).diff(dayjs())
-      } else if (dayjs().isBefore(events[i].end)) {
+        events[i].countdown = dayjs.tz(events[i].start).diff(date)
+      } else if (date.isBefore(events[i].end)) {
         events[i].status = 2
-        events[i].countdown = dayjs(events[i].end).diff(dayjs())
+        events[i].countdown = dayjs.tz(events[i].end).diff(date)
       }
     }
     return {

@@ -96,22 +96,22 @@ export default {
   computed: {
     coin () {
       let date = dayjs(this.targetDate)
-      let result = this.currentCoin === undefined ? 0 : Number(this.currentCoin)
-      result += (this.currentGachapon === undefined ? 0 : Number(this.currentGachapon)) * 300
-      result += (this.currentGachapon10 === undefined ? 0 : Number(this.currentGachapon10)) * 3000
+      let result = this.currentCoin ? Number(this.currentCoin) : 0
+      result += (this.currentGachapon ? Number(this.currentGachapon) : 0) * 300
+      result += (this.currentGachapon10 ? Number(this.currentGachapon10) : 0) * 3000
 
       for (let i in this.card) {
         if (this.card[i].on) {
           let times = Math.ceil(date.diff(dayjs(), 'day', true))
-          if (this.card[i].dec !== undefined)
-          times = Math.min(times, Math.ceil(dayjs(this.card[i].dec).diff(dayjs(), 'day', true)))
+          if (this.card[i].dec)
+            times = Math.min(times, Math.ceil(dayjs(this.card[i].dec).diff(dayjs(), 'day', true)))
           result += times * this.card[i].count
         }
       }
 
       for (let i in this.data) {
         let times = Math.ceil(date.diff(dayjs(), this.data[i].unit, true))
-        let pertime = this.data[i].other === undefined ? 0 : Number(this.data[i].other)
+        let pertime = this.data[i].other ? Number(this.data[i].other) : 0
         for (let j in this.data[i].value) {
           if (this.data[i].value[j].on)
             pertime += this.data[i].value[j].count

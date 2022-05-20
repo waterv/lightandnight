@@ -140,7 +140,7 @@ export default {
     },
     calculate () {
       let result = [['免费获取']]
-      let getValue = (v, def) => Number(v !== undefined ? v : def)
+      let getValue = (v, def) => Number(v ? v : def)
 
       let minigameTime = 23 - getValue(this.nextMinigameTime, 1)
       result.push(['「星雾谜戏」活动', minigameTime])
@@ -171,7 +171,7 @@ export default {
       if (bottleNeed > 0) {
         let hasDiscountBottleBoughtToday = this.paidBottleBought.indexOf('daily') != -1
         let hasBottlePackBought = this.paidBottleBought.indexOf('total') != -1
-        let shopDiscountBottleRemain = 8 - dayjs().subtract(5, 'hour').diff(dayjs(this.calendarValue), 'day') - Number(hasDiscountBottleBoughtToday)
+        let shopDiscountBottleRemain = 8 - dayjs().subtract(5, 'hour').diff(dayjs.tz(this.calendarValue), 'day') - Number(hasDiscountBottleBoughtToday)
         let gemsNeed = 0
 
         if ((bottleNeed < 4 && shopDiscountBottleRemain >= 0) ||

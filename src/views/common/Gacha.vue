@@ -292,7 +292,7 @@ export default {
     gachaInner (must5) {
       let random = Math.random() * 100
       let random2 = Math.random() * 100
-      let p = this.pool.p === undefined ? 50 : this.pool.p
+      let p = this.pool.p ? this.pool.p : 50
       if (random <= this.possibility) {
         this.waterLevel = 0
         this.starCount[6] += 1
