@@ -11,10 +11,10 @@
 
   <van-divider>通用工具</van-divider>
   <div class="content">
-    <van-button block to="/common/hoard" class="light" color="linear-gradient(135deg, #bbe0f5, #e0f8e0)">囤囤鼠计算器</van-button>
+    <van-button block to="/common/hoard" id="hoard" color="linear-gradient(135deg, #bbe0f5, #e0f8e0)">囤囤鼠计算器</van-button>
     <van-button block to="/common/gacha" color="linear-gradient(135deg, #91c4cc, #b7ddc0)">信使花园模拟器</van-button>
-    <van-button block to="/common/cpr" class="light" color="linear-gradient(135deg, #fbe9c3, #e6d8be)">礼包性价比计算器</van-button>
-    <van-button block to="/common/item" class="light" color="linear-gradient(135deg, #f3d7d3, #c4c7e8)">道具合成计算器</van-button>
+    <van-button block to="/common/cpr" id="cpr" color="linear-gradient(135deg, #fbe9c3, #e6d8be)">礼包性价比计算器</van-button>
+    <van-button block to="/common/item" id="item" color="linear-gradient(135deg, #f3d7d3, #c4c7e8)">道具合成计算器</van-button>
   </div>
 
   <van-divider>限时活动</van-divider>
@@ -73,8 +73,16 @@ export default {
   color: unset;
 }
 
-.light {
-  color: rgba(69, 90, 100, 0.8) !important;
+#hoard {
+  color: rgba(69, 90, 100, .8) !important;
+}
+
+#cpr {
+  color: rgba(85, 76, 60, .8) !important
+}
+
+#item {
+  color: rgba(78, 68, 91, 0.8) !important
 }
 
 .van-button {

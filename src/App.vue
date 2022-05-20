@@ -15,15 +15,6 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-h2 {
-  margin: 20px 16px;
-  font-size: 14px;
-  font-weight: 400;
-  height: 16px;
-  line-height: 16px;
-  color: rgba(69, 90, 100, 0.6);
-}
-
 .content {
   margin: 5px 16px;
 }
