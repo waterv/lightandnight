@@ -22,14 +22,14 @@
       <van-cell-group inset title="当前状态">
         <van-cell title="水位" :value="waterLevel" center />
         <van-cell title="6 星概率" :value="possibility + '%'" is-link @click="possibilityShow = true" />
-        <van-cell title="已使用羽毛笔" :value="usedGachapon" />
-        <van-cell title="已使用十连收信券" :value="usedGachapon10" />
+        <van-cell title="已单抽次数" :value="usedGachapon" />
+        <van-cell title="已十连次数" :value="usedGachapon10" />
         <van-cell title="已获得心迹书简" :value="gachaRecord.length" />
       </van-cell-group>
 
       <van-cell-group inset title="抽卡">
-        <van-cell title="收信 1 次" is-link @click="gacha1" />
-        <van-cell title="收信 10 次" is-link @click="gacha10" />
+        <van-cell title="收取一次" is-link @click="gacha1" />
+        <van-cell title="收取十次" is-link @click="gacha10" />
       </van-cell-group>
     </van-tab>
 
@@ -128,7 +128,7 @@ let data = require('@/assets/data/card.json')
 
 let getCardName = (star, index) => {
   let item = data.cards[star][index]
-  return { name: `${data.characters[item[0]]}·${item[1]}`, char: item[0] }
+  return { name: `${data.characters[item[0]]}・${item[1]}`, char: item[0] }
 }
 
 let getFromList = (list) => {
