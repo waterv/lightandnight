@@ -30,10 +30,10 @@ export default {
     return {
       stars: '★★★★★★',
       backgroundColor: {
-        6: 'linear-gradient(135deg, #f6f0d2, #e6d899)',
+        6: 'linear-gradient(135deg, #f5efcd, #ded19d)',
         5: 'linear-gradient(135deg, #f0e4f2, #cdc5de)',
-        4: '#bebad5',
-        3: '#b6c5d8',
+        4: '#beb8d3',
+        3: '#b5c6d8',
       },
     }
   }
@@ -53,11 +53,12 @@ export default {
   padding: 8px;
   border-radius: 8px;
   color: var(--van-gray-8);
-  text-shadow: 0 1px 2px white;
+  text-align: center;
+  text-shadow: 0 1px 2px var(--van-gray-2);
 }
 
 .star {
   color: #f4ebc4;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, .2);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, .3);
 }
 </style>

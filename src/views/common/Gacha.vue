@@ -4,7 +4,7 @@
   <van-tabs v-model:active="active" sticky>
     <van-tab title="攻略说明">
       <van-cell-group inset title="攻略">
-        <van-cell title="说明" label="本工具除了并未还原卡池特殊机制（例如「日日夜夜」100 抽赠送随机限定灵犀）以外，抽卡机制也不一定与官方完全相同，仅作娱乐之用。刷新页面即可清空数据。" />
+        <van-cell title="说明" label="本工具并未还原卡池特殊机制（例如「日日夜夜」100 抽赠送随机限定灵犀），除此之外，抽卡机制也与游戏中不完全相同，仅作娱乐之用。刷新页面即可清空数据。" />
         <van-cell title="「浮世同行」数据分析" url="https://weibo.com/2304898581/LbPP0AlN8" is-link center />
         <van-cell title="「尘封的雪影」数据分析" url="https://weibo.com/2304898581/LcrUctQEB" is-link center />
         <van-cell title="「日日夜夜」数据分析" url="https://weibo.com/2304898581/LcIFtaXwt" is-link center />
@@ -20,8 +20,8 @@
       </van-cell-group>
 
       <van-cell-group inset title="当前状态">
-        <van-cell title="水位" :value="waterLevel" center />
-        <van-cell title="6 星概率" :value="possibility + '%'" is-link @click="possibilityShow = true" />
+        <van-cell title="水位" :value="waterLevel" is-link @click="waterLevelShow = true" />
+        <van-cell title="6 星出率" :value="possibility + '%'" is-link @click="possibilityShow = true" />
         <van-cell title="已单抽次数" :value="usedGachapon" />
         <van-cell title="已十连次数" :value="usedGachapon10" />
         <van-cell title="已获得心迹书简" :value="gachaRecord.length" />
@@ -40,7 +40,13 @@
       </van-dropdown-menu>
       <van-list @load="listLoad">
         <template v-if="list.length">
-          <van-cell v-for="v in list" :key="v" :title="v.name" :value="v.pool" :label="stars.slice(0, v.star)" />
+          <van-cell v-for="v in list" :key="v" :value="v.pool">
+            <template #title>
+              <van-tag plain>{{v.star}}</van-tag>
+              {{v.name}}
+              <van-tag v-if="v.single">单抽</van-tag>
+            </template>
+          </van-cell>
         </template>
       </van-list>
     </van-tab>
@@ -63,32 +69,41 @@
 
   <van-popup v-model:show="poolSelectShow" round position="bottom">
     <van-cascader v-model="poolCascaderValue" title="请选择卡池" :options="poolSelectValue"
-      @close="poolSelectShow = false" @finish="poolSelectFinish">
-      <template #options-top>
-        <van-notice-bar left-icon="warning-o" color="#1989fa" background="#ecf9ff" text="切换卡池后，水位将被直接清空。" />
-      </template>
-    </van-cascader>
+      @close="poolSelectShow = false" @finish="poolSelectFinish" />
   </van-popup>
 
   <van-config-provider :theme-vars="dialogTheme">
-    <van-dialog v-model:show="possibilityShow" theme="round-button" :confirm-button-color="buttonColor" closeOnClickOverlay>
+    <van-dialog v-model:show="waterLevelShow" title="水位" theme="round-button" :confirm-button-color="buttonColor" closeOnClickOverlay>
+      <van-divider />
       <div class="container">
         <van-row class="content">
+          <van-col span="24" class="desc">水位即连续未得到 6 星的抽卡次数。在水位达到 60 后，6 星的出率将随着水位的增加而有所增加。</van-col>
+        </van-row>
+        <van-row class="content">
+          <van-col span="24" class="desc">常驻卡池「浮世同行」更新时，此前的水位将不会清空；在「时间的彼岸」系列轮换卡池中，前一个卡池的水位将继承到下一个卡池。除了这两种情况外，卡池间不共享水位。</van-col>
+        </van-row>
+      </div>
+    </van-dialog>
+
+    <van-dialog v-model:show="possibilityShow" title="当前概率" theme="round-button" :confirm-button-color="buttonColor" closeOnClickOverlay>
+      <van-divider />
+      <div class="container">
+        <van-row class="content center-row">
           <van-col span="8"><strong>星级</strong></van-col>
-          <van-col span="8"><strong>概率</strong></van-col>
+          <van-col span="8"><strong>出率</strong></van-col>
           <van-col span="8"><strong>已取得</strong></van-col>
         </van-row>
-        <van-divider dashed />
-        <van-row v-for="i in [3, 4, 5, 6]" :key="i" class="content">
+        <van-row v-for="i in [3, 4, 5, 6]" :key="i" class="content center-row">
           <van-col span="8">{{i}} 星</van-col>
           <van-col span="8">{{starPossibility[i]}}%</van-col>
           <van-col span="8">{{starCount[i]}}</van-col>
         </van-row>
+      </div>
+      <div class="container">
         <van-divider />
         <van-row class="content">
           <van-col span="24" class="desc">自连续不出 6 星的第 60 抽起，每抽都会增加 6 星 10% 的出率，直到抽到 6 星、出率恢复为 2% 为止。十连收信必出 5 星或以上灵犀。</van-col>
         </van-row>
-        <van-divider dashed />
         <van-row class="content">
           <van-col span="24" class="desc">如果对 5 星卡不感兴趣，或者水位大于 51，建议用单抽代替十连。</van-col>
         </van-row>
@@ -122,7 +137,7 @@
 </template>
 
 <script>
-import { Cascader, DropdownMenu, DropdownItem, List } from 'vant'
+import { Cascader, DropdownMenu, DropdownItem, List, Tag } from 'vant'
 import Card from '@/components/Card.vue'
 import Navbar from '@/components/Navbar.vue'
 let data = require('@/assets/data/card.json')
@@ -143,6 +158,7 @@ export default {
     [DropdownMenu.name]: DropdownMenu,
     [DropdownItem.name]: DropdownItem,
     [List.name]: List,
+    [Tag.name]: Tag,
     Card,
     Navbar,
   },
@@ -186,6 +202,7 @@ export default {
       poolSelectValue,
       poolCascaderValue: undefined,
       poolSelectShow: false,
+      waterLevelShow: false,
       possibilityShow: false,
       gacha1Show: false,
       gacha10Show: false,
@@ -212,9 +229,7 @@ export default {
   computed: {
     poolDetail () {
       let poolDetail = ''
-      if (this.poolType == 'common')
-        poolDetail = this.pool.detail
-      else {
+      if (this.poolType == 'limited') {
         for (let star in this.pool.up) {
           poolDetail += `[${star} 星] `
           for (let i in this.pool.up[star]) {
@@ -224,7 +239,7 @@ export default {
         poolDetail = poolDetail.slice(0, -1)
         poolDetail += ` 将获得 ${this.pool.p ? this.pool.p : '50'}% 概率 UP。`
       }
-      return poolDetail
+      return poolDetail + (this.pool.detail ? this.pool.detail : '')
     },
     possibility () {
       return this.waterLevel < 60 ? 2 : Math.min(12 + (this.waterLevel - 60) * 10, 100)
@@ -240,9 +255,12 @@ export default {
   },
   methods: {
     poolSelectFinish ({ selectedOptions }) {
+      let previousInherit = this.pool.inherit
+      let previousType = this.poolType
+
       this.poolSelectShow = false
       this.poolType = selectedOptions[0].value
-      this.waterLevel = 0
+
       let v1 = selectedOptions[1].value
       let v2 = selectedOptions[2]?.value
       if (this.poolType == 'common') {
@@ -250,10 +268,13 @@ export default {
       } else {
         this.pool = { ...data.limited[v1][v2] }
       }
+
+      if (this.pool.name != previousInherit && (this.poolType != 'common' || previousType != 'common'))
+        this.waterLevel = 0
     },
     gacha1 () {
       this.usedGachapon += 1
-      this.gachaResult = this.gacha()
+      this.gachaResult = this.gacha(true, false)
       this.gacha1Show = true
     },
     gacha10 () {
@@ -261,19 +282,20 @@ export default {
       let has5 = false
       let res = []
       for (let i = 0; i < 10; i ++) {
-        let item = this.gacha(i == 9 && !has5)
+        let item = this.gacha(false, i == 9 && !has5)
         if (item.star >= 5) has5 = true
         res.push(item)
       }
       this.gachaResult = res
       this.gacha10Show = true
     },
-    gacha (must5) {
+    gacha (single, must5) {
       let res = this.gachaInner(must5)
       let { name, char } = getCardName(res.star, res.index)
       res.name = name
       res.char = char
       res.pool = this.pool.name
+      res.single = single
 
       if (this.cardGot[res.star][res.index])
         this.cardGot[res.star][res.index].count += 1
@@ -326,7 +348,7 @@ export default {
     },
     listLoad () {
       let count = 0
-      for (let i = this.listIndex; i >= 0 && count < 10; i --) {
+      for (let i = this.listIndex; i >= 0 && count < 20; i --) {
         this.listIndex = i - 1
         if (this.optionCharValue == 'all' || this.optionCharValue == this.gachaRecord[i].char)
           if (this.optionStarValue == 'all' || this.optionStarValue == this.gachaRecord[i].star) {
@@ -340,7 +362,7 @@ export default {
 </script>
 
 <style scoped>
-.van-col {
+.center-row .van-col {
   text-align: center;
 }
 </style>

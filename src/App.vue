@@ -35,6 +35,6 @@ body {
 
 .desc {
   font-size: var(--van-font-size-sm);
-  color: var(--van-gray-6);
+  color: var(--van-gray-7);
 }
 </style>
