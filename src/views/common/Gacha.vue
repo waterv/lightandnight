@@ -355,6 +355,7 @@ export default {
       return isNew
     },
     getLimitedShop (pool) {
+      if (pool.noshop) return {}
       let shop = {}
       if (pool.up)
         for (let i in pool.up)
