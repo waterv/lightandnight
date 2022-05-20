@@ -1,5 +1,5 @@
 <template>
-  <van-nav-bar title="礼包性价比" left-text="返回" left-arrow @click-left="returnHomepage" />
+  <navbar title="礼包性价比" can-return />
 
   <van-cell-group inset title="攻略">
     <van-cell title="说明" label="本工具仅计算抽卡道具性价比，礼包总体性价比通常可在游戏中直接看到。不氪立省百分百。" />
@@ -51,8 +51,13 @@
 </template>
 
 <script>
+import Navbar from '@/components/Navbar.vue'
+
 export default {
   name: 'CPR',
+  components: {
+    Navbar,
+  },
   data () {
     return {
       gemRatio: 100,
@@ -68,9 +73,6 @@ export default {
     }
   },
   methods: {
-    returnHomepage () {
-      this.$router.push('/')
-    },
     gemRatioSelect (v) {
       this.gemRatio = v
       this.gemRatioSelected = String(v)

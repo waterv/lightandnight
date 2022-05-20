@@ -1,7 +1,7 @@
 <template>
-  <van-nav-bar title="信使花园" left-text="返回" left-arrow @click-left="returnHomepage" />
+  <navbar title="信使花园" can-return />
 
-  <van-tabs v-model:active="active">
+  <van-tabs v-model:active="active" sticky>
     <van-tab title="攻略说明">
       <van-cell-group inset title="攻略">
         <van-cell title="说明" label="本工具除了并未还原卡池特殊机制（例如「日日夜夜」100 抽赠送随机限定灵犀）以外，抽卡机制也不一定与官方完全相同，仅作娱乐之用。刷新页面即可清空数据。" />
@@ -124,6 +124,7 @@
 <script>
 import { Cascader, DropdownMenu, DropdownItem, List } from 'vant'
 import Card from '@/components/Card.vue'
+import Navbar from '@/components/Navbar.vue'
 let data = require('@/assets/data/card.json')
 
 let getCardName = (star, index) => {
@@ -143,6 +144,7 @@ export default {
     [DropdownItem.name]: DropdownItem,
     [List.name]: List,
     Card,
+    Navbar,
   },
   data () {
     let year
@@ -237,9 +239,6 @@ export default {
     },
   },
   methods: {
-    returnHomepage () {
-      this.$router.push('/')
-    },
     poolSelectFinish ({ selectedOptions }) {
       this.poolSelectShow = false
       this.poolType = selectedOptions[0].value

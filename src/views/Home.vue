@@ -1,5 +1,5 @@
 <template>
-  <van-nav-bar title="光夜小工具" />
+  <navbar title="光夜小工具" />
 
   <van-notice-bar left-icon="clock-o" color="#1989fa" background="#ecf9ff">
     <van-swipe vertical class="notice-swipe" :autoplay="3000" :show-indicators="false">
@@ -27,12 +27,14 @@
 
 <script>
 import { CountDown, Swipe, SwipeItem } from 'vant'
+import Navbar from '@/components/Navbar.vue'
 
 let dayjs = require('dayjs')
 let event = require('@/assets/data/event.json')
 export default {
   name: 'App',
   components: {
+    Navbar,
     [CountDown.name]: CountDown,
     [Swipe.name]: Swipe,
     [SwipeItem.name]: SwipeItem,

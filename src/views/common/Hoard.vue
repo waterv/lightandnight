@@ -1,5 +1,5 @@
 <template>
-  <van-nav-bar title="囤囤鼠" left-text="返回" left-arrow @click-left="returnHomepage" />
+  <navbar title="囤囤鼠" can-return />
 
   <van-cell-group inset title="攻略">
     <van-cell title="说明" label="本工具计算预计可攒到小熊星座的数目时，所有项目统一按照「每周期第一天就发放奖励」的规则参与计算，与实际情况存在偏差（如「每月签到」只在累积签满 x6 天才能得到羽毛笔），仅供粗略计算之用。" />
@@ -42,9 +42,12 @@
 </template>
 
 <script>
+import Navbar from '@/components/Navbar.vue'
 let dayjs = require('dayjs')
+
 export default {
   name: 'CPR',
+  components: { Navbar },
   data () {
     return {
       card: [
@@ -126,9 +129,6 @@ export default {
     }
   },
   methods: {
-    returnHomepage () {
-      this.$router.push('/')
-    },
     showCalendar (i) {
       this.currentCalendar = i
       this.calendarShow = true

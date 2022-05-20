@@ -1,7 +1,7 @@
 <template>
-  <van-nav-bar title="道具合成" left-text="返回" left-arrow @click-left="returnHomepage" />
+  <navbar title="道具合成" can-return />
 
-  <van-tabs v-model:active="active">
+  <van-tabs v-model:active="active" sticky>
     <van-tab title="设计师证明">
       <van-cell-group inset title="合成目标">
         <van-field v-model="aTargetString" is-link readonly label="合成目标" @click="showPicker = true"/>
@@ -46,8 +46,13 @@
 </template>
 
 <script>
+import Navbar from '@/components/Navbar.vue'
+
 export default {
   name: 'CPR',
+  components: {
+    Navbar,
+  },
   data () {
     return {
       active: 0,
@@ -63,9 +68,6 @@ export default {
     }
   },
   methods: {
-    returnHomepage () {
-      this.$router.push('/')
-    },
     confirmA (v) {
       this.showPicker = false
       this.aTargetString = v

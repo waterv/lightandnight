@@ -1,5 +1,5 @@
 <template>
-  <van-nav-bar title="羁梦星愿" left-text="返回" left-arrow @click-left="returnHomepage" />
+  <navbar title="羁梦星愿" can-return />
 
   <van-cell-group inset title="攻略">
     <van-cell title="说明" label="这是一个帮助你计算「羁梦星愿」活动中，如何购买「星愿瓶」最划算的小工具。" />
@@ -22,32 +22,35 @@
    </van-cell-group>
   </van-radio-group>
 
-  <van-checkbox-group v-model="paidBottleBought">
-    <van-cell-group inset title="当前状态">
-      <van-cell title="说明" label="填写下列信息前，请尽可能在「星雾谜戏」用尽所有的「星光手杖」完成星盘，并在「星星驿站」用尽所有的「星芒币」购买限时「星愿瓶」。下面的表单中，括号表示本项的默认值。" />
-      <van-field v-model="nextMinigameTime" type="number" label="星雾谜戏" placeholder="详见说明 (1)" center autocomplete="off">
-        <template #button>
-          <van-button size="small" plain type="primary" @click="nextMinigameTimeDetail = true">查看说明</van-button>
-        </template>
-      </van-field>
-      <van-field v-model="freeBottle" type="number" label="持有限时瓶" placeholder="持有限时星愿瓶的数目 (0)" autocomplete="off" />
-      <van-field v-model="paidBottle" type="number" label="持有永久瓶" placeholder="持有永久星愿瓶的数目 (0)" autocomplete="off" />
-      <van-field v-model="shopFreeBottleRemain" type="number" label="商店瓶库存" placeholder="星星驿站中星愿瓶剩余数 (20)" autocomplete="off" />
-      <van-field v-model="wishedTime" type="number" label="已许愿次数" placeholder="已经许愿的次数 (0)" autocomplete="off" />
-      <van-cell title="活动开始日期" :value="calendarString" clickable @click="calendarShow = true" />
-      <van-cell title="今日 2 北极星「每日星愿瓶」已购买" clickable @click="paidBottleBoughtToggle(0)">
-        <template #right-icon>
-          <van-checkbox name="daily" @click.stop :ref="el => paidBottleBoughtRef[0] = el" />
-        </template>
-      </van-cell>
-      <van-cell title="本次 9 北极星「星愿瓶礼盒」已购买" clickable @click="paidBottleBoughtToggle(1)">
-        <template #right-icon>
-          <van-checkbox name="total" @click.stop :ref="el => paidBottleBoughtRef[1] = el" />
-        </template>
-      </van-cell>
-      <van-field v-model="lostBottle" type="number" label="错过瓶子数" placeholder="错过的限时星愿瓶数目 (0)" autocomplete="off" />
-    </van-cell-group>
-  </van-checkbox-group>
+  <van-cell-group inset title="当前状态">
+    <van-cell title="说明" label="填写下列信息前，请尽可能在「星雾谜戏」用尽所有的「星光手杖」完成星盘，并在「星星驿站」用尽所有的「星芒币」购买限时「星愿瓶」。" />
+    <van-cell center>
+      <template #title><div @click="nextMinigameTimeDetail = true">星雾谜戏 <van-icon name="question-o" /></div></template>
+      <template #right-icon><van-stepper v-model="nextMinigameTime" integer min="1" /></template>
+    </van-cell>
+    <van-cell title="持有限时星愿瓶" center>
+      <template #right-icon><van-stepper v-model="freeBottle" integer min="0" /></template>
+    </van-cell>
+    <van-cell title="持有永久星愿瓶" center>
+      <template #right-icon><van-stepper v-model="paidBottle" integer min="0" /></template>
+    </van-cell>
+    <van-cell title="「星星驿站」星愿瓶剩余库存" center>
+      <template #right-icon><van-stepper v-model="shopFreeBottleRemain" integer min="0" max="20" /></template>
+    </van-cell>
+    <van-cell title="已许愿次数" center>
+      <template #right-icon><van-stepper v-model="wishedTime" integer min="0" max="99" /></template>
+    </van-cell>
+    <van-cell title="活动开始日期" :value="calendarString" clickable @click="calendarShow = true" />
+    <van-cell title="已购买今日 2 北极星「每日星愿瓶」">
+      <template #right-icon><van-switch v-model="hasDiscountBottleBoughtToday" size="24" /></template>
+    </van-cell>
+    <van-cell title="已购买本次 9 北极星「星愿瓶礼盒」">
+      <template #right-icon><van-switch v-model="hasBottlePackBought" size="24" /></template>
+    </van-cell>
+    <van-cell title="错过限时星愿瓶" center>
+      <template #right-icon><van-stepper v-model="lostBottle" integer min="0" /></template>
+    </van-cell>
+  </van-cell-group>
 
   <van-cell-group inset title=" ">
     <van-cell title="计算" is-link @click="calculate" />
@@ -83,10 +86,16 @@
 </template>
 
 <script>
+import { Icon } from 'vant'
+import Navbar from '@/components/Navbar.vue'
 let dayjs = require('dayjs')
 
 export default {
   name: 'Wish',
+  components: {
+    [Icon.name]: Icon,
+    Navbar,
+  },
   data () {
     return {
       targetWishTimeData: [
@@ -101,20 +110,20 @@ export default {
       ],
       targetWishTime: 64,
       targetWishTimeSelected: '64',
-      nextMinigameTime: undefined,
+      nextMinigameTime: 1,
       nextMinigameTimeDetail: false,
-      freeBottle: undefined,
-      paidBottle: undefined,
-      shopFreeBottleRemain: undefined,
-      wishedTime: undefined,
+      freeBottle: 0,
+      paidBottle: 0,
+      shopFreeBottleRemain: 20,
+      wishedTime: 0,
+      lostBottle: 0,
+      hasDiscountBottleBoughtToday: false,
+      hasBottlePackBought: false,
       minDate: dayjs().subtract(5, 'hour').subtract(8, 'day').toDate(),
       maxDate: dayjs().subtract(5, 'hour').add(8, 'day').toDate(),
       calendarShow: false,
       calendarValue: new Date(),
       calendarString: dayjs().format('M 月 D 日'),
-      paidBottleBought: [],
-      paidBottleBoughtRef: [],
-      lostBottle: undefined,
       result: [],
       resultShow: false,
       resultTheme: {
@@ -123,9 +132,6 @@ export default {
     }
   },
   methods: {
-    returnHomepage () {
-      this.$router.push('/')
-    },
     targetWishTimeSelect (v) {
       this.targetWishTime = v
       this.targetWishTimeSelected = String(v)
@@ -134,9 +140,6 @@ export default {
       this.calendarShow = false
       this.calendarValue = v
       this.calendarString = dayjs(v).format('M 月 D 日')
-    },
-    paidBottleBoughtToggle (i) {
-      this.paidBottleBoughtRef[i].toggle()
     },
     calculate () {
       let result = [['免费获取']]
@@ -169,8 +172,8 @@ export default {
       let bottleNeed = this.targetWishTime - bottleHave
 
       if (bottleNeed > 0) {
-        let hasDiscountBottleBoughtToday = this.paidBottleBought.indexOf('daily') != -1
-        let hasBottlePackBought = this.paidBottleBought.indexOf('total') != -1
+        let hasDiscountBottleBoughtToday = this.hasDiscountBottleBoughtToday
+        let hasBottlePackBought = this.hasBottlePackBought
         let shopDiscountBottleRemain = 8 - dayjs().subtract(5, 'hour').diff(dayjs.tz(this.calendarValue), 'day') - Number(hasDiscountBottleBoughtToday)
         let gemsNeed = 0
 
