@@ -31,8 +31,8 @@ export default {
       stars: '★★★★★★',
       backgroundColor: {
         6: 'linear-gradient(135deg, #f5efcd, #ded19d)',
-        5: 'linear-gradient(135deg, #f0e4f2, #cdc5de)',
-        4: '#beb8d3',
+        5: 'linear-gradient(135deg, #f5e9f7, #cec6e0)',
+        4: '#b4afc9',
         3: '#b5c6d8',
       },
     }

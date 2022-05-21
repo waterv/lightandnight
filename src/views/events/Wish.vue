@@ -23,7 +23,6 @@
   </van-radio-group>
 
   <van-cell-group inset title="当前状态">
-    <van-cell title="说明" label="填写下列信息前，请尽可能在「星雾谜戏」用尽所有的「星光手杖」完成星盘，并在「星星驿站」用尽所有的「星芒币」购买限时「星愿瓶」。" />
     <van-cell center>
       <template #title><div @click="nextMinigameTimeDetail = true">星雾谜戏 <van-icon name="question-o" /></div></template>
       <template #right-icon><van-stepper v-model="nextMinigameTime" integer min="1" /></template>
@@ -61,7 +60,7 @@
     <van-dialog v-model:show="nextMinigameTimeDetail" theme="round-button" closeOnClickOverlay
       confirm-button-color="linear-gradient(135deg, #6c71c5, #93a9da)">
       <div class="container">
-        <p class="content">打开「星雾谜戏」活动界面，确认当前的「星光手杖」不足以开启下一局游戏后，将下图中白框位置的数字填写在此处。</p>
+        <p class="content">打开「星雾谜戏」活动界面，将下图中白框位置的数字填写在此处。</p>
         <p class="content">请根据实际情况填写，<strong>而非</strong><span class="delete"> 直接填写 21 </span>。</p>
         <van-image class="content center" width="80%" :src="require('@/assets/img/wish_01.jpg')" />
       </div>
