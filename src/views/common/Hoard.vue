@@ -2,7 +2,7 @@
   <navbar title="囤囤鼠" can-return />
 
   <van-cell-group inset title="攻略">
-    <van-cell title="说明" label="本工具计算预计可攒到小熊星座的数目时，所有项目统一按照「每周期第一天就发放奖励」的规则参与计算，与实际情况存在偏差（如「每月签到」只在累积签满 x6 天才能得到羽毛笔），仅供粗略计算之用。" />
+    <van-cell title="说明" label="本工具计算预计可攒到小熊星座的数目时，所有项目统一按照「每周期第一天就发放奖励」的规则参与计算，与实际情况存在偏差（如「每月签到」只在累积签满 x6 天才能得到羽毛笔），仅供粗略计算之用。目标日期越远，计算结果会越准确。" />
     <van-cell title="签到活动汇总" url="https://weibo.com/2304898581/Lp8uxiSt3" is-link center />
   </van-cell-group>
 
@@ -92,7 +92,7 @@ export default {
       currentGachapon10: undefined,
       currentCalendar: 0,
       calendarShow: false,
-      startDate: dayjs().add(1, 'month').toDate(),
+      startDate: dayjs().toDate(),
       targetDate: dayjs().add(1, 'month').toDate(),
       targetDateString: dayjs().add(1, 'month').format('M 月 D 日'),
     }
