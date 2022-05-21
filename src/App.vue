@@ -2,6 +2,16 @@
   <router-view/>
 </template>
 
+<script>
+export default {
+  data () {
+    return {
+      homepageActive: 'events',
+    }
+  }
+}
+</script>
+
 <style>
 body {
   min-width: 100vw;

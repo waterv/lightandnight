@@ -40,7 +40,7 @@
     </template>
   </div>
 
-  <van-tabbar v-model="active">
+  <van-tabbar v-model="active" @change="onActiveChange">
     <van-tabbar-item name="events" icon="calendar-o">活动提醒</van-tabbar-item>
     <van-tabbar-item name="calculator" icon="apps-o">实用工具</van-tabbar-item>
     <van-tabbar-item name="gacha" icon="gift-card-o" to="/common/gacha">抽卡模拟</van-tabbar-item>
@@ -96,7 +96,13 @@ export default {
 
     return {
       event,
-      active: 'events',
+      active: this.$root.homepageActive,
+    }
+  },
+  methods: {
+    onActiveChange (active) {
+      if (active != 'gacha')
+        this.$root.homepageActive = active
     }
   }
 }

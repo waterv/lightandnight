@@ -1,0 +1,16 @@
+{
+  "name": "光夜小工具",
+  "short_name": "光夜小工具",
+  "theme_color": "#f3f9c7",
+  "icons": [
+      {
+          "src": "/icon.png",
+          "sizes": "256x256",
+          "type": "image/png"
+      }
+  ],
+  "start_url": "/",
+  "display": "browser",
+  "background_color": "#f3f9c7",
+  "orientation": "portrait-primary"
+}
