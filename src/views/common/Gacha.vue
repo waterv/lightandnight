@@ -4,7 +4,7 @@
   <van-tabs v-model:active="active" sticky>
     <van-tab title="攻略说明">
       <van-cell-group inset title="攻略">
-        <van-cell title="说明" label="本工具并未还原卡池特殊机制（例如「日日夜夜」100 抽赠送随机限定灵犀），除此之外，抽卡机制也与游戏中不完全相同，仅作娱乐之用。返回并重新进入本页面即可重置数据。" />
+        <van-cell title="说明" label="本工具抽卡机制与游戏中不完全相同，仅作娱乐之用。返回并重新进入本页面即可重置数据。" />
         <van-cell title="「浮世同行」数据分析" url="https://weibo.com/2304898581/LbPP0AlN8" is-link center />
         <van-cell title="「尘封的雪影」数据分析" url="https://weibo.com/2304898581/LcrUctQEB" is-link center />
         <van-cell title="「日日夜夜」数据分析" url="https://weibo.com/2304898581/LcIFtaXwt" is-link center />
