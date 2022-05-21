@@ -1,5 +1,7 @@
 <template>
-  <navbar title="光夜小工具" />
+  <navbar title="光夜小工具">
+    <van-icon name="ellipsis" @click="infoShow = true" />
+  </navbar>
 
   <div class="home">
     <template v-if="active == 'events'">
@@ -21,22 +23,15 @@
     </template>
 
     <template v-if="active == 'calculator'">
-      <van-divider>通用工具</van-divider>
-      <div class="content">
-        <van-button block to="/common/hoard" id="hoard" color="linear-gradient(135deg, #bbe0f5, #e0f8e0)">囤囤鼠计算器</van-button>
-        <van-button block to="/common/cpr" id="cpr" color="linear-gradient(135deg, #fbe9c3, #e6d8be)">礼包性价比计算器</van-button>
-        <van-button block to="/common/item" id="item" color="linear-gradient(135deg, #f3d7d3, #c4c7e8)">道具合成计算器</van-button>
-      </div>
-
-      <van-divider>限时活动</van-divider>
-      <div class="content">
-        <van-button block to="/events/wish" color="linear-gradient(135deg, #6c71c5, #93a9da)">「羁梦星愿」计算器</van-button>
-      </div>
-
-      <van-divider>广告时间</van-divider>
-      <div class="content">
-        <van-button block url="https://github.com/waterv/lightandnight" color="linear-gradient(135deg, #25292e, #353940)">本站的 GitHub 仓库</van-button>
-      </div>
+      <template v-for="v in tool" :key="v">
+        <van-divider>{{v.name}}</van-divider>
+         <div class="content">
+          <van-button v-for="u in v.children" :key="u" block :to="u.to" :color="u.background"
+            :style="u.color ? `color: ${u.color} !important;` : ''" @click="onEnterPage">
+            {{u.name}}
+          </van-button>
+        </div>
+      </template>
     </template>
   </div>
 
@@ -45,18 +40,24 @@
     <van-tabbar-item name="calculator" icon="apps-o">实用工具</van-tabbar-item>
     <van-tabbar-item name="gacha" icon="gift-card-o" to="/common/gacha">抽卡模拟</van-tabbar-item>
   </van-tabbar>
+
+  <van-action-sheet v-model:show="infoShow" :actions="infoActions" cancel-text="关闭" close-on-click-action />
+
 </template>
 
 <script>
-import { Tabbar, TabbarItem } from 'vant'
+import { Icon, ActionSheet, Tabbar, TabbarItem, Toast } from 'vant'
 import Navbar from '@/components/Navbar.vue'
 let dayjs = require('dayjs')
 
 export default {
   name: 'App',
   components: {
+    [Icon.name]: Icon,
+    [ActionSheet.name]: ActionSheet,
     [Tabbar.name]: Tabbar,
     [TabbarItem.name]: TabbarItem,
+    [Toast.name]: Toast,
     Navbar,
   },
   data () {
@@ -95,14 +96,38 @@ export default {
     }
 
     return {
-      event,
       active: this.$root.homepageActive,
+      infoShow: false,
+      infoActions: [
+        { name: '查看 GitHub 仓库', subname: 'waterv/lightandnight', color: 'var(--van-blue)', callback: () => window.open('https://github.com/waterv/lightandnight') },
+      ],
+      event,
+      tool: [
+        {
+          name: '通用工具',
+          children: [
+            { name: '囤囤鼠计算器', background: 'linear-gradient(135deg, #bbe0f5, #e0f8e0)', color: 'rgba(69, 90, 100, .8)', to: '/common/hoard', },
+            { name: '礼包性价比计算器', background: 'linear-gradient(135deg, #fbe9c3, #e6d8be)', color: 'rgba(85, 76, 60, .8)', to: '/common/cpr', },
+            { name: '道具合成计算器', background: 'linear-gradient(135deg, #f3d7d3, #c4c7e8)', color: 'rgba(78, 68, 91, 0.8)', to: '/common/item', },
+          ]
+        }, {
+          name: '限时活动',
+          children: [
+            { name: '「羁梦星愿」计算器', background: 'linear-gradient(135deg, #6c71c5, #93a9da)', to: '/events/wish', },
+          ]
+        }
+      ],
     }
   },
   methods: {
     onActiveChange (active) {
       if (active != 'gacha')
         this.$root.homepageActive = active
+      else
+        this.onEnterPage()
+    },
+    onEnterPage () {
+      Toast.loading({ message: '加载中...', forbidClick: true });
     }
   }
 }
@@ -121,18 +146,6 @@ export default {
   font-size: 12px;
   text-align: center;
   border-radius: 4px;
-}
-
-#hoard {
-  color: rgba(69, 90, 100, .8) !important;
-}
-
-#cpr {
-  color: rgba(85, 76, 60, .8) !important
-}
-
-#item {
-  color: rgba(78, 68, 91, 0.8) !important
 }
 
 .van-button {
