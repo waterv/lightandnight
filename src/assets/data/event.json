@@ -25,8 +25,8 @@
   {
     "name": "周期事件",
     "events": [
-      { "name": "本周「星座研究」", "periodic": true, "state": "结束", "day": 1 },
-      { "name": "下次「织梦迷境」", "periodic": true, "state": "开始", "day": 4 }
+      { "name": "本周「星座研究」", "periodic": true, "state": "止", "day": 1 },
+      { "name": "下次「织梦迷境」", "periodic": true, "state": "始", "day": 4 }
     ]
   },
   {

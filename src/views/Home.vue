@@ -12,9 +12,10 @@
       <template v-for="v in event" :key="v">
         <van-cell-group v-if="!v.noavailable" inset :title="v.name">
           <template v-for="u in v.events" :key="u">
-            <van-cell v-if="u.time" :title="u.name" center>
+            <van-cell v-if="u.hour !== undefined" :title="u.name" center>
               <template #right-icon>
-                <span class="block" :style="{ backgroundColor: u.color }">{{u.time}}</span>h 后{{u.state}}
+                <span class="block" :style="{ backgroundColor: u.color }">{{u.day}}</span><small>d</small>
+                <span class="block" :style="{ backgroundColor: u.color }">{{u.hour}}</span><small>h {{u.state}}</small>
               </template>
             </van-cell>
           </template>
@@ -70,26 +71,30 @@ export default {
         if (v.periodic) {
           count += 1
           let target = dayjs().day(v.day).hour(0).minute(0).second(0)
-          if (v.state == '开始') target = target.hour(5)
+          if (v.state == '始') target = target.hour(5)
           if (!now.isBefore(target)) target = target.add(1, 'week')
-          v.time = target.diff(now, 'hour')
+          v.hour = target.diff(now, 'hour')
           v.color = 'var(--van-gray-7)'
         } else {
           let start = dayjs.tz(v.start)
           if (now.isBefore(start)) {
             count += 1
-            v.time = start.diff(now, 'hour')
-            v.state = '开始'
+            v.hour = start.diff(now, 'hour')
+            v.state = '始'
             v.color = 'var(--van-blue)'
           } else {
             let end = dayjs.tz(v.end)
             if (now.isBefore(end)) {
               count += 1
-              v.time = end.diff(now, 'hour')
-              v.state = '结束'
-              v.color = (v.time <= 24) ? 'var(--van-red)' : 'var(--van-green)'
+              v.hour = end.diff(now, 'hour')
+              v.state = '止'
+              v.color = (v.hour <= 24) ? 'var(--van-red)' : 'var(--van-green)'
             }
           }
+        }
+        if (v.hour) {
+          v.day = Math.floor(v.hour / 24)
+          v.hour %= 24
         }
       }
       if (count == 0) event[i].noavailable = true
@@ -140,8 +145,8 @@ export default {
 
 .block {
   display: inline-block;
-  width: 30px;
-  margin-right: 4px;
+  width: 22px;
+  margin: 0 2px;
   color: white;
   font-size: 12px;
   text-align: center;

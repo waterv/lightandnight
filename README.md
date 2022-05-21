@@ -21,8 +21,8 @@ name | 活动名称 | `string` |
 start | 活动开始时间 | `string` |
 end | 活动结束时间 | `string` | 因为活动结束常常伴随停服维护，结束时间按 00:00 而非 04:59 计
 periodic | 是否为周期活动 | `boolean` | 不写默认为 `false`
-state | 周期活动需要提醒的是 `开始` 时间还是 `结束` 时间 | `string` |
-day | 周期活动需要提醒的时刻是一周中的第几天 | `number` | 星期天为 `0`
+state | 周期活动中，需要提醒的是开始时间还是结束时间 | `string` | `始` 或 `止`
+day | 周期活动中，需要提醒的时刻是一周中的第几天 | `number` | 星期天为 `0`
 
 ## `card.json` 数据结构
 「信使花园模拟器」功能使用的数据保存在 `@/assets/data/card.json` 中。
