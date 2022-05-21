@@ -2,7 +2,6 @@
   <navbar title="羁梦星愿" can-return />
 
   <van-cell-group inset title="攻略">
-    <van-cell title="说明" label="这是一个帮助你计算「羁梦星愿」活动中，如何购买「星愿瓶」最划算的小工具。" />
     <van-cell title="「星雾谜戏」攻略、星盘对照图" url="https://weibo.com/2304898581/Lha6s1oIu" is-link center />
     <van-cell title="「羁梦星愿」攻略" label="在活动开启第一天得到 18 个限时星愿瓶的攻略，见此链接中图 4 的 1～6 步。" url="https://weibo.com/2304898581/LgDLGeIYw" is-link center />
     <van-cell title="「羁梦星愿」礼包性价比" url="https://weibo.com/2304898581/Lh7DbiDhz" is-link center />
@@ -57,16 +56,14 @@
 
   <van-calendar v-model:show="calendarShow" :min-date="minDate" :max-date="maxDate" @confirm="calendarConfirm" :show-confirm="false" />
   <van-config-provider :theme-vars="resultTheme">
-    <van-dialog v-model:show="nextMinigameTimeDetail" theme="round-button" closeOnClickOverlay
-      confirm-button-color="linear-gradient(135deg, #6c71c5, #93a9da)">
+    <van-dialog v-model:show="nextMinigameTimeDetail" theme="round-button" closeOnClickOverlay :confirm-button-color="buttonColor">
       <div class="container">
         <p class="content">打开「星雾谜戏」活动界面，将下图中白框位置的数字填写在此处。</p>
         <p class="content">请根据实际情况填写，<strong>而非</strong><span class="delete"> 直接填写 21 </span>。</p>
         <van-image class="content center" width="80%" :src="require('@/assets/img/wish_01.jpg')" />
       </div>
     </van-dialog>
-    <van-dialog v-model:show="resultShow" theme="round-button" closeOnClickOverlay
-      confirm-button-color="linear-gradient(135deg, #6c71c5, #93a9da)">
+    <van-dialog v-model:show="resultShow" theme="round-button" closeOnClickOverlay :confirm-button-color="buttonColor">
       <div class="container">
         <van-row class="content">
           <van-col span="16"><strong>项目</strong></van-col>
@@ -85,14 +82,12 @@
 </template>
 
 <script>
-import { Icon } from 'vant'
 import Navbar from '@/components/Navbar.vue'
 let dayjs = require('dayjs')
 
 export default {
   name: 'Wish',
   components: {
-    [Icon.name]: Icon,
     Navbar,
   },
   data () {
@@ -120,6 +115,7 @@ export default {
       hasBottlePackBought: false,
       minDate: dayjs().subtract(5, 'hour').subtract(8, 'day').toDate(),
       maxDate: dayjs().subtract(5, 'hour').add(8, 'day').toDate(),
+      buttonColor: this.$root.colors.events.wish,
       calendarShow: false,
       calendarValue: new Date(),
       calendarString: dayjs().format('M 月 D 日'),

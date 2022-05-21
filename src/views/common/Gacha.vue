@@ -20,7 +20,7 @@
       </van-cell-group>
 
       <van-cell-group inset title="当前状态">
-        <van-cell title="水位" :value="waterLevel" is-link @click="waterLevelShow = true" />
+        <van-cell title="水位" :value="waterLevel" is-link @click="showWaterlevelInfo" />
         <van-cell title="6 星出率" :value="possibility + '%'" is-link @click="possibilityShow = true" />
         <van-cell title="总抽数" :value="`${usedGachapon} + 10 × ${usedGachapon10} = ${gachaTime}`" />
         <van-cell title="当前卡池抽数" :value="`${currentPoolUsedGachapon} + 10 × ${currentPoolUsedGachapon10} = ${currentPoolGachaTime}`" />
@@ -98,32 +98,22 @@
   </van-popup>
 
   <van-config-provider :theme-vars="dialogTheme">
-    <van-dialog v-model:show="waterLevelShow" title="水位" theme="round-button" :confirm-button-color="buttonColor" closeOnClickOverlay>
-      <div class="container">
-        <van-row class="content">
-          <van-col span="24" class="desc">水位即连续未得到 6 星的抽卡次数。在水位达到 60 后，6 星的出率将随着水位的增加而有所增加。</van-col>
-        </van-row>
-        <van-row class="content">
-          <van-col span="24" class="desc">常驻卡池「浮世同行」更新时，此前的水位将不会清空；在「时间的彼岸」系列轮换卡池中，前一个卡池的水位将继承到下一个卡池。除了这两种情况外，卡池间不共享水位。</van-col>
-        </van-row>
-      </div>
-    </van-dialog>
-
-    <van-dialog v-model:show="possibilityShow" title="当前概率" theme="round-button" :confirm-button-color="buttonColor" closeOnClickOverlay>
+    <van-dialog v-model:show="possibilityShow" theme="round-button" :confirm-button-color="buttonColor" closeOnClickOverlay>
       <div class="container">
         <van-row class="content center-row">
           <van-col span="8"><strong>星级</strong></van-col>
-          <van-col span="8"><strong>出率</strong></van-col>
-          <van-col span="8"><strong>已取得</strong></van-col>
+          <van-col span="8"><strong>当前出率</strong></van-col>
+          <van-col span="8"><strong>已抽取</strong></van-col>
         </van-row>
+        <van-divider dashed />
         <van-row v-for="i in [3, 4, 5, 6]" :key="i" class="content center-row">
           <van-col span="8">{{i}} 星</van-col>
           <van-col span="8">{{starPossibility[i]}}%</van-col>
           <van-col span="8">{{starCount[i]}}</van-col>
         </van-row>
       </div>
+      <van-divider />
       <div class="container">
-        <van-divider />
         <van-row class="content">
           <van-col span="24" class="desc">自连续不出 6 星的第 60 抽起，每抽都会增加 6 星 10% 的出率，直到抽到 6 星、出率恢复为 2% 为止。十连收信必出 5 星或以上灵犀。</van-col>
         </van-row>
@@ -247,7 +237,6 @@ export default {
       poolCascaderValue: undefined,
 
       poolSelectShow: false,
-      waterLevelShow: false,
       possibilityShow: false,
       shopShow: false,
       limitedShopShow: false,
@@ -270,7 +259,7 @@ export default {
       currentPoolUsedGachapon10: 0,
 
       stars: '★★★★★★',
-      buttonColor: 'linear-gradient(135deg, #91c4cc, #b7ddc0)',
+      buttonColor: this.$root.colors.common.gacha,
       dialogTheme: {
         dialogFontSize: 'var(--van-font-size-md)',
       },
@@ -347,6 +336,14 @@ export default {
     },
   },
   methods: {
+    showWaterlevelInfo () {
+      this.$dialog.alert({
+        ...this.$root.dialogSettings,
+        title: '水位',
+        message: '水位即连续未得到 6 星的抽卡次数。在水位达到 60 后，6 星出率将随水位增加而增加。\n\n常驻卡池「浮世同行」更新时，水位将不会清空；主线轮换卡池「时间的彼岸」中，前一个卡池的水位能够继承到下一个卡池。除了这两种情况外，卡池间不共享水位。',
+        confirmButtonColor: this.buttonColor,
+      })
+    },
     gainCard (star, index) {
       star = `${star}`
       let isNew = false

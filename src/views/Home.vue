@@ -1,13 +1,12 @@
 <template>
   <navbar title="光夜小工具">
-    <van-icon name="ellipsis" @click="infoShow = true" />
+    <van-icon name="question-o" @click="infoShow = true" />
   </navbar>
 
   <div class="home">
     <template v-if="active == 'events'">
-      <van-cell-group inset title="说明">
-        <van-cell title="说明" label="本页面提供当前游戏中各活动的大约开始或结束时间。因为活动结束常常伴随停服维护，结束时间按 00:00 而非 04:59 计。信息可能过时或不准确，请以游戏中实际情况为准。" />
-        <van-cell title="游戏官方微博" is-link url="https://weibo.com/u/6880285576" />
+      <van-cell-group inset title="声明">
+        <van-cell title="声明" label="信息可能过时或不准确，请以游戏中实际情况为准。" />
       </van-cell-group>
       <template v-for="v in event" :key="v">
         <van-cell-group v-if="!v.noavailable" inset :title="v.name">
@@ -47,14 +46,13 @@
 </template>
 
 <script>
-import { Icon, ActionSheet, Tabbar, TabbarItem, Toast } from 'vant'
+import { ActionSheet, Tabbar, TabbarItem, Toast } from 'vant'
 import Navbar from '@/components/Navbar.vue'
 let dayjs = require('dayjs')
 
 export default {
   name: 'App',
   components: {
-    [Icon.name]: Icon,
     [ActionSheet.name]: ActionSheet,
     [Tabbar.name]: Tabbar,
     [TabbarItem.name]: TabbarItem,
@@ -104,6 +102,14 @@ export default {
       active: this.$root.homepageActive,
       infoShow: false,
       infoActions: [
+        {
+          name: '「活动提醒」说明',
+          callback: () => this.$dialog.alert({
+            ...this.$root.dialogSettings,
+            title: '说明',
+            message: '本页展示当前游戏中，各活动的大约开始或结束时间。\n\n因为活动结束常常伴随停服维护，结束时间按 00:00 而非 04:59 计。\n\n信息可能过时或不准确，请以游戏中实际情况为准。',
+          })
+        },
         { name: '查看 GitHub 仓库', subname: 'waterv/lightandnight', color: 'var(--van-blue)', callback: () => window.open('https://github.com/waterv/lightandnight') },
       ],
       event,
@@ -111,14 +117,14 @@ export default {
         {
           name: '通用工具',
           children: [
-            { name: '囤囤鼠计算器', background: 'linear-gradient(135deg, #bbe0f5, #e0f8e0)', color: 'rgba(69, 90, 100, .8)', to: '/common/hoard', },
-            { name: '礼包性价比计算器', background: 'linear-gradient(135deg, #fbe9c3, #e6d8be)', color: 'rgba(85, 76, 60, .8)', to: '/common/cpr', },
-            { name: '道具合成计算器', background: 'linear-gradient(135deg, #f3d7d3, #c4c7e8)', color: 'rgba(78, 68, 91, 0.8)', to: '/common/item', },
+            { name: '囤囤鼠计算器', background: this.$root.colors.common.hoard, color: 'rgba(69, 90, 100, .8)', to: '/common/hoard', },
+            { name: '礼包性价比计算器', background: this.$root.colors.common.cpr, color: 'rgba(85, 76, 60, .8)', to: '/common/cpr', },
+            { name: '道具合成计算器', background: this.$root.colors.common.item, color: 'rgba(78, 68, 91, 0.8)', to: '/common/item', },
           ]
         }, {
           name: '限时活动',
           children: [
-            { name: '「羁梦星愿」计算器', background: 'linear-gradient(135deg, #6c71c5, #93a9da)', to: '/events/wish', },
+            { name: '「羁梦星愿」计算器', background: this.$root.colors.events.wish, to: '/events/wish', },
           ]
         }
       ],

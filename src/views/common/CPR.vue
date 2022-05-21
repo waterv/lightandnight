@@ -1,15 +1,16 @@
 <template>
-  <navbar title="礼包性价比" can-return />
+  <navbar title="礼包性价比" can-return>
+    <van-icon name="question-o" @click="showInfo" />
+  </navbar>
 
   <van-cell-group inset title="攻略">
-    <van-cell title="说明" label="本工具仅计算抽卡道具性价比，礼包总体性价比通常可在游戏中直接看到。不氪立省百分百。" />
     <van-cell title="常驻礼包性价比" url="https://weibo.com/2304898581/Lg2v1rjG8" is-link center />
     <van-cell title="其他攻略" url="https://weibo.com/u/2304898581" is-link center />
   </van-cell-group>
 
   <van-radio-group v-model="gemRatioSelected">
     <van-cell-group inset title="北极星兑换比率">
-      <van-cell title="说明" label="本游戏中，抽卡相关代币的原价为：1 羽毛笔 = 300 小熊星座 = 6 北极星 = 18 元。因为北极星与抽卡道具的兑换比率不固定，计算礼包性价比时需要分不同情况讨论。因为性价比高的兑换方式限量，氪度越高兑换比率越低。" />
+      <van-cell title="说明" is-link @click="showGemRatioInfo" />
       <van-cell v-for="v in gemRatioData" :key="v"
         :title="`1 北极星 = ${v.value} 小熊星座`" :label="v.desc"
         clickable @click="gemRatioSelect(v.value)">
@@ -63,6 +64,7 @@ export default {
         { value: 50, desc: '原价兑换' },
       ],
       gemRatioSelected: '100',
+      buttonColor: this.$root.colors.common.cpr,
       price: undefined,
       gem: undefined,
       coin: undefined,
@@ -74,6 +76,20 @@ export default {
     }
   },
   methods: {
+    showInfo () {
+      this.$dialog.alert({
+        ...this.$root.dialogSettings,
+        message: '此工具仅计算礼包用于抽卡的性价比，游戏中显示的性价比计入了「极光币」等培养材料。\n\n不氪立省百分百。',
+        confirmButtonColor: this.buttonColor,
+      })
+    },
+    showGemRatioInfo () {
+      this.$dialog.alert({
+        ...this.$root.dialogSettings,
+        message: '本游戏中，抽卡道具的原价为：\n\n1 羽毛笔 = 300 小熊星座 = 6 北极星 = 18 元\n\n北极星与其他道具的兑换比率不固定，因此计算性价比时需要分不同情况讨论。\n\n请根据您一般使用北极星兑换小熊星座的途径，选择恰当的兑换比率。\n\n如果还是不明白选什么：重氪选 [50]，其他选 [100]。',
+        confirmButtonColor: this.buttonColor,
+      })
+    },
     gemRatioSelect (v) {
       this.gemRatio = v
       this.gemRatioSelected = String(v)
