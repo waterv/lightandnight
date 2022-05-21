@@ -258,7 +258,7 @@ export default {
       gachaResult: undefined,
       gachaRecord: [],
       waterLevel: 0,
-      letter: 1000,
+      letter: 0,
       limitedLetter: 0,
       shopColumn,
       limitedShop,
