@@ -22,14 +22,16 @@
       <van-cell-group inset title="当前状态">
         <van-cell title="水位" :value="waterLevel" is-link @click="waterLevelShow = true" />
         <van-cell title="6 星出率" :value="possibility + '%'" is-link @click="possibilityShow = true" />
-        <van-cell title="抽卡次数" :value="`${usedGachapon} + 10 × ${usedGachapon10} = ${gachaTime}`" />
+        <van-cell title="总抽数" :value="`${usedGachapon} + 10 × ${usedGachapon10} = ${gachaTime}`" />
+        <van-cell title="当前卡池抽数" :value="`${currentPoolUsedGachapon} + 10 × ${currentPoolUsedGachapon10} = ${currentPoolGachaTime}`" />
         <van-cell title="心迹书简" :value="letter" />
-        <van-cell v-if="pool.limitedletter" :title="pool.limitedletter" :value="limitedLetter" />
+        <van-cell v-if="pool.limitedLetter" :title="pool.limitedLetter" :value="limitedLetter" />
       </van-cell-group>
 
       <van-cell-group inset title="兑换">
         <van-cell title="兑换常驻灵犀" is-link @click="shopShow = true" />
         <van-cell v-if="Object.keys(limitedShop).length" title="兑换限定灵犀" is-link @click="limitedShopShow = true" />
+        <van-cell v-if="pool.pickPrice || pool.pickTime" title="兑换自选灵犀" is-link @click="pickShopShow = true" />
       </van-cell-group>
 
       <van-cell-group inset title="抽卡">
@@ -49,8 +51,10 @@
             <template #title>
               <van-tag plain>{{v.star}}</van-tag>
               {{v.name}}
-              <van-tag v-if="v.single">单抽</van-tag>
+              <van-tag v-if="v.single" plain>单抽</van-tag>
               <van-tag v-if="v.shop">兑换</van-tag>
+              <van-tag v-if="v.pick">自选</van-tag>
+              <van-tag v-if="v.random">随机</van-tag>
             </template>
           </van-cell>
         </template>
@@ -89,6 +93,10 @@
     <van-picker :columns="limitedColumn" @confirm="limitedShopBuy" />
   </van-popup>
 
+  <van-popup v-model:show="pickShopShow" round position="bottom">
+    <van-picker :columns="pickColumn" @confirm="pickShopBuy" />
+  </van-popup>
+
   <van-config-provider :theme-vars="dialogTheme">
     <van-dialog v-model:show="waterLevelShow" title="水位" theme="round-button" :confirm-button-color="buttonColor" closeOnClickOverlay>
       <div class="container">
@@ -125,7 +133,8 @@
       </div>
     </van-dialog>
 
-    <van-dialog v-model:show="gacha1Show" theme="round-button" :confirm-button-color="buttonColor" closeOnClickOverlay>
+    <van-dialog v-model:show="gacha1Show" theme="round-button"
+      :confirm-button-color="buttonColor" closeOnClickOverlay @closed="checkRandomTimeReached">
       <div class="container" v-if="typeof(gachaResult) == 'object'">
         <van-row class="content" gutter="5">
           <card :name="gachaResult.name" :star="gachaResult.star" :is-new="gachaResult.new" is-single />
@@ -133,7 +142,8 @@
       </div>
     </van-dialog>
 
-    <van-dialog v-model:show="gacha10Show" theme="round-button" :confirm-button-color="buttonColor" closeOnClickOverlay>
+    <van-dialog v-model:show="gacha10Show" theme="round-button"
+      :confirm-button-color="buttonColor" closeOnClickOverlay @closed="checkRandomTimeReached">
       <div class="container" v-if="gachaResult.length">
         <template v-for="(v, i) in [0, 1, 3, 4, 6, 7, 9]" :key="i">
           <van-row class="content" gutter="5">
@@ -156,6 +166,7 @@ import { Cascader, DropdownMenu, DropdownItem, List, Tag, Notify } from 'vant'
 import Card from '@/components/Card.vue'
 import Navbar from '@/components/Navbar.vue'
 let data = require('@/assets/data/card.json')
+
 
 let getCardName = (star, index) => {
   let item = data.cards[star][index]
@@ -212,21 +223,26 @@ export default {
       optionStar.push({ text: `${i} 星`, value: i })
 
     let limitedShop = this.getLimitedShop(pool)
+    let poolDetail = this.getPoolDetail(pool)
     let shopColumn = []
     for (let i = 0; i <= 1; i ++) {
       let star = i + 5
       shopColumn.push({
         text: `${star} 星 (${star == 5 ? 80 : 180} 心迹书简)`,
-        children: []
+        star, children: []
       })
       for (let j in data.common[0][`${star}`])
-        shopColumn[i].children.push({ text: getCardName(star, data.common[0][`${star}`][j]).name })
+        shopColumn[i].children.push({
+          text: getCardName(star, data.common[0][`${star}`][j]).name,
+          index: data.common[0][`${star}`][j]
+        })
     }
 
     return {
       active: '攻略说明',
       pool,
       poolType: 'limited',
+      poolDetail,
       poolSelectValue,
       poolCascaderValue: undefined,
 
@@ -235,13 +251,14 @@ export default {
       possibilityShow: false,
       shopShow: false,
       limitedShopShow: false,
+      pickShopShow: false,
       gacha1Show: false,
       gacha10Show: false,
 
       gachaResult: undefined,
       gachaRecord: [],
       waterLevel: 0,
-      letter: 0,
+      letter: 1000,
       limitedLetter: 0,
       shopColumn,
       limitedShop,
@@ -249,6 +266,8 @@ export default {
       cardGot: { 3: {}, 4: {}, 5: {}, 6: {} },
       usedGachapon: 0,
       usedGachapon10: 0,
+      currentPoolUsedGachapon: 0,
+      currentPoolUsedGachapon10: 0,
 
       stars: '★★★★★★',
       buttonColor: 'linear-gradient(135deg, #91c4cc, #b7ddc0)',
@@ -264,48 +283,7 @@ export default {
     }
   },
   computed: {
-    poolDetail () {
-      let poolDetail = ''
-
-      let generateCardList = (list) => {
-        for (let star in list) {
-          poolDetail += `[${star} 星] `
-          for (let i in list[star])
-            poolDetail += getCardName(star, list[star][i]).name + '、'
-        }
-        poolDetail = poolDetail.slice(0, -1)
-      }
-
-      if (this.pool.up) {
-        generateCardList(this.pool.up)
-        poolDetail += ` 将获得 ${this.pool.p ? this.pool.p : '50'}% 概率 UP。`
-      }
-
-      if (this.pool.addcommon) {
-        generateCardList(this.pool.addcommon)
-        poolDetail += ` 也将加入卡池但不享受概率 UP。`
-      }
-
-      if (this.pool.noshop)
-        poolDetail += '以上灵犀将不会额外开放书简兑换。'
-
-      if (this.pool.add) {
-        poolDetail += '当日维护更新后，'
-        generateCardList(this.pool.add)
-        poolDetail += ' 加入所有卡池常驻。'
-      }
-
-      if (this.pool.inherit)
-        poolDetail += `该卡池的水位将能够继承到「${this.pool.inherit}」中。`
-
-      if (this.pool.limitedletter)
-        poolDetail += `该卡池中，每次收信将额外获得「${this.pool.limitedletter}」而非「心迹书简」。`
-
-      return poolDetail + (this.pool.detail ? this.pool.detail : '')
-    },
-    possibility () {
-      return this.waterLevel < 60 ? 2 : Math.min(12 + (this.waterLevel - 60) * 10, 100)
-    },
+    possibility () { return this.waterLevel < 60 ? 2 : Math.min(12 + (this.waterLevel - 60) * 10, 100) },
     starPossibility () {
       return {
         3: Math.max(60 - this.possibility, 0),
@@ -314,9 +292,9 @@ export default {
         6: this.possibility
       }
     },
-    gachaTime () {
-      return this.usedGachapon + this.usedGachapon10 * 10
-    },
+    gachaTime () { return this.usedGachapon + this.usedGachapon10 * 10 },
+    currentPoolGachaTime () { return this.currentPoolUsedGachapon + this.currentPoolUsedGachapon10 * 10 },
+    currentPoolLetterName () { return this.pool.limitedLetter ? this.pool.limitedLetter : '心迹书简' },
     limitedShopPrice () {
       let price = {}
       for (let i in this.limitedShop) {
@@ -332,15 +310,41 @@ export default {
       let index = 0
       for (let i in this.limitedShop) {
         column.push({
-          text: `${i} 星 (${this.limitedShopPrice[i]} ${this.pool.limitedletter ? this.pool.limitedletter : '心迹书简'})`,
+          text: `${i} 星 (${this.limitedShopPrice[i]} ${this.currentPoolLetterName})`,
+          star: i,
           children: []
         })
         for (let j in this.limitedShop[i])
-          column[index].children.push({ text: getCardName(i, this.limitedShop[i][j]).name })
+          column[index].children.push({
+            text: getCardName(i, this.limitedShop[i][j]).name,
+            index: this.limitedShop[i][j]
+          })
         index += 1
       }
       return column
-    }
+    },
+    pickColumn () {
+      if (!this.pool.pickPrice && !this.pool.pickTime) return []
+      let column = []
+      let cards = []
+      for (let i in this.pool.up[6])
+        cards.push({
+          text: getCardName(6, this.pool.up[6][i]).name,
+          index: this.pool.up[6][i]
+        })
+      // 目前只有 6 星卡池开启过自选
+      if (this.pool.pickPrice) column.push({
+        text: `${this.pool.pickPrice} ${this.currentPoolLetterName}`,
+        children: cards,
+        type: 1 
+      })
+      if (this.pool.pickTime) column.push({
+        text: `${this.pool.pickTime} 次收信`,
+        children: cards,
+        type: 2
+      })
+      return column
+    },
   },
   methods: {
     gainCard (star, index) {
@@ -352,17 +356,56 @@ export default {
         this.cardGot[star][index] = { count: 1, ...getCardName(star, index) }
         isNew = true
       }
+      this.list = []
+      this.listIndex = this.gachaRecord.length
       return isNew
     },
+    getPoolDetail (pool) {
+      let poolDetail = ''
+      let generateCardList = (list) => {
+        for (let star in list) {
+          poolDetail += `[${star} 星] `
+          for (let i in list[star])
+            poolDetail += getCardName(star, list[star][i]).name + '、'
+        }
+        poolDetail = poolDetail.slice(0, -1)
+      }
+      if (pool.up) {
+        generateCardList(pool.up)
+        poolDetail += ` 将获得 ${pool.p ? pool.p : '50'}% 概率 UP。`
+      }
+      if (pool.addCommon) {
+        generateCardList(pool.addCommon)
+        poolDetail += ` 也将加入卡池但不享受概率 UP。`
+      }
+      if (pool.noShop)
+        poolDetail += '以上灵犀将不会额外开放书简兑换。'
+      if (pool.add) {
+        poolDetail += '当日维护更新后，'
+        generateCardList(pool.add)
+        poolDetail += ' 加入所有卡池常驻。'
+      }
+      if (pool.inherit)
+        poolDetail += `该卡池的水位将能够继承到「${pool.inherit}」中。`
+      if (pool.limitedLetter)
+        poolDetail += `该卡池中，每次收信将额外获得「${pool.limitedLetter}」而非「心迹书简」。`
+      if (pool.randomTime)
+        poolDetail += `累计收信 ${pool.randomTime} 次，将随机获赠一张限定灵犀。`
+      if (pool.pickTime)
+        poolDetail += `累计收信 ${pool.pickTime} 次，可自选一张限定灵犀。`
+      if (pool.pickPrice)
+        poolDetail += `使用 ${pool.pickPrice} 枚「${this.currentPoolLetterName}」可兑换一张自选限定灵犀。`
+      return poolDetail + (pool.detail ? pool.detail : '')
+    },
     getLimitedShop (pool) {
-      if (pool.noshop) return {}
+      if (pool.noShop) return {}
       let shop = {}
       if (pool.up)
         for (let i in pool.up)
           shop[i] = [].concat(pool.up[i])
-      if (pool.addcommon)
-        for (let i in pool.addcommon)
-          shop[i] = shop[i].concat(pool.addcommon[i])
+      if (pool.addCommon)
+        for (let i in pool.addCommon)
+          shop[i] = shop[i].concat(pool.addCommon[i])
       let res = { ...shop }
       if (pool.maxbuy)
         for (let i = 1; i < pool.maxbuy; i ++)
@@ -370,10 +413,10 @@ export default {
             res[j] = res[j].concat(shop[j])
       return res
     },
-    shopBuy (v1, v2) {
+    shopBuy (v1) {
       this.shopShow = false
-      let star = Number(v1[0].text.slice(0, 1))
-      let index = Number(data.common[0][star][v2[1]])
+      let star = v1[0].star
+      let index = v1[1].index
       let price = star == 5 ? 80 : 180
 
       if (this.letter < price) {
@@ -385,26 +428,25 @@ export default {
 
       let { name, char } = getCardName(star, index)
       let item = {
-        star, name, char,
+        star: Number(star),
+        name, char,
         pool: '浮世同行',
         shop: true,
         new: this.gainCard(star, index)
       }
 
-      this.list = []
-      this.listIndex = this.gachaRecord.length
       this.gachaResult = item
       this.gacha1Show = true
       this.gachaRecord.push(item)
     },
     limitedShopBuy (v1, v2) {
       this.limitedShopShow = false
-      let star = Number(v1[0].text.slice(0, 1))
-      let index = Number(this.limitedShop[star][v2[1]])
+      let star = v1[0].star
+      let index = v1[1].index
       let price = this.limitedShopPrice[star]
-      if (this.pool.limitedletter) {
+      if (this.pool.limitedLetter) {
         if (this.limitedLetter < price) {
-          Notify(this.pool.limitedletter + '不足。')
+          Notify(this.pool.limitedLetter + '不足。')
           return
         }
         this.limitedLetter -= price
@@ -423,14 +465,54 @@ export default {
 
       let { name, char } = getCardName(star, index)
       let item = {
-        star, name, char,
+        star: Number(star),
+        name, char,
         pool: this.pool.name,
         shop: true,
         new: this.gainCard(star, index)
       }
 
-      this.list = []
-      this.listIndex = this.gachaRecord.length
+      this.gachaResult = item
+      this.gacha1Show = true
+      this.gachaRecord.push(item)
+    },
+    pickShopBuy (v1) {
+      this.pickShopShow = false
+      let type = v1[0].type
+      let index = v1[1].index
+      console.log(type, index)
+      if (type == 1) { // 使用书简兑换
+        if (this.pool.limitedLetter) {
+          if (this.limitedLetter < this.pool.pickPrice) {
+            Notify(this.pool.limitedLetter + '不足。')
+            return
+          }
+          this.limitedLetter -= this.pool.pickPrice
+        } else {
+          if (this.letter < this.pool.pickPrice) {
+            Notify('心迹书简不足。')
+            return
+          }
+          this.letter -= this.pool.pickPrice
+        }
+        this.pool.pickPrice = undefined
+      } else if (type == 2) { // 到达抽数赠送
+        if (this.currentPoolGachaTime < this.pool.pickTime) {
+          Notify('抽数不足。')
+          return
+        }
+        this.pool.pickTime = undefined
+      }
+
+      let { name, char } = getCardName(6, index)
+      let item = {
+        star: 6,
+        name, char,
+        pool: this.pool.name,
+        pick: true,
+        new: this.gainCard(6, index)
+      }
+
       this.gachaResult = item
       this.gacha1Show = true
       this.gachaRecord.push(item)
@@ -451,20 +533,25 @@ export default {
         this.pool = { ...data.limited[v1][v2] }
 
       this.limitedShop = this.getLimitedShop(this.pool)
+      this.poolDetail = this.getPoolDetail(this.pool)
 
       if (this.pool.name != previousInherit && (this.poolType != 'common' || previousType != 'common'))
         this.waterLevel = 0
 
       this.letter += this.limitedLetter
       this.limitedLetter = 0
+      this.currentPoolUsedGachapon = 0
+      this.currentPoolUsedGachapon10 = 0
     },
     gacha1 () {
       this.usedGachapon += 1
+      this.currentPoolUsedGachapon += 1
       this.gachaResult = this.gacha(true, false)
       this.gacha1Show = true
     },
     gacha10 () {
       this.usedGachapon10 += 1
+      this.currentPoolUsedGachapon10 += 1
       let has5 = false
       let res = []
       for (let i = 0; i < 10; i ++) {
@@ -484,11 +571,10 @@ export default {
         new: this.gainCard(res.star, res.index)
       }
 
-      this.list = []
-      this.listIndex = this.gachaRecord.length
+      this.starCount[res.star] += 1
       this.gachaRecord.push(item)
       
-      if (this.pool.limitedletter)
+      if (this.pool.limitedLetter)
         this.limitedLetter += 1
       else
         this.letter += 1
@@ -503,38 +589,50 @@ export default {
 
       if (random <= this.possibility) {
         this.waterLevel = 0
-        this.starCount[6] += 1
         let list = []
         if (random2 <= p && this.pool.up && this.pool.up['6'])
           list = this.pool.up['6']
         else {
           list = data.common[this.pool.common]['6']
-          if (this.pool.addcommon && this.pool.addcommon['6'])
-            list = list.concat(this.pool.addcommon['6'])
+          if (this.pool.addCommon && this.pool.addCommon['6'])
+            list = list.concat(this.pool.addCommon['6'])
         }
         return { star: 6, index: getFromList(list) }
       }
       
-      if (random <= 60 && !must5) {
-        this.starCount[3] += 1
+      if (random <= 60 && !must5)
         return { star: 3, index: getFromList(data.common[this.pool.common]['3']) }
-      }
 
-      if (random <= 90 && !must5) {
-        this.starCount[4] += 1
+      if (random <= 90 && !must5)
         return { star: 4, index: getFromList(data.common[this.pool.common]['4']) }
-      }
 
-      this.starCount[5] += 1
       let list = []
       if (random2 <= p && this.pool.up && this.pool.up['5'])
         list = this.pool.up['5']
       else {
         list = data.common[this.pool.common]['5']
-        if (this.pool.addcommon && this.pool.addcommon['5'])
-          list = list.concat(this.pool.addcommon['5'])
+        if (this.pool.addCommon && this.pool.addCommon['5'])
+          list = list.concat(this.pool.addCommon['5'])
       } 
       return { star: 5, index: getFromList(list) }
+    },
+    checkRandomTimeReached () {
+      if (!this.pool.randomTime) return
+      if (this.currentPoolGachaTime < this.pool.randomTime) return
+      // 目前只有 6 星卡池具有此机制
+      let index = getFromList(this.pool.up['6'])
+      let { name, char } = getCardName(6, index)
+      let item = {
+        star: 6,
+        index, name, char,
+        pool: this.pool.name,
+        new: this.gainCard(6, index),
+        random: true
+      }
+      this.gachaResult = item
+      this.gacha1Show = true
+      this.gachaRecord.push(item)
+      this.pool.randomTime = undefined
     },
     listReload () {
       this.list = []

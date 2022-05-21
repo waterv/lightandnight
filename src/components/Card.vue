@@ -1,6 +1,6 @@
 <template>
   <van-col :offset="isSingle ? 6 : 0" span="12" :class="{'list': inList}">
-    <van-badge :content="isNew ? 'New' : (count > 1 ? count : undefined)"
+    <van-badge :content="isNew ? 'New' : (count > 1 ? `${count - 1} 花` : undefined)"
       class="badge" :offset="[-12, 6]" color="rgba(187, 134, 68, .7)">
       <div class="card" :style="{'background': backgroundColor[star]}">
         {{name}}

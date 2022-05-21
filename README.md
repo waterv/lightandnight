@@ -65,10 +65,13 @@ desc | 时间 | `string` |
 detail | 详情 | `string` |
 common | 常驻卡池索引 | `number` |
 up | 享受概率 UP 的灵犀 | `Object` |
-addcommon | 加入卡池，但不享受概率 UP 的灵犀 | `Object` |
+addCommon | 加入卡池，但不享受概率 UP 的灵犀 | `Object` |
 inherit | 继承该池水位的卡池 | `string` | 不写默认为水位不继承
 p | UP 概率 | `number` | 单位为 %，不写默认为 `50`
-noshop | 是否能使用书简兑换限定灵犀 | `boolean` | 不写默认为 `false`
-limitedletter | 限定书简的名称 | `string` | 不写默认为不使用限定书简
+noShop | 是否能使用书简兑换限定灵犀 | `boolean` | 不写默认为 `false`
+limitedLetter | 限定书简的名称 | `string` | 不写默认为不使用限定书简
 price | 使用书简兑换限定灵犀的价格 | `Object` | 不写默认为 5 星 `80`、6 星 `180`
 maxbuy | 使用书简兑换限定灵犀的最多次数 | `number` | 不写默认为 `1`
+pickPrice | 使用书简兑换自选限定灵犀的价格 | `number` | 不写默认为不能兑换
+pickTime | 赠送自选限定灵犀的抽数 | `number` | 不写默认为不赠送
+randomTime | 赠送随机限定灵犀的抽数 | `number` | 不写默认为不赠送

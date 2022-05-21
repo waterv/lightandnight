@@ -132,7 +132,11 @@ export default {
         this.onEnterPage()
     },
     onEnterPage () {
-      Toast.loading({ message: '加载中...', forbidClick: true });
+      Toast.loading({
+        message: '加载中…',
+        forbidClick: true,
+        duration: 0
+      });
     }
   }
 }

@@ -10,17 +10,10 @@
   <van-radio-group v-model="gemRatioSelected">
     <van-cell-group inset title="北极星兑换比率">
       <van-cell title="说明" label="本游戏中，抽卡相关代币的原价为：1 羽毛笔 = 300 小熊星座 = 6 北极星 = 18 元。因为北极星与抽卡道具的兑换比率不固定，计算礼包性价比时需要分不同情况讨论。因为性价比高的兑换方式限量，氪度越高兑换比率越低。" />
-      <van-cell title="1 北极星 = 150 小熊星座" label="活动十连特惠（20 北极星 = 10 连，部分活动出现）" clickable @click="gemRatioSelect(150)">
-        <template #right-icon><van-radio name="150" /></template>
-      </van-cell>
-      <van-cell title="1 北极星 = 100 小熊星座" label="本月十连特惠、今日星座专享" clickable @click="gemRatioSelect(100)">
-        <template #right-icon><van-radio name="100" /></template>
-      </van-cell>
-      <van-cell title="1 北极星 = 71.33 小熊星座" label="福袋（平均值，部分活动出现）" clickable @click="gemRatioSelect(71.33)">
-        <template #right-icon><van-radio name="71.33" /></template>
-      </van-cell>
-      <van-cell title="1 北极星 = 50 小熊星座" label="原价兑换" clickable @click="gemRatioSelect(50)">
-        <template #right-icon><van-radio name="50" /></template>
+      <van-cell v-for="v in gemRatioData" :key="v"
+        :title="`1 北极星 = ${v.value} 小熊星座`" :label="v.desc"
+        clickable @click="gemRatioSelect(v.value)">
+        <template #right-icon><van-radio :name="`${v.value}`" /></template>
       </van-cell>
       <van-cell title="自定义" center>
         <template #right-icon>
@@ -31,7 +24,7 @@
   </van-radio-group>
 
   <van-cell-group inset title="礼包内容">
-    <van-field v-model="price" type="number" label="价格" placeholder="单位：RMB" autocomplete="off" />
+    <van-field v-model="price" type="number" label="售价" placeholder="单位：RMB" autocomplete="off" />
     <van-field v-model="gem" type="number" label="北极星" autocomplete="off" />
     <van-field v-model="coin" type="number" label="小熊星座" autocomplete="off" />
     <van-field v-model="gachapon" type="number" label="羽毛笔" autocomplete="off" />
@@ -51,16 +44,24 @@
 </template>
 
 <script>
+import { Notify } from 'vant'
 import Navbar from '@/components/Navbar.vue'
 
 export default {
   name: 'CPR',
   components: {
+    [Notify.name]: Notify,
     Navbar,
   },
   data () {
     return {
       gemRatio: 100,
+      gemRatioData: [
+        { value: 150, desc: '活动十连特惠（20 北极星十连，部分活动出现）' },
+        { value: 100, desc: '本月十连特惠、今日星座专享' },
+        { value: 71.33, desc: '福袋（平均值，部分活动出现）' },
+        { value: 50, desc: '原价兑换' },
+      ],
       gemRatioSelected: '100',
       price: undefined,
       gem: undefined,
@@ -78,23 +79,27 @@ export default {
       this.gemRatioSelected = String(v)
     },
     calculate () {
-      try {
-        let getValue = (v, def) => Number(v ? v : def)
-        let price = getValue(this.price, 0)
-        let gem = getValue(this.gem, 0)
-        let coin = getValue(this.coin, 0)
-        let gachapon = getValue(this.gachapon, 0)
-        let gachapon10 = getValue(this.gachapon10, 0)
-
-        let gachaCount = (gem * this.gemRatio + coin) / 300 + gachapon + 10 * gachapon10
-        let result = gachaCount / price * 18
-
-        this.gachaCount = String(Math.round(gachaCount * 100) / 100) + ' 抽'
-        this.ratio = String(Math.round(result * 100)) + '%'
-        this.pricePerGacha = String(Math.round(18 / result * 100) / 100) + ' 元'
-      } catch (e) {
-        console.log(e)
+      let getValue = (v, def) => Number(v ? v : def)
+      let price = getValue(this.price, 0)
+      if (!price) {
+        Notify('请输入礼包售价。')
+        return
       }
+      let gem = getValue(this.gem, 0)
+      let coin = getValue(this.coin, 0)
+      let gachapon = getValue(this.gachapon, 0)
+      let gachapon10 = getValue(this.gachapon10, 0)
+        
+      let gachaCount = (gem * this.gemRatio + coin) / 300 + gachapon + 10 * gachapon10
+      if (!gachaCount) {
+        Notify('请输入礼包内容。')
+        return
+      }
+
+      let result = gachaCount / price * 18
+      this.gachaCount = String(Math.round(gachaCount * 100) / 100) + ' 抽'
+      this.ratio = String(Math.round(result * 100)) + '%'
+      this.pricePerGacha = String(Math.round(18 / result * 100) / 100) + ' 元'
     },
     clear () {
       this.price = undefined
