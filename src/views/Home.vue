@@ -72,7 +72,7 @@ export default {
           if (v.state == '始') target = target.hour(5)
           if (!now.isBefore(target)) target = target.add(1, 'week')
           v.hour = target.diff(now, 'hour')
-          v.color = 'var(--van-gray-7)'
+          v.color = (v.state == '止' && v.hour <= 24) ? 'var(--van-red)' : 'var(--van-gray-7)'
         } else {
           let start = dayjs.tz(v.start)
           if (now.isBefore(start)) {
