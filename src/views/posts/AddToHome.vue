@@ -13,7 +13,7 @@
           <p>由于 Android 系统的情况较为复杂，我们使用 Fusion App 软件，将网站打包成了 App，方便您直接下载使用。</p>
           <p>这样打包出的软件，比起网页并不附带其他任何额外功能，俗称「套壳浏览器」，其形式类似于游戏中出现的「外链活动」。</p>
           <p>由于没有应用商店审核，安装时<strong>可能会提示不安全，请您手动放行</strong>。除了需要网络连接，该 App 理论上无需其他任何权限，如有申请可以拒绝。</p>
-          <p><strong>如果不放心</strong>，可自行使用 Fusion App 等工具打包，或者参考下一节给出其他的解决方案。</p>
+          <p><strong>如果不放心</strong>，可自行使用 Fusion App 等工具打包，或者参考下一节给出的其他解决方案。</p>
           <van-button icon="down" type="success" block url="/lightandnight/android.apk">下载 Android App</van-button>
       </van-tab>
       <van-tab title="Android 2" class="container">
