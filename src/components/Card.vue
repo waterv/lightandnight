@@ -72,7 +72,7 @@ export default {
 .card.animation .card-inner {
   animation-duration: 2s;
   animation-timing-function: ease-in-out;
-  animation-fill-mode: backwards;
+  animation-fill-mode: both;
 }
 
 .card.animation1 {
