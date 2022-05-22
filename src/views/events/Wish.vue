@@ -114,7 +114,7 @@ export default {
       hasDiscountBottleBoughtToday: false,
       hasBottlePackBought: false,
       minDate: dayjs().subtract(5, 'hour').subtract(8, 'day').toDate(),
-      maxDate: dayjs().subtract(5, 'hour').add(8, 'day').toDate(),
+      maxDate: dayjs().subtract(5, 'hour').toDate(),
       buttonColor: this.$root.colors.events.wish,
       calendarShow: false,
       calendarValue: new Date(),

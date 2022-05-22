@@ -90,7 +90,7 @@ export default {
             }
           }
         }
-        if (v.hour) {
+        if (v.hour !== undefined) {
           v.day = Math.floor(v.hour / 24)
           v.hour %= 24
         }
