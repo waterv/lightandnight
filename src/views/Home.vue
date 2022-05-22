@@ -110,7 +110,16 @@ export default {
             message: '本页展示当前游戏中，各活动的大约开始或结束时间。\n\n因为活动结束常常伴随停服维护，结束时间按 00:00 而非 04:59 计。\n\n信息可能过时或不准确，请以游戏中实际情况为准。',
           })
         },
-        { name: '查看 GitHub 仓库', subname: 'waterv/lightandnight', color: 'var(--van-blue)', callback: () => window.open('https://github.com/waterv/lightandnight') },
+        {
+          name: '添加到主屏幕',
+          callback: () => this.$router.push('/posts/addtohome')
+        },
+        {
+          name: '查看 GitHub 仓库',
+          subname: 'waterv/lightandnight',
+          color: 'var(--van-blue)',
+          callback: () => window.open('https://github.com/waterv/lightandnight')
+        },
       ],
       event,
       tool: [

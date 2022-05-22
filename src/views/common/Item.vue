@@ -1,7 +1,7 @@
 <template>
   <navbar title="道具合成" can-return />
 
-  <van-tabs v-model:active="active" sticky>
+  <van-tabs v-model:active="active" sticky offset-top="46">
     <van-tab title="设计师证明">
       <van-cell-group inset title="合成目标">
         <van-field v-model="aTargetString" is-link readonly label="合成目标" @click="showPicker = true"/>
@@ -49,7 +49,7 @@
 import Navbar from '@/components/Navbar.vue'
 
 export default {
-  name: 'CPR',
+  name: 'Item',
   components: {
     Navbar,
   },

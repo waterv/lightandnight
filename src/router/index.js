@@ -8,6 +8,7 @@ const routes = [
   { path: '/common/cpr', component: () => import('../views/common/CPR.vue') },
   { path: '/common/item', component: () => import('../views/common/Item.vue') },
   { path: '/events/wish', component: () => import('../views/events/Wish.vue') },
+  { path: '/posts/addtohome', component: () => import('../views/posts/AddToHome.vue') },
 ]
 
 const router = createRouter({

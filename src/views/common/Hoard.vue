@@ -49,7 +49,7 @@ import Navbar from '@/components/Navbar.vue'
 let dayjs = require('dayjs')
 
 export default {
-  name: 'CPR',
+  name: 'Hoard',
   components: {
     Navbar
   },
