@@ -1,7 +1,7 @@
 {
   "name": "光夜小工具",
   "short_name": "光夜小工具",
-  "theme_color": "#f3f9c7",
+  "theme_color": "#ffffff",
   "icons": [
       {
           "src": "/icon.png",
@@ -9,8 +9,8 @@
           "type": "image/png"
       }
   ],
-  "start_url": "/",
+  "start_url": "/lightandnight",
   "display": "browser",
-  "background_color": "#f3f9c7",
+  "background_color": "#ffffff",
   "orientation": "portrait-primary"
 }
