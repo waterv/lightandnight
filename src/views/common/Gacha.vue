@@ -11,6 +11,16 @@
         <van-cell title="「时间的彼岸」数据分析" url="https://weibo.com/2304898581/Lmq1jEYXe" is-link center />
         <van-cell title="其他攻略" url="https://weibo.com/u/2304898581" is-link center />
       </van-cell-group>
+
+      <van-radio-group v-model="animationType">
+        <van-cell-group inset title="动画（实验性功能）">
+          <van-cell v-for="v in animationData" :key="v" :title="v.name" clickable @click="animationType = v.value">
+            <template #right-icon>
+              <van-radio :name="v.value" />
+            </template>
+          </van-cell>
+        </van-cell-group>
+      </van-radio-group>
     </van-tab>
 
     <van-tab title="信使花园">
@@ -127,7 +137,7 @@
       :confirm-button-color="buttonColor" closeOnClickOverlay @closed="checkRandomTimeReached">
       <div class="container" v-if="typeof(gachaResult) == 'object'">
         <van-row class="content" gutter="5">
-          <card :name="gachaResult.name" :star="gachaResult.star" :is-new="gachaResult.new" is-single />
+          <card :index="0" :name="gachaResult.name" :star="gachaResult.star" :is-new="gachaResult.new" is-single :ani="animationType" />
         </van-row>
       </div>
     </van-dialog>
@@ -138,11 +148,11 @@
         <template v-for="(v, i) in [0, 1, 3, 4, 6, 7, 9]" :key="i">
           <van-row class="content" gutter="5">
             <template v-if="i % 2">
-              <card :name="gachaResult[v].name" :star="gachaResult[v].star" :is-new="gachaResult[v].new" />
-              <card :name="gachaResult[v + 1].name" :star="gachaResult[v + 1].star" :is-new="gachaResult[v + 1].new" />
+              <card :index="v" :name="gachaResult[v].name" :star="gachaResult[v].star" :is-new="gachaResult[v].new" :ani="animationType" />
+              <card :index="v + 1" :name="gachaResult[v + 1].name" :star="gachaResult[v + 1].star" :is-new="gachaResult[v + 1].new" :ani="animationType" />
             </template>
             <template v-else>
-              <card :name="gachaResult[v].name" :star="gachaResult[v].star" :is-new="gachaResult[v].new" is-single />
+              <card :index="v" :name="gachaResult[v].name" :star="gachaResult[v].star" :is-new="gachaResult[v].new" is-single :ani="animationType" />
             </template>
           </van-row>
         </template>
@@ -269,6 +279,13 @@ export default {
       optionStarValue: 'all',
       list: [],
       listIndex: -1,
+
+      animationType: 1,
+      animationData: [
+        { name: '不启用动画', value: 0 },
+        { name: '动画样式 1', value: 1 },
+        { name: '动画样式 2', value: 2 },
+      ]
     }
   },
   computed: {

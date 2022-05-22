@@ -1,12 +1,20 @@
 <template>
-  <van-col :offset="isSingle ? 6 : 0" span="12" :class="{'list': inList}">
-    <van-badge :content="isNew ? 'New' : (count > 1 ? `${count - 1} 花` : undefined)"
-      class="badge" :offset="[-12, 6]" color="rgba(187, 134, 68, .7)">
-      <div class="card" :style="{'background': backgroundColor[star]}">
-        {{name}}
-        <div class="star">{{stars.slice(0, star)}}</div>
+  <van-col :offset="isSingle ? 6 : 0" span="12" :class="{ 'list': inList }">
+      <div class="card" :class="{
+        animation: ani,
+        animation1: ani == 1,
+        animation2: ani == 2,
+        star6: star == 6,
+        star5: star == 5,
+        star4: star == 4,
+        star3: star == 3
+      }" :style="{ animationDelay: !ani ? 0 : `${750 * index}ms` }">
+        <van-badge :content="isNew ? 'New' : (count > 1 ? `${count - 1} 花` : undefined)"
+          class="card-inner" color="rgba(187, 134, 68, .7)" :style="{ animationDelay: !ani ? 0 : `${750 * index}ms` }">
+            {{name}}
+            <div class="star">{{stars.slice(0, star)}}</div>
+        </van-badge>
       </div>
-    </van-badge>
   </van-col>
 </template>
 
@@ -25,26 +33,18 @@ export default {
     isNew: Boolean,
     count: Number,
     inList: Boolean,
+    ani: Number,
+    index: Number,
   },
   data () {
     return {
       stars: '★★★★★★',
-      backgroundColor: {
-        6: 'linear-gradient(135deg, #f5efcd, #ded19d)',
-        5: 'linear-gradient(135deg, #f5e9f7, #cec6e0)',
-        4: '#b4afc9',
-        3: '#b5c6d8',
-      },
     }
   }
 }
 </script>
 
 <style scoped>
-.badge {
-  width: 100%;
-}
-
 .list {
   padding: 4px;
 }
@@ -55,10 +55,127 @@ export default {
   color: var(--van-gray-8);
   text-align: center;
   text-shadow: 0 1px 2px var(--van-gray-2);
+  background-size: 200% 100%;
+  background-position: 100% 0%;
+}
+
+.card-inner {
+  width: 100%;
 }
 
 .star {
   color: #f4ebc4;
   text-shadow: 0 1px 2px rgba(0, 0, 0, .3);
+}
+
+.card.animation,
+.card.animation .card-inner {
+  animation-duration: 2s;
+  animation-timing-function: ease-in-out;
+  animation-fill-mode: backwards;
+}
+
+.card.animation1 {
+  animation-name: open;
+}
+
+.card.animation1 .card-inner {
+  animation-name: open-inner;
+}
+
+.card.animation2 {
+  animation-name: open2;
+}
+
+.card.animation2 .card-inner {
+  animation-name: open2-inner;
+}
+
+.star6 {
+  background-image: linear-gradient(to right,
+    #222220 0%, #222220 2%,
+    #cba96c 2%, #514536 4%,
+    #252420 4%, #252420 46%,
+    #514536 46%, #cba96c 48%,
+    #222220 48%, #222220 50%,
+    #f5efcd 50%, #ded19d 100%
+  );
+}
+
+.star5 {
+  background-image: linear-gradient(to right,
+    #000 0%, #000 2%,
+    #20304c 2%, #20304c 10%,
+    #a8abb0 10%, #a8abb0 40%,
+    #20304c 40%, #20304c 48%,
+    #000 48%, #000 50%,
+    #f5e9f7 50%, #cec6e0 100%
+  );
+}
+
+.star4 {
+  background-image: linear-gradient(to right,
+   #dccfc3 0%, #dccfc3 2%,
+   #fcf6e4 2%, #fcf6e4 10%,
+   #e0c3a9 10%, #e0c3a9 11%,
+   #fcf6e4 11%, #fcf6e4 12%,
+   #e0c3a9 12%, #e0c3a9 13%,
+   #fcf6e4 13%, #fcf6e4 48%,
+   #dccfc3 48%, #dccfc3 50%,
+   #bab5d0 50%, #b4afc9 100%
+  );
+}
+
+.star3 {
+  background-image: linear-gradient(to right,
+    #a99380 0%, #a99380 2%,
+    #c6b09c 2%, #c6b09c 48%,
+    #a99380 48%, #a99380 50%,
+    #bccee1 50%, #b5c6d8 100%
+  );
+}
+
+@keyframes open {
+  0% {
+    opacity: 0;
+    background-position: 0% 0%;
+  }
+  25% {
+    opacity: 1;
+    background-position: 0% 0%;
+  }
+  100% {
+    background-position: 100% 0%;
+  }
+}
+
+@keyframes open-inner {
+  0% {
+    opacity: 0;
+  }
+  25% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes open2 {
+  0% {
+    background-position: 0% 0%;
+  }
+  100% {
+    background-position: 100% 0%;
+  }
+}
+
+@keyframes open2-inner {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 </style>
