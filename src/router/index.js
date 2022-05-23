@@ -30,6 +30,10 @@ const routes = [
     path: '/posts/addtohome',
     component: () => import('../views/posts/AddToHome.vue'),
   },
+  {
+    path: '/posts/changelog',
+    component: () => import('../views/posts/ChangeLog.vue'),
+  },
 ]
 
 const router = createRouter({

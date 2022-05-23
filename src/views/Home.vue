@@ -8,7 +8,7 @@
       <van-cell-group title="声明" inset>
         <van-cell
           title="声明"
-          label="信息可能过时或不准确，请以游戏中实际情况为准。"
+          label="本页信息可能更新不及时、内容不准确或已经失效，请您以游戏中实际情况为准。"
         />
       </van-cell-group>
       <template v-for="v in event" :key="v">
@@ -68,7 +68,7 @@
 </template>
 
 <script>
-import { ActionSheet, Tabbar, TabbarItem, Toast } from 'vant'
+import { ActionSheet, Notify, Tabbar, TabbarItem, Toast } from 'vant'
 import Navbar from '@/components/Navbar.vue'
 let dayjs = require('dayjs')
 
@@ -76,6 +76,7 @@ export default {
   name: 'App',
   components: {
     [ActionSheet.name]: ActionSheet,
+    [Notify.name]: Notify,
     [Tabbar.name]: Tabbar,
     [TabbarItem.name]: TabbarItem,
     [Toast.name]: Toast,
@@ -90,7 +91,12 @@ export default {
         let v = event[i].events[j]
         if (v.periodic) {
           count += 1
-          let target = dayjs().day(v.day).hour(0).minute(0).second(0).millisecond(0)
+          let target = dayjs()
+            .day(v.day)
+            .hour(0)
+            .minute(0)
+            .second(0)
+            .millisecond(0)
           if (v.state == '始') target = target.hour(5)
           if (now.day() >= v.day) target = target.add(1, 'week')
           v.hour = target.diff(now, 'hour')
@@ -139,6 +145,10 @@ export default {
         {
           name: '添加到主屏幕',
           callback: () => this.$router.push('/posts/addtohome'),
+        },
+        {
+          name: '更新日志',
+          callback: () => this.$router.push('/posts/changelog'),
         },
         {
           name: '查看 GitHub 仓库',
