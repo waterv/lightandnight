@@ -1,0 +1,26 @@
+[
+  {
+    "name": "超值月卡",
+    "aka": "小月卡",
+    "desc": "游戏内 30 元开通",
+    "count": 150,
+    "on": false,
+    "decString": "不过期"
+  },
+  {
+    "name": "悦享卡",
+    "aka": "大月卡",
+    "desc": "心悦俱乐部 98 元开通",
+    "count": 300,
+    "on": false,
+    "decString": "不过期"
+  },
+  {
+    "name": "限定巡礼",
+    "aka": "季卡/年卡",
+    "desc": "活动 60 元开通",
+    "count": 100,
+    "on": false,
+    "decString": "不过期"
+  }
+]

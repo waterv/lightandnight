@@ -7,8 +7,8 @@
 * 间隔号总是使用「・」（`\u30fb`）。
 * 除了日期中的斜杠（如 `22/05/21`）之外，斜杠总是在左右添加空格（如 `与罪同行 / 归途`）。
 
-## `event.json` 数据结构
-「活动提醒」功能需要的活动信息保存在 `@/assets/data/event.json` 中。
+## `events.json` 数据结构
+「活动提醒」功能需要的活动信息保存在 `@/assets/data/events.json` 中。
 
 键名 | 说明 | 类型 | 备注
 ----|----|----|----
@@ -24,8 +24,8 @@ periodic | 是否为周期活动 | `boolean` | 不写默认为 `false`
 state | 周期活动中，需要提醒的是开始时间还是结束时间 | `string` | `始` 或 `止`
 day | 周期活动中，需要提醒的时刻是一周中的第几天 | `number` | 星期天为 `0`
 
-## `card.json` 数据结构
-「信使花园模拟器」功能使用的数据保存在 `@/assets/data/card.json` 中。
+## `cards.json` 数据结构
+「信使花园模拟器」功能使用的数据保存在 `@/assets/data/cards.json` 中。
 
 ### cards
 每张灵犀以数组 `Array<number, string>` 的形式存放在其星级数组中。灵犀数组的第一个成员为男主在 characters 数组中的下标，第二个成员为灵犀名称。
