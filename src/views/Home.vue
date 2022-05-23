@@ -90,9 +90,9 @@ export default {
         let v = event[i].events[j]
         if (v.periodic) {
           count += 1
-          let target = dayjs().day(v.day).hour(0).minute(0).second(0)
+          let target = dayjs().day(v.day).hour(0).minute(0).second(0).millisecond(0)
           if (v.state == '始') target = target.hour(5)
-          if (!now.isBefore(target)) target = target.add(1, 'week')
+          if (now.day() >= v.day) target = target.add(1, 'week')
           v.hour = target.diff(now, 'hour')
           v.color =
             v.state == '止' && v.hour <= 24
