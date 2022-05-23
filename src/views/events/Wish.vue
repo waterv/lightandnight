@@ -48,6 +48,10 @@
   </van-radio-group>
 
   <van-cell-group title="当前状态" inset>
+    <van-cell
+      title="说明"
+      label="若计算还未开始的活动，只需改动「持有永久星愿瓶」。"
+    />
     <van-cell center>
       <template #title
         ><div @click="nextMinigameTimeDetail = true">
@@ -120,11 +124,7 @@
     >
       <div class="container">
         <p class="content">
-          打开「星雾谜戏」活动界面，将下图中白框位置的数字填写在此处。
-        </p>
-        <p class="content">
-          请根据实际情况填写，<strong>而非</strong
-          ><span class="delete"> 直接填写 21 </span>。
+          打开「星雾谜戏」活动界面，将下图中「??」处出现的数字填写在此处。
         </p>
         <van-image
           class="content center"

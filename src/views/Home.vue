@@ -14,16 +14,20 @@
       <template v-for="v in event" :key="v">
         <van-cell-group v-if="!v.noavailable" :title="v.name" inset>
           <template v-for="u in v.events" :key="u">
-            <van-cell v-if="u.hour !== undefined" :title="u.name" center>
+            <van-cell v-if="u.time !== undefined" :title="u.name" center>
               <template #right-icon>
-                <span class="block" :style="{ backgroundColor: u.color }">{{
-                  u.day
-                }}</span
-                ><small>d</small>
-                <span class="block" :style="{ backgroundColor: u.color }">{{
-                  u.hour
-                }}</span
-                ><small>h {{ u.state }}</small>
+                <van-count-down :time="u.time">
+                  <template #default="timeData">
+                    <span class="block" :style="{ backgroundColor: u.color }">{{
+                      timeData.days
+                    }}</span
+                    ><small>d</small>
+                    <span class="block" :style="{ backgroundColor: u.color }">{{
+                      timeData.hours
+                    }}</span
+                    ><small>h {{ u.state }}</small>
+                  </template>
+                </van-count-down>
               </template>
             </van-cell>
           </template>
@@ -68,7 +72,7 @@
 </template>
 
 <script>
-import { ActionSheet, Notify, Tabbar, TabbarItem, Toast } from 'vant'
+import { ActionSheet, CountDown, Tabbar, TabbarItem, Toast } from 'vant'
 import Navbar from '@/components/Navbar.vue'
 let dayjs = require('dayjs')
 
@@ -76,7 +80,7 @@ export default {
   name: 'App',
   components: {
     [ActionSheet.name]: ActionSheet,
-    [Notify.name]: Notify,
+    [CountDown.name]: CountDown,
     [Tabbar.name]: Tabbar,
     [TabbarItem.name]: TabbarItem,
     [Toast.name]: Toast,
@@ -99,31 +103,28 @@ export default {
             .millisecond(0)
           if (v.state == '始') target = target.hour(5)
           if (now.day() >= v.day) target = target.add(1, 'week')
-          v.hour = target.diff(now, 'hour')
+          v.time = target.diff(now)
           v.color =
-            v.state == '止' && v.hour <= 24
+            v.state == '止' && v.time <= 86400000
               ? 'var(--van-red)'
               : 'var(--van-gray-7)'
         } else {
           let start = dayjs.tz(v.start)
           if (now.isBefore(start)) {
             count += 1
-            v.hour = start.diff(now, 'hour')
+            v.time = start.diff(now)
             v.state = '始'
             v.color = 'var(--van-blue)'
           } else {
             let end = dayjs.tz(v.end)
             if (now.isBefore(end)) {
               count += 1
-              v.hour = end.diff(now, 'hour')
+              v.time = end.diff(now)
               v.state = '止'
-              v.color = v.hour <= 24 ? 'var(--van-red)' : 'var(--van-green)'
+              v.color =
+                v.time <= 86400000 ? 'var(--van-red)' : 'var(--van-green)'
             }
           }
-        }
-        if (v.hour !== undefined) {
-          v.day = Math.floor(v.hour / 24)
-          v.hour %= 24
         }
       }
       if (count == 0) event[i].noavailable = true
