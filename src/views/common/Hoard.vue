@@ -81,8 +81,8 @@
   </van-cell-group>
 
   <van-cell-group inset title="计算结果">
-    <van-cell title="预计可攒到小熊（折合）" :value="coin" />
-    <van-cell title="预计可攒到抽数（折合）" :value="gacha" />
+    <van-cell title="预计可攒到抽数" :value="gacha" />
+    <van-cell title="折合为小熊星座" :value="coin" />
   </van-cell-group>
 
   <van-calendar

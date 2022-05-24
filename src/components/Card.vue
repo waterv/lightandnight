@@ -61,6 +61,7 @@ export default {
   padding: 8px;
   border-radius: 8px;
   color: var(--van-gray-8);
+  font-size: .8em;
   text-align: center;
   text-shadow: 0 1px 2px var(--van-gray-2);
   background-size: 200% 100%;
