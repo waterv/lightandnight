@@ -175,16 +175,6 @@ export default {
   animation-iteration-count: infinite;
 }
 
-.card.animating.animating-type1.shining.star5 .card-highlight,
-.card.animating.animating-type1.shining.star6 .card-highlight {
-  animation-delay: 500ms;
-}
-
-.card.animating.animating-type2.shining.star5 .card-highlight,
-.card.animating.animating-type2.shining.star6 .card-highlight {
-  animation-delay: 6s;
-}
-
 .card.star4 .card-background {
   background-image: linear-gradient(
     to right,

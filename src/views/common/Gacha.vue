@@ -257,7 +257,7 @@
             :name="cardNewlyGot.name"
             :star="cardNewlyGot.star"
             :is-new="cardNewlyGot.new"
-            :ani="animationType"
+            :ani="animationType ? 1 : 0"
             :shining="shiningType"
             is-single
           />
