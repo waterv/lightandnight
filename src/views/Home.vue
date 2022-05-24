@@ -145,11 +145,17 @@ export default {
         },
         {
           name: '添加到主屏幕',
-          callback: () => this.$router.push('/posts/addtohome'),
+          callback: () => {
+            this.$router.push('/posts/addtohome')
+            this.onEnterPage()
+          },
         },
         {
           name: '更新日志',
-          callback: () => this.$router.push('/posts/changelog'),
+          callback: () => {
+            this.$router.push('/posts/changelog')
+            this.onEnterPage()
+          },
         },
         {
           name: '查看 GitHub 仓库',
