@@ -36,7 +36,7 @@
       </van-cell-group>
 
       <van-radio-group v-model="animationType">
-        <van-cell-group inset title="动画（实验性功能）">
+        <van-cell-group inset title="收信动画（实验性功能）">
           <van-cell
             v-for="v in animationData"
             :key="v"
@@ -47,6 +47,11 @@
             <template #right-icon>
               <van-radio :name="v.value" />
             </template>
+          </van-cell>
+          <van-cell v-if="animationType" title="发光效果">
+            <template #right-icon
+              ><van-switch v-model="shiningType" size="24"
+            /></template>
           </van-cell>
         </van-cell-group>
       </van-radio-group>
@@ -253,6 +258,7 @@
             :star="cardNewlyGot.star"
             :is-new="cardNewlyGot.new"
             :ani="animationType"
+            :shining="shiningType"
             is-single
           />
         </van-row>
@@ -276,6 +282,7 @@
                 :star="cardsNewlyGot[v].star"
                 :is-new="cardsNewlyGot[v].new"
                 :ani="animationType"
+                :shining="shiningType"
               />
               <card
                 :index="v + 1"
@@ -283,6 +290,7 @@
                 :star="cardsNewlyGot[v + 1].star"
                 :is-new="cardsNewlyGot[v + 1].new"
                 :ani="animationType"
+                :shining="shiningType"
               />
             </template>
             <template v-else>
@@ -292,6 +300,7 @@
                 :star="cardsNewlyGot[v].star"
                 :is-new="cardsNewlyGot[v].new"
                 :ani="animationType"
+                :shining="shiningType"
                 is-single
               />
             </template>
@@ -308,12 +317,12 @@ import Card from '@/components/Card.vue'
 import Navbar from '@/components/Navbar.vue'
 let data = require('@/assets/data/cards.json')
 
-let getCardName = (star, index) => {
+let getCardInfo = (star, index) => {
   let item = data.cards[star][index]
   return { name: `${data.characters[item[0]]}・${item[1]}`, char: item[0] }
 }
 
-let getFromList = list => {
+let getRandomCardFromList = list => {
   let random = Math.floor(list.length * Math.random())
   return list[random]
 }
@@ -331,6 +340,7 @@ export default {
     Navbar,
   },
   data() {
+    // 初始化卡池数据
     let year
     let poolSelectValue = [
       { text: '常驻卡池', value: 'common', children: [] },
@@ -357,16 +367,9 @@ export default {
 
     let poolIndex = data.limited[year].length - 1
     let pool = { ...data.limited[year][poolIndex] }
-
-    let optionChar = [{ text: '不限男主', value: 'all' }]
-    for (let i in data.characters)
-      optionChar.push({ text: data.characters[i], value: i })
-
-    let optionStar = [{ text: '不限星级', value: 'all' }]
-    for (let i = 3; i <= 6; i++) optionStar.push({ text: `${i} 星`, value: i })
-
     let limitedShop = this.getLimitedShop(pool)
     let poolDetail = this.getPoolDetail(pool)
+
     let shopColumn = []
     for (let i = 0; i <= 1; i++) {
       let star = i + 5
@@ -377,10 +380,17 @@ export default {
       })
       for (let j in data.common[0][`${star}`])
         shopColumn[i].children.push({
-          text: getCardName(star, data.common[0][`${star}`][j]).name,
+          text: getCardInfo(star, data.common[0][`${star}`][j]).name,
           index: data.common[0][`${star}`][j],
         })
     }
+
+    let optionChar = [{ text: '不限男主', value: 'all' }]
+    for (let i in data.characters)
+      optionChar.push({ text: data.characters[i], value: i })
+
+    let optionStar = [{ text: '不限星级', value: 'all' }]
+    for (let i = 3; i <= 6; i++) optionStar.push({ text: `${i} 星`, value: i })
 
     return {
       active: 0,
@@ -425,12 +435,13 @@ export default {
       list: [],
       listIndex: -1,
 
-      animationType: 1,
+      animationType: 2,
       animationData: [
         { name: '不启用动画', value: 0 },
         { name: '动画样式 1', value: 1 },
         { name: '动画样式 2', value: 2 },
       ],
+      shiningType: true,
     }
   },
   computed: {
@@ -476,7 +487,7 @@ export default {
         })
         for (let j in this.limitedShop[i])
           column[index].children.push({
-            text: getCardName(i, this.limitedShop[i][j]).name,
+            text: getCardInfo(i, this.limitedShop[i][j]).name,
             index: this.limitedShop[i][j],
           })
         index += 1
@@ -489,7 +500,7 @@ export default {
       let cards = []
       for (let i in this.pool.up[6])
         cards.push({
-          text: getCardName(6, this.pool.up[6][i]).name,
+          text: getCardInfo(6, this.pool.up[6][i]).name,
           index: this.pool.up[6][i],
         })
       // 目前只有 6 星卡池开启过自选
@@ -524,11 +535,11 @@ export default {
       let isNew = false
       if (this.cardsGot[star][index]) this.cardsGot[star][index].count += 1
       else {
-        this.cardsGot[star][index] = { count: 1, ...getCardName(star, index) }
+        this.cardsGot[star][index] = { count: 1, ...getCardInfo(star, index) }
         isNew = true
       }
 
-      let { name, char } = getCardName(star, index)
+      let { name, char } = getCardInfo(star, index)
       let item = {
         star: Number(star),
         name,
@@ -557,7 +568,7 @@ export default {
         for (let star in list) {
           poolDetail += `[${star} 星] `
           for (let i in list[star])
-            poolDetail += getCardName(star, list[star][i]).name + '、'
+            poolDetail += getCardInfo(star, list[star][i]).name + '、'
         }
         poolDetail = poolDetail.slice(0, -1)
       }
@@ -756,19 +767,19 @@ export default {
           if (this.pool.addCommon && this.pool.addCommon['6'])
             list = list.concat(this.pool.addCommon['6'])
         }
-        return { star: 6, index: getFromList(list) }
+        return { star: 6, index: getRandomCardFromList(list) }
       }
 
       if (random <= 60 && !must5)
         return {
           star: 3,
-          index: getFromList(data.common[this.pool.common]['3']),
+          index: getRandomCardFromList(data.common[this.pool.common]['3']),
         }
 
       if (random <= 90 && !must5)
         return {
           star: 4,
-          index: getFromList(data.common[this.pool.common]['4']),
+          index: getRandomCardFromList(data.common[this.pool.common]['4']),
         }
 
       let list = []
@@ -779,13 +790,13 @@ export default {
         if (this.pool.addCommon && this.pool.addCommon['5'])
           list = list.concat(this.pool.addCommon['5'])
       }
-      return { star: 5, index: getFromList(list) }
+      return { star: 5, index: getRandomCardFromList(list) }
     },
     checkRandomTimeReached() {
       if (!this.pool.randomTime) return
       if (this.poolGachaTime < this.pool.randomTime) return
       // 目前只有 6 星卡池具有此机制
-      let index = getFromList(this.pool.up['6'])
+      let index = getRandomCardFromList(this.pool.up['6'])
       let item = this.gainCard(6, index, {
         random: true,
       })

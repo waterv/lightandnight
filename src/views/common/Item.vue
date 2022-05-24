@@ -29,7 +29,7 @@
         </template>
       </van-cell-group>
 
-      <van-cell-group title="需要合成" inset>
+      <van-cell-group title="合成路线" inset>
         <template v-for="i in [1, 2, 3, 4]" :key="i">
           <van-cell v-if="i <= aTarget" :title="aName[i]" :value="aNeed[i]" />
         </template>
@@ -52,7 +52,7 @@
         <van-cell title="清空" is-link @click="b = [0, 0]" />
       </van-cell-group>
 
-      <van-cell-group title="需要合成" inset>
+      <van-cell-group title="合成路线" inset>
         <van-cell
           v-for="i in [1, 2]"
           :key="i"
