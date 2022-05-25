@@ -6,7 +6,7 @@
   <div class="home">
     <template v-if="active == 'events'">
       <van-cell-group title=" " inset>
-        <van-cell title="介绍与声明" is-link to="/posts/statement" />
+        <van-cell title="介绍与声明" is-link to="/posts/statement" @click="onEnterPage" />
       </van-cell-group>
       <template v-for="v in event" :key="v">
         <van-cell-group v-if="!v.noavailable" :title="v.name" inset>
