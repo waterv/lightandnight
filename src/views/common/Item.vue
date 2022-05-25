@@ -65,7 +65,7 @@
 
   <van-popup v-model:show="showPicker" round position="bottom">
     <van-picker
-      :columns="aName.slice(2)"
+      :columns="aColumns"
       :default-index="2"
       @confirm="confirmA"
       @cancel="showPicker = false"
@@ -101,11 +101,18 @@ export default {
       bNeed: [0, 0, 0],
     }
   },
+  computed: {
+    aColumns() {
+      return this.aName.slice(2).map((v, i) => {
+        return { text: v, value: i + 2 }
+      })
+    }
+  },
   methods: {
     confirmA(v) {
       this.showPicker = false
-      this.aTargetString = v
-      for (let i in this.aName) if (this.aName[i] == v) this.aTarget = i
+      this.aTargetString = v.selectedOptions[0].text
+      this.aTarget = v.selectedOptions[0].value
       this.calculateA()
     },
     calculateA() {

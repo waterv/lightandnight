@@ -375,12 +375,14 @@ export default {
       let star = i + 5
       shopColumn.push({
         text: `${star} 星 (${star == 5 ? 80 : 180} 心迹书简)`,
+        value: i,
         star,
         children: [],
       })
       for (let j in data.common[0][`${star}`])
         shopColumn[i].children.push({
           text: getCardInfo(star, data.common[0][`${star}`][j]).name,
+          value: j,
           index: data.common[0][`${star}`][j],
         })
     }
@@ -482,12 +484,14 @@ export default {
       for (let i in this.limitedShop) {
         column.push({
           text: `${i} 星 (${this.limitedShopPrice[i]} ${this.poolLetterName})`,
+          value: i,
           star: i,
           children: [],
         })
         for (let j in this.limitedShop[i])
           column[index].children.push({
             text: getCardInfo(i, this.limitedShop[i][j]).name,
+            value: j,
             index: this.limitedShop[i][j],
           })
         index += 1
@@ -501,21 +505,29 @@ export default {
       for (let i in this.pool.up[6])
         cards.push({
           text: getCardInfo(6, this.pool.up[6][i]).name,
+          value: i,
           index: this.pool.up[6][i],
         })
       // 目前只有 6 星卡池开启过自选
-      if (this.pool.pickPrice)
+      let i = 0
+      if (this.pool.pickPrice) {
         column.push({
           text: `${this.pool.pickPrice} ${this.poolLetterName}`,
+          value: i,
           children: cards,
           type: 1,
         })
-      if (this.pool.pickTime)
+        i += 1
+      }
+      if (this.pool.pickTime) {
         column.push({
           text: `${this.pool.pickTime} 次收信`,
+          value: i,
           children: cards,
           type: 2,
         })
+        i += 1
+      }
       return column
     },
   },
@@ -611,10 +623,10 @@ export default {
           for (let j in res) res[j] = res[j].concat(shop[j])
       return res
     },
-    shopBuy(v1) {
+    shopBuy(v) {
       this.shopShow = false
-      let star = v1[0].star
-      let index = v1[1].index
+      let star = v.selectedOptions[0].star
+      let index = v.selectedOptions[1].index
       let price = star == 5 ? 80 : 180
 
       if (this.letter < price) {
@@ -630,10 +642,10 @@ export default {
       })
       this.showCardNewlyGot(item)
     },
-    limitedShopBuy(v1, v2) {
+    limitedShopBuy(v) {
       this.limitedShopShow = false
-      let star = v1[0].star
-      let index = v1[1].index
+      let star = v.selectedOptions[0].star
+      let index = v.selectedOptions[1].index
       let price = this.limitedShopPrice[star]
       if (this.pool.limitedLetter) {
         if (this.limitedLetter < price) {
@@ -650,7 +662,8 @@ export default {
       }
 
       Notify({ type: 'success', message: '兑换成功。' })
-      this.limitedShop[star].splice(v2[1], 1)
+      let arrayIndex = v.selectedValues[1]
+      this.limitedShop[star].splice(arrayIndex, 1)
       if (this.limitedShop[star].length == 0) delete this.limitedShop[star]
 
       let item = this.gainCard(star, index, {
@@ -658,10 +671,10 @@ export default {
       })
       this.showCardNewlyGot(item)
     },
-    pickShopBuy(v1) {
+    pickShopBuy(v) {
       this.pickShopShow = false
-      let type = v1[0].type
-      let index = v1[1].index
+      let type = v.selectedOptions[0].type
+      let index = v.selectedOptions[1].index
       if (type == 1) {
         // 使用书简兑换
         if (this.pool.limitedLetter) {

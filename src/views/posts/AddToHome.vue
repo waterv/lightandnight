@@ -6,12 +6,13 @@
       <van-tab title="iOS">
         <h2>iOS</h2>
         <p>
-          1. 打开浏览器的「 <share-ios height="14" /> 共享」菜单。如果您使用
-          Safari 浏览器，该按钮位于下方中间位置。
+          1. 打开浏览器的「
+          <share-ios height="14" :fill="fill" /> 共享」菜单。如果您使用 Safari
+          浏览器，该按钮位于下方中间位置。
         </p>
         <p>
           2. 在弹出的窗口中，选择列表中的「
-          <add-ios height="14" /> 添加到主屏幕」。
+          <add-ios height="14" :fill="fill" /> 添加到主屏幕」。
         </p>
       </van-tab>
       <van-tab title="Android 1" class="container">
@@ -109,6 +110,11 @@ export default {
     return {
       active: 0,
     }
+  },
+  computed: {
+    fill() {
+      return this.$root.theme == 'dark' ? '#fff' : '#323233'
+    },
   },
 }
 </script>

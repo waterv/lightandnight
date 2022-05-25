@@ -1,11 +1,17 @@
 <template>
-  <router-view />
+  <van-config-provider :theme="theme">
+    <router-view />
+  </van-config-provider>
 </template>
 
 <script>
 export default {
   data() {
+    let theme = ''
+    if (window.matchMedia('(prefers-color-scheme: dark)').matches)
+      theme = 'dark'
     return {
+      theme,
       homepageActive: 'events',
       dialogSettings: {
         title: '说明',
@@ -26,6 +32,17 @@ export default {
       },
     }
   },
+  mounted() {
+    window
+      .matchMedia('(prefers-color-scheme: dark)')
+      .addEventListener('change', event => {
+        if (event.matches) {
+          this.theme = 'dark'
+        } else {
+          this.theme = ''
+        }
+      })
+  },
 }
 </script>
 
@@ -42,6 +59,11 @@ body {
     'Hiragino Sans GB', 'Microsoft Yahei', sans-serif;
   background-color: #f7f8fa;
   -webkit-font-smoothing: antialiased;
+}
+
+body.van-theme-dark {
+  color: rgba(255, 255, 255, 0.75);
+  background-color: #202124;
 }
 
 .content {

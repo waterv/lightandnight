@@ -6,7 +6,7 @@
   <div class="home">
     <template v-if="active == 'events'">
       <van-cell-group title=" " inset>
-        <van-cell title="介绍与声明" is-link to="/posts/statement" @click="onEnterPage" />
+        <van-cell title="关于与声明" is-link to="/posts/statement" />
       </van-cell-group>
       <template v-for="v in event" :key="v">
         <van-cell-group v-if="!v.noavailable" :title="v.name" inset>
@@ -43,7 +43,6 @@
             :to="u.to"
             :color="u.background"
             :style="u.color ? `color: ${u.color} !important;` : ''"
-            @click="onEnterPage"
           >
             {{ u.name }}
           </van-button>
@@ -144,17 +143,11 @@ export default {
         },
         {
           name: '添加到主屏幕',
-          callback: () => {
-            this.$router.push('/posts/addtohome')
-            this.onEnterPage()
-          },
+          callback: () => this.$router.push('/posts/addtohome'),
         },
         {
           name: '更新日志',
-          callback: () => {
-            this.$router.push('/posts/changelog')
-            this.onEnterPage()
-          },
+          callback: () => this.$router.push('/posts/changelog'),
         },
       ],
       event,
@@ -198,14 +191,6 @@ export default {
   methods: {
     onActiveChange(active) {
       if (active != 'gacha') this.$root.homepageActive = active
-      else this.onEnterPage()
-    },
-    onEnterPage() {
-      Toast.loading({
-        message: '加载中…',
-        forbidClick: true,
-        duration: 0,
-      })
     },
   },
 }
@@ -226,7 +211,15 @@ export default {
   border-radius: 4px;
 }
 
+.van-theme-dark .block {
+  filter: brightness(0.8);
+}
+
 .van-button {
   margin: 5px 0;
+}
+
+.van-theme-dark .van-button {
+  filter: brightness(0.8);
 }
 </style>

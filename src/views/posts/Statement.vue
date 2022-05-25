@@ -1,10 +1,10 @@
 <template>
-  <navbar title="介绍与声明" can-return />
+  <navbar title="关于与声明" can-return />
 
   <van-tabs v-model:active="active" scrollspy sticky offset-top="46">
     <div class="content">
-      <van-tab title="介绍">
-        <h2>介绍</h2>
+      <van-tab title="关于">
+        <h2>关于</h2>
         <p>
           这是北极光工作室手机游戏《光与夜之恋》相关小工具集合，包含各类计算器与抽卡模拟器。
         </p>

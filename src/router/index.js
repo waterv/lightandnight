@@ -1,4 +1,5 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
+import { Toast } from 'vant'
 import Home from '../views/Home.vue'
 
 const routes = [
@@ -43,6 +44,15 @@ const routes = [
 const router = createRouter({
   history: createWebHashHistory(),
   routes,
+})
+
+router.beforeEach((to) => {
+  if (to.fullPath != '/')
+    Toast.loading({
+      message: '加载中…',
+      forbidClick: true,
+      duration: 0,
+    })
 })
 
 export default router

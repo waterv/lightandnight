@@ -164,7 +164,6 @@ export default {
         ...this.$root.dialogSettings,
         message:
           '此工具在计算过程中，所有项目均按照「奖励在第一天发放」的规则参与计算，与实际情况存在偏差。\n\n目标日期越远，计算结果会越准确，但同时活动等不确定因素也增多。\n\n出于上述原因，本工具仅供粗略计算之用。',
-        confirmButtonColor: this.$root.colors.common.hoard,
       })
     },
     showCalendar(i) {

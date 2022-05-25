@@ -109,7 +109,6 @@ export default {
         { value: 50, desc: '原价兑换' },
       ],
       gemRatioSelected: '100',
-      buttonColor: this.$root.colors.common.cpr,
       price: undefined,
       gem: undefined,
       coin: undefined,
@@ -126,7 +125,6 @@ export default {
         ...this.$root.dialogSettings,
         message:
           '此工具仅计算礼包用于抽卡的性价比，游戏中显示的性价比计入了「极光币」等培养材料。\n\n不氪立省百分百。',
-        confirmButtonColor: this.buttonColor,
       })
     },
     showGemRatioInfo() {
@@ -134,7 +132,6 @@ export default {
         ...this.$root.dialogSettings,
         message:
           '本游戏中，抽卡道具的原价为：\n\n1 羽毛笔 = 300 小熊星座 = 6 北极星 = 18 元\n\n北极星与其他道具的兑换比率不固定，因此计算性价比时需要分不同情况讨论。\n\n请根据您一般使用北极星兑换小熊星座的途径，选择恰当的兑换比率。\n\n如果还是不明白选什么：重氪选 [50]，其他选 [100]。',
-        confirmButtonColor: this.buttonColor,
       })
     },
     gemRatioSelect(v) {

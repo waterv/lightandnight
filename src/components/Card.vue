@@ -78,6 +78,10 @@ export default {
   padding: 4px;
 }
 
+.van-theme-dark .card {
+  filter: brightness(.8);
+}
+
 .card .card-background {
   padding: 8px 4px;
   box-sizing: border-box;
