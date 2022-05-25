@@ -1,6 +1,7 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import { Toast } from 'vant'
 import Home from '../views/Home.vue'
+import NotFound from '../views/NotFound.vue'
 
 const routes = [
   {
@@ -39,6 +40,7 @@ const routes = [
     path: '/posts/statement',
     component: () => import('../views/posts/Statement.vue'),
   },
+  { path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFound },
 ]
 
 const router = createRouter({
@@ -46,7 +48,7 @@ const router = createRouter({
   routes,
 })
 
-router.beforeEach((to) => {
+router.beforeEach(to => {
   if (to.fullPath != '/')
     Toast.loading({
       message: '加载中…',
