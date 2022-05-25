@@ -34,6 +34,10 @@ const routes = [
     path: '/posts/changelog',
     component: () => import('../views/posts/ChangeLog.vue'),
   },
+  {
+    path: '/posts/statement',
+    component: () => import('../views/posts/Statement.vue'),
+  },
 ]
 
 const router = createRouter({

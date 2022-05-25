@@ -5,11 +5,8 @@
 
   <div class="home">
     <template v-if="active == 'events'">
-      <van-cell-group title="声明" inset>
-        <van-cell
-          title="声明"
-          label="本页信息可能更新不及时、内容不准确或已经失效，请您以游戏中实际情况为准。"
-        />
+      <van-cell-group title=" " inset>
+        <van-cell title="介绍与声明" is-link to="/posts/statement" />
       </van-cell-group>
       <template v-for="v in event" :key="v">
         <van-cell-group v-if="!v.noavailable" :title="v.name" inset>
@@ -158,13 +155,6 @@ export default {
             this.$router.push('/posts/changelog')
             this.onEnterPage()
           },
-        },
-        {
-          name: '查看 GitHub 仓库',
-          subname: 'waterv/lightandnight',
-          color: 'var(--van-blue)',
-          callback: () =>
-            window.open('https://github.com/waterv/lightandnight'),
         },
       ],
       event,

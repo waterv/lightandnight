@@ -8,9 +8,7 @@
 欢迎大家使用，如果认为好用可随意分享；如果有任何想法、建议、希望添加的功能，或者发现了任何 bug，欢迎提 issue、pull request 或者到我的微博 [@HCRPaandaa](https://weibo.com/paandaa) 提出。
 
 ## 使用
-目前本工具部署在 GitHub Pages 上：https://waterv.github.io/lightandnight
+目前本工具部署在 GitHub Pages 上：https://waterv.github.io/lightandnight。
 
 ## 如果我跑路了
 如果我跑路了，GitHub 仓库大概率依然保留，只是数据不再更新。如果您了解 Vue，并且愿意接手屎山，欢迎您以 clone 或 fork 的形式进行后续维护更新（参见 [Wiki](https://github.com/waterv/lightandnight/wiki)）。
-
-
