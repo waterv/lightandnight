@@ -96,11 +96,13 @@ export default {
         if (v.periodic) {
           count += 1
           let target = dayjs()
+            .tz()
             .day(v.day)
             .hour(0)
             .minute(0)
             .second(0)
             .millisecond(0)
+
           if (v.state == '始') target = target.hour(5)
           if (now.day() >= v.day) target = target.add(1, 'week')
           v.time = target.diff(now)
