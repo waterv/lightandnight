@@ -59,7 +59,7 @@
             :key="v"
             :title="v.text"
             clickable
-            @click="maxFrame = v.value"
+            @click="setMaxFrame(v.value)"
           >
             <template #right-icon>
               <van-radio :name="v.value" />
@@ -256,6 +256,10 @@ export default {
           '由于官方未公示该活动概率规则，本工具中使用的概率数据是由面积比例估算而来，与实际情况不符。\n\n本工具默认假设：「恋心」占有 166 的权重，「眩光沙砾」占有 145 的权重，其他奖励均占有 100 的权重，所得到的概率数值与已记录的实际数值稍有偏差。如果您有更好的权重数据，可在此处更改。',
         confirmButtonColor: this.buttonColor
       })
+    },
+    setMaxFrame(v) {
+      this.maxFrame = v
+      this.frame = 0
     },
     gacha3Times() {
       if (this.frame && this.frame <= this.maxFrame) return
