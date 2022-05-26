@@ -1,14 +1,11 @@
 <template>
   <navbar title="光夜小工具">
-    <van-icon name="question-o" @click="infoShow = true" />
+    <van-icon v-if="active == 'events'" name="question-o" @click="showInfo" />
   </navbar>
 
   <div class="home">
     <template v-if="active == 'events'">
-      <van-cell-group title=" " inset>
-        <van-cell title="关于与声明" is-link to="/posts/statement" />
-      </van-cell-group>
-      <template v-for="v in event" :key="v">
+      <template v-for="v in events" :key="v">
         <van-cell-group v-if="!v.noavailable" :title="v.name" inset>
           <template v-for="u in v.events" :key="u">
             <van-cell v-if="u.time !== undefined" :title="u.name" center>
@@ -32,8 +29,8 @@
       </template>
     </template>
 
-    <template v-if="active == 'calculator'">
-      <template v-for="v in tool" :key="v">
+    <template v-if="active == 'calculators'">
+      <template v-for="v in tools" :key="v">
         <van-divider>{{ v.name }}</van-divider>
         <div class="content">
           <van-button
@@ -49,46 +46,43 @@
         </div>
       </template>
     </template>
+
+    <template v-if="active == 'settings'">
+      <van-cell-group title=" " inset>
+        <van-cell title="添加到主屏幕" is-link to="/posts/addtohome" />
+        <van-cell title="关于与声明" is-link to="/posts/statement" />
+        <van-cell title="更新日志" is-link to="/posts/changelog" />
+      </van-cell-group>
+    </template>
   </div>
 
   <van-tabbar v-model="active" @change="onActiveChange">
     <van-tabbar-item name="events" icon="calendar-o">活动提醒</van-tabbar-item>
-    <van-tabbar-item name="calculator" icon="apps-o">实用工具</van-tabbar-item>
-    <van-tabbar-item name="gacha" icon="gift-card-o" to="/common/gacha"
-      >抽卡模拟</van-tabbar-item
-    >
+    <van-tabbar-item name="calculators" icon="apps-o">实用工具</van-tabbar-item>
+    <van-tabbar-item name="settings" icon="setting-o">设置</van-tabbar-item>
   </van-tabbar>
-
-  <van-action-sheet
-    v-model:show="infoShow"
-    :actions="infoActions"
-    cancel-text="关闭"
-    close-on-click-action
-  />
 </template>
 
 <script>
-import { ActionSheet, CountDown, Tabbar, TabbarItem, Toast } from 'vant'
+import { CountDown, Tabbar, TabbarItem } from 'vant'
 import Navbar from '@/components/Navbar.vue'
 let dayjs = require('dayjs')
 
 export default {
   name: 'App',
   components: {
-    [ActionSheet.name]: ActionSheet,
     [CountDown.name]: CountDown,
     [Tabbar.name]: Tabbar,
     [TabbarItem.name]: TabbarItem,
-    [Toast.name]: Toast,
     Navbar,
   },
   data() {
-    let event = require('@/assets/data/events.json')
+    let events = require('@/assets/data/events.json')
     let now = dayjs()
-    for (let i in event) {
+    for (let i in events) {
       let count = 0
-      for (let j in event[i].events) {
-        let v = event[i].events[j]
+      for (let j in events[i].events) {
+        let v = events[i].events[j]
         if (v.periodic) {
           count += 1
           let target = dayjs()
@@ -125,33 +119,24 @@ export default {
           }
         }
       }
-      if (count == 0) event[i].noavailable = true
+      if (count == 0) events[i].noavailable = true
     }
 
     return {
       active: this.$root.homepageActive,
       infoShow: false,
-      infoActions: [
+      events,
+      tools: [
         {
-          name: '功能「活动提醒」说明',
-          callback: () =>
-            this.$dialog.alert({
-              ...this.$root.dialogSettings,
-              message:
-                '本页展示当前游戏中，各活动的大约开始或结束时间。\n\n因为活动结束常常伴随停服维护，结束时间按 00:00 而非 04:59 计。\n\n信息可能过时或不准确，请以游戏中实际情况为准。',
-            }),
+          name: '抽卡模拟',
+          children: [
+            {
+              name: '信使花园模拟器',
+              background: this.$root.colors.common.gacha,
+              to: '/common/gacha',
+            },
+          ],
         },
-        {
-          name: '添加到主屏幕',
-          callback: () => this.$router.push('/posts/addtohome'),
-        },
-        {
-          name: '更新日志',
-          callback: () => this.$router.push('/posts/changelog'),
-        },
-      ],
-      event,
-      tool: [
         {
           name: '通用工具',
           children: [
@@ -189,8 +174,15 @@ export default {
     }
   },
   methods: {
+    showInfo() {
+      this.$dialog.alert({
+        ...this.$root.dialogSettings,
+        message:
+          '本页展示当前游戏中，各活动的大约开始或结束时间。\n\n因为活动结束常常伴随停服维护，结束时间按 00:00 而非 04:59 计。\n\n信息可能过时或不准确，请以游戏中实际情况为准。',
+      })
+    },
     onActiveChange(active) {
-      if (active != 'gacha') this.$root.homepageActive = active
+      this.$root.homepageActive = active
     },
   },
 }

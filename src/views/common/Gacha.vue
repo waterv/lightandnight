@@ -618,8 +618,8 @@ export default {
         for (let i in pool.addCommon)
           shop[i] = shop[i].concat(pool.addCommon[i])
       let res = { ...shop }
-      if (pool.maxbuy)
-        for (let i = 1; i < pool.maxbuy; i++)
+      if (pool.maxBuy)
+        for (let i = 1; i < pool.maxBuy; i++)
           for (let j in res) res[j] = res[j].concat(shop[j])
       return res
     },
