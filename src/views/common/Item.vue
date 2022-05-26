@@ -1,5 +1,5 @@
 <template>
-  <navbar title="道具合成" can-return />
+  <navbar title="道具合成计算器" can-return />
 
   <van-tabs v-model:active="active" sticky offset-top="46">
     <van-tab title="设计师证明">

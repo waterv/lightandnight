@@ -1,5 +1,5 @@
 <template>
-  <navbar title="羁梦星愿" can-return />
+  <navbar title="羁梦星愿计算器" can-return />
 
   <van-cell-group title="攻略" inset>
     <van-cell

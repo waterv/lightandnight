@@ -135,6 +135,11 @@ export default {
               background: this.$root.colors.common.gacha,
               to: '/common/gacha',
             },
+            {
+              name: '羁梦星愿模拟器',
+              background: this.$root.colors.events.wish,
+              to: '/events/wish/sim',
+            },
           ],
         },
         {
@@ -164,7 +169,7 @@ export default {
           name: '限时活动',
           children: [
             {
-              name: '「羁梦星愿」计算器',
+              name: '羁梦星愿计算器',
               background: this.$root.colors.events.wish,
               to: '/events/wish',
             },

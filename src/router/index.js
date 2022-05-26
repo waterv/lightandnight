@@ -29,6 +29,10 @@ const routes = [
     component: () => import('../views/events/Wish.vue'),
   },
   {
+    path: '/events/wish/sim',
+    component: () => import('../views/events/WishSimulator.vue'),
+  },
+  {
     path: '/posts/addtohome',
     component: () => import('../views/posts/AddToHome.vue'),
   },

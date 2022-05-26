@@ -1,5 +1,5 @@
 <template>
-  <navbar title="信使花园" can-return />
+  <navbar title="信使花园模拟器" can-return />
 
   <van-tabs v-model:active="active" sticky offset-top="46">
     <van-tab title="攻略说明">

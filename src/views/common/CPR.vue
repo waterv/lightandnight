@@ -1,5 +1,5 @@
 <template>
-  <navbar title="礼包性价比" can-return>
+  <navbar title="礼包性价比计算器" can-return>
     <van-icon name="question-o" @click="showInfo" />
   </navbar>
 

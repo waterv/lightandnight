@@ -1,5 +1,5 @@
 <template>
-  <navbar title="囤囤鼠" can-return>
+  <navbar title="囤囤鼠计算器" can-return>
     <van-icon name="question-o" @click="showInfo" />
   </navbar>
 
