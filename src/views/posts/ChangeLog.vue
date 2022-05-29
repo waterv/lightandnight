@@ -3,6 +3,11 @@
 
   <van-tabs v-model:active="active" scrollspy sticky offset-top="46">
     <div class="content">
+      <van-tab title="22/05/29">
+        <h2>2022 年 05 月 29 日</h2>
+        <h3>数据更新</h3>
+        <p>1. 活动提醒：添加「异日徜欢」活动信息。</p>
+      </van-tab>
       <van-tab title="22/05/26">
         <h2>2022 年 05 月 26 日</h2>
         <h3>功能与改进</h3>

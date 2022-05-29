@@ -49,6 +49,7 @@ export default {
 <style>
 body {
   min-width: 100vw;
+  max-width: 425px;
   margin: 0;
   padding-bottom: 20px;
   overflow-x: auto;
@@ -64,6 +65,11 @@ body {
 body.van-theme-dark {
   color: rgba(255, 255, 255, 0.75);
   background-color: #202124;
+}
+
+#app {
+  max-width: 425px;
+  margin: auto;
 }
 
 .content {

@@ -25,6 +25,10 @@ const routes = [
     component: () => import('../views/common/Item.vue'),
   },
   {
+    path: '/common/image',
+    component: () => import('../views/common/Image.vue'),
+  },
+  {
     path: '/events/wish',
     component: () => import('../views/events/Wish.vue'),
   },
@@ -59,6 +63,10 @@ router.beforeEach(to => {
       forbidClick: true,
       duration: 0,
     })
+})
+
+router.afterEach(() => {
+  Toast.clear()
 })
 
 export default router

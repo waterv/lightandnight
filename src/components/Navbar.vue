@@ -5,7 +5,7 @@
     left-text="返回"
     left-arrow
     @click-left="returnHomepage"
-    fixed
+    :fixed="!noFix"
     safe-area-inset-top
     placeholder
   >
@@ -13,7 +13,13 @@
       <slot />
     </template>
   </van-nav-bar>
-  <van-nav-bar v-else :title="title" fixed safe-area-inset-top placeholder>
+  <van-nav-bar
+    v-else
+    :title="title"
+    :fixed="!noFix"
+    safe-area-inset-top
+    placeholder
+  >
     <template #right>
       <slot />
     </template>
@@ -32,9 +38,7 @@ export default {
   props: {
     title: String,
     canReturn: Boolean,
-  },
-  mounted() {
-    Toast.clear()
+    noFix: Boolean,
   },
   methods: {
     returnHomepage() {

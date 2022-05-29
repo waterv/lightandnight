@@ -152,7 +152,7 @@ export default {
     const { width } = useWindowSize()
     return {
       active: 0,
-      width: width.value,
+      width: Math.min(width.value, 425),
       gachaTime: 0,
       initialAngle_: Math.PI,
       initialAngle: Math.PI,
@@ -461,9 +461,7 @@ export default {
 .van-theme-dark #canvas {
   filter: brightness(0.8);
 }
-</style>
 
-<style scoped>
 .center-row .van-col {
   text-align: center;
 }
