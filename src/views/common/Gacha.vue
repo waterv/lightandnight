@@ -36,7 +36,7 @@
       </van-cell-group>
 
       <van-radio-group v-model="animationType">
-        <van-cell-group inset title="收信动画（实验性功能）">
+        <van-cell-group inset title="收信动画">
           <van-cell
             v-for="v in animationData"
             :key="v"

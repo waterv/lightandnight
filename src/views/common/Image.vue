@@ -1,10 +1,15 @@
 <template>
-  <navbar title="晒欧模拟器" no-fix can-return />
+  <navbar title="欧皇模拟器" no-fix can-return />
 
   <van-cell-group title="说明" inset>
     <van-cell
       title="说明"
-      label="建议您使用安装有「方正风雅宋」（FZYaSong-M-GBK）字体的电脑访问本页。"
+      label="由于引用的图片资源较多，本页可能加载较长时间，请耐心等候。角色与灵犀名需要使用「方正准雅宋 GBK」字体，建议您使用安装有该字体的电脑访问本页。"
+    />
+    <van-cell
+      title="获取「方正准雅宋 GBK」字体"
+      is-link
+      @click="showFontInfo"
     />
   </van-cell-group>
 
@@ -42,7 +47,7 @@
     </van-cell>
     <van-cell title="勿忘" center>
       <template #right-icon>
-        <van-switch v-model="isFlower" size="24" />
+        <van-switch v-model="isFlower" size="24" @change="onFlowerChange" />
       </template>
     </van-cell>
     <template v-if="isFlower">
@@ -92,7 +97,7 @@
   <van-cell-group title="生成图片" inset>
     <van-cell
       title="生成图片"
-      label="请您手动截图并裁剪为合适的尺寸，然后拿去「晒欧」吧！"
+      label="请您手动截图并裁剪为合适的尺寸。"
       center
       is-link
       @click="draw"
@@ -110,13 +115,14 @@
 
 <script>
 import { useWindowSize } from '@vant/use'
-import { Uploader } from 'vant'
+import { Uploader, Toast } from 'vant'
 import Navbar from '@/components/Navbar.vue'
 
 export default {
   name: 'Image',
   components: {
     [Uploader.name]: Uploader,
+    [Toast.name]: Toast,
     Navbar,
   },
   data() {
@@ -158,11 +164,32 @@ export default {
     this.draw()
   },
   methods: {
+    showFontInfo() {
+      this.$dialog
+        .alert({
+          ...this.$root.dialogSettings,
+          message:
+            '使用「方正准雅宋 GBK」字体需要获得授权，其中「个人非商业授权」可按照以下步骤免费获得：\n\n1. 登陆方正字库官网，认真阅读并同意相关许可协议。\n2. 在「方正雅宋家族」页面的「字体样式」下找到「方正准雅宋」，点击它右侧的「获取字体」。\n3. 点击右侧浮动菜单中的「清单 - 字体清单」。\n4. 在弹出的页面中，将「字符集」改为「繁简扩展 (GBK)」，然后点击右下角的「获得字体」。\n5. 再次确认后，即可在「我的字体」中找到「下载字体」。\n\n下载字体并安装后，重新启动浏览器，一般就可以正常调用该字体。',
+          confirmButtonText: '前往方正字库官网',
+          cancelButtonText: '关闭',
+          showCancelButton: true,
+        })
+        .then(() => {
+          window.open(
+            'https://www.foundertype.com/index.php/FontInfo/index/id/193'
+          )
+        })
+        .catch(() => {})
+    },
     onSignConfirm({ selectedOptions }) {
       this.showSignPicker = false
       this.sign = selectedOptions[0].value
       this.signSelected = selectedOptions[0].text
       this.character = selectedOptions[0].character
+    },
+    onFlowerChange() {
+      this.flower = Math.max(Math.min(this.star, 6), 3)
+      this.border = Math.max(Math.min(this.star, 6), 3)
     },
     blur() {
       // Via GitHub arahaya/ImageFilters.js
@@ -257,6 +284,12 @@ export default {
       }
     },
     draw() {
+      Toast.loading({
+        message: '加载中…',
+        forbidClick: true,
+        duration: 0,
+      })
+
       let canvas = document.getElementById('canvas')
       let ctx = canvas.getContext('2d')
 
@@ -383,6 +416,8 @@ export default {
         // Stars
         for (let i = 0; i < this.star; i++)
           ctx.drawImage(images[7], 5 + 60 * i, 850, 60, 60)
+
+        Toast.clear()
       })
     },
   },

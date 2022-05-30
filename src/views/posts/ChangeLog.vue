@@ -3,10 +3,17 @@
 
   <van-tabs v-model:active="active" scrollspy sticky offset-top="46">
     <div class="content">
+      <van-tab title="22/05/30">
+        <h2>2022 年 05 月 30 日</h2>
+        <h3>功能与改进</h3>
+        <p>1. 欧皇模拟器：加入。</p>
+      </van-tab>
       <van-tab title="22/05/29">
         <h2>2022 年 05 月 29 日</h2>
         <h3>数据更新</h3>
         <p>1. 活动提醒：添加「异日徜欢」活动信息。</p>
+        <h3>问题修复</h3>
+        <p>1. 修复加载提示有时不会消失的问题。</p>
       </van-tab>
       <van-tab title="22/05/26">
         <h2>2022 年 05 月 26 日</h2>

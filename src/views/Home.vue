@@ -48,6 +48,9 @@
     </template>
 
     <template v-if="active == 'settings'">
+      <van-cell-group title="实验性功能" inset>
+        <van-cell title="欧皇模拟器" is-link to="/common/image" />
+      </van-cell-group>
       <van-cell-group title=" " inset>
         <van-cell title="添加到主屏幕" is-link to="/posts/addtohome" />
         <van-cell title="关于与声明" is-link to="/posts/statement" />
