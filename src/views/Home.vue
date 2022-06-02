@@ -8,7 +8,7 @@
       <template v-for="v in events" :key="v">
         <van-cell-group v-if="!v.noavailable" :title="v.name" inset>
           <template v-for="u in v.events" :key="u">
-            <van-cell v-if="u.time !== undefined" :title="u.name" center>
+            <van-cell v-if="u.time !== undefined" :title="u.name" :label="u.desc" center>
               <template #right-icon>
                 <van-count-down :time="u.time">
                   <template #default="timeData">
