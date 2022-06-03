@@ -313,6 +313,17 @@
         "common": 5,
         "up": { "6": [ 40 ] },
         "maxBuy": 5
+      }, {
+        "name": "繁花与序章",
+        "desc": "06/11 - 06/27",
+        "common": 5,
+        "up": { "6": [ 46, 47, 48, 49, 50 ] },
+        "p": 75,
+        "limitedLetter": "回忆书简",
+        "price": { "6": 140 },
+        "maxBuy": 2,
+        "pickTime": 200,
+        "randomTime": 100
       }
     ]
   }
