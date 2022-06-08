@@ -29,6 +29,11 @@
           url="https://weibo.com/2304898581/Lmq1jEYXe"
         />
         <van-cell
+          title="「繁花与序章」数据分析"
+          is-link
+          url="https://weibo.com/2304898581/Lw0gD1Qab"
+        />
+        <van-cell
           title="其他攻略"
           is-link
           url="https://weibo.com/u/2304898581"

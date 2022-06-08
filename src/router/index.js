@@ -14,7 +14,7 @@ const routes = [
   },
   {
     path: '/common/gacha',
-    component: () => import('../views/common/Gacha.vue'),
+    component: () => import('../views/common/GachaSimulator.vue'),
   },
   {
     path: '/common/cpr',
@@ -23,6 +23,10 @@ const routes = [
   {
     path: '/common/item',
     component: () => import('../views/common/Item.vue'),
+  },
+  {
+    path: '/common/level',
+    component: () => import('../views/common/Level.vue'),
   },
   {
     path: '/common/image',

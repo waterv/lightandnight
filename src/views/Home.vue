@@ -8,7 +8,12 @@
       <template v-for="v in events" :key="v">
         <van-cell-group v-if="!v.noavailable" :title="v.name" inset>
           <template v-for="u in v.events" :key="u">
-            <van-cell v-if="u.time !== undefined" :title="u.name" :label="u.desc" center>
+            <van-cell
+              v-if="u.time !== undefined"
+              :title="u.name"
+              :label="u.desc"
+              center
+            >
               <template #right-icon>
                 <van-count-down :time="u.time">
                   <template #default="timeData">
@@ -159,6 +164,12 @@ export default {
               background: this.$root.colors.common.cpr,
               color: 'rgba(85, 76, 60, .8)',
               to: '/common/cpr',
+            },
+            {
+              name: '灵犀养成计算器',
+              background: this.$root.colors.common.level,
+              color: 'rgba(109, 46, 43, 0.8)',
+              to: '/common/level',
             },
             {
               name: '道具合成计算器',
