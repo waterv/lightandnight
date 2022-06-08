@@ -1,0 +1,43 @@
+{
+  "current": {
+    "star": 6,
+    "level": 1,
+    "isBreak": false,
+    "rank": 0,
+    "skill": [
+      {
+        "star": 0,
+        "level": 1
+      },
+      {
+        "star": 0,
+        "level": 1
+      },
+      {
+        "star": 0,
+        "level": 1
+      }
+    ]
+  },
+  "target": {
+    "star": 6,
+    "level": 60,
+    "isBreak": true,
+    "rank": 0,
+    "second": false,
+    "skill": [
+      {
+        "star": 4,
+        "level": 60
+      },
+      {
+        "star": 4,
+        "level": 60
+      },
+      {
+        "star": 4,
+        "level": 60
+      }
+    ]
+  }
+}
