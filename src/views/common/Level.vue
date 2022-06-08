@@ -407,7 +407,7 @@ export default {
       this.遇见初心 = Math.ceil(this.慕心 / 4)
       this.外婆小铺3 = Math.ceil(this.稀愿珍宝 / ratio)
       this.外婆小铺6 = Math.ceil((this.心愿海螺 / ratio) * 5)
-      this.遇见铭迹 = Math.ceil((this.眩光沙砾 - this.外婆小铺6 * ratio) / 300)
+      this.遇见铭迹 = Math.ceil((this.眩光沙砾 - this.外婆小铺6 * ratio) / 30)
     },
   },
 }
