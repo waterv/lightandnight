@@ -5,7 +5,8 @@
     "desc": "游戏内 30 元开通",
     "count": 150,
     "on": false,
-    "decString": "不过期"
+    "decString": "不过期",
+    "unit": "d"
   },
   {
     "name": "悦享卡",
@@ -13,7 +14,8 @@
     "desc": "心悦俱乐部 98 元开通",
     "count": 300,
     "on": false,
-    "decString": "不过期"
+    "decString": "不过期",
+    "unit": "d"
   },
   {
     "name": "限定巡礼",
@@ -21,6 +23,31 @@
     "desc": "活动 60 元开通",
     "count": 100,
     "on": false,
-    "decString": "不过期"
+    "decString": "不过期",
+    "unit": "d"
+  },
+  {
+    "name": "祈愿勾勾",
+    "aka": "年卡",
+    "desc": "活动 68 元开通，按保底计",
+    "level": [
+      {
+        "text": "日影契约 (200/w)",
+        "value": 200
+      },
+      {
+        "text": "仲元契约 (400/w)",
+        "value": 400
+      },
+      {
+        "text": "永兆契约 (700/w)",
+        "value": 700
+      }
+    ],
+    "count": 200,
+    "on": false,
+    "curLevel": 0,
+    "decString": "不过期",
+    "unit": "w"
   }
 ]

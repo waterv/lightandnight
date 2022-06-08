@@ -15,16 +15,26 @@
     <template v-for="(v, i) in card" :key="i">
       <van-cell
         :title="`「${v.name}」已开通`"
-        :label="`${v.count}/d・${v.aka}・${v.desc}`"
+        :label="`${v.count}/${v.unit}・${v.aka}・${v.desc}`"
         center
       >
         <template #right-icon>
           <van-switch v-model="v.on" size="24" />
         </template>
       </van-cell>
+      <van-field
+        v-if="v.level && v.on"
+        v-model="v.level[v.curLevel].text"
+        label="等级"
+        left-icon="arrow"
+        readonly
+        is-link
+        @click="showPicker(v)"
+      />
       <van-cell
         v-if="v.on"
-        :title="`「${v.name}」过期时间`"
+        title="过期时间"
+        icon="arrow"
         :value="v.decString"
         clickable
         @click="showCalendar(i)"
@@ -91,6 +101,15 @@
     :min-date="startDate"
     @confirm="calendarConfirm"
   />
+
+  <van-popup v-model:show="pickerShow" round position="bottom">
+    <van-picker
+      :columns="pickerColumn"
+      :default-index="0"
+      @confirm="pickerConfirm"
+      @cancel="pickerShow = false"
+    />
+  </van-popup>
 </template>
 
 <script>
@@ -116,6 +135,9 @@ export default {
       currentGachapon: undefined,
       currentGachapon10: undefined,
       currentCalendar: 0,
+      pickerColumn: [],
+      pickerTarget: {},
+      pickerShow: false,
       calendarShow: false,
       startDate: dayjs().toDate(),
       targetDate: dayjs().add(1, 'month').toDate(),
@@ -133,9 +155,12 @@ export default {
 
       for (let i in this.card) {
         if (this.card[i].on) {
-          let times = this.getDiff(date)
+          let times = this.getDiff(date, this.card[i].unit)
           if (this.card[i].dec)
-            times = Math.min(times, this.getDiff(this.card[i].dec))
+            times = Math.min(
+              times,
+              this.getDiff(this.card[i].dec, this.card[i].unit)
+            )
           result += times * this.card[i].count
         }
       }
@@ -163,8 +188,22 @@ export default {
       this.$dialog.alert({
         ...this.$root.dialogSettings,
         message:
-          '此工具在计算过程中，所有项目均按照「奖励在第一天发放」的规则参与计算，与实际情况存在偏差。\n\n目标日期越远，计算结果会越准确，但同时活动等不确定因素也增多。\n\n出于上述原因，本工具仅供粗略计算之用。',
+          '此工具在计算过程中，所有项目均按照「奖励在第一天发放」的规则参与计算，与实际情况存在偏差。\n\n目标日期越远，因奖励发放时间产生的偏差所占比例减小，计算结果相对更加准确；但同时活动等不确定因素也增多。\n\n出于上述原因，本工具仅供粗略计算之用。',
       })
+    },
+    showPicker(v) {
+      this.pickerColumn = v.level.map((u, i) => {
+        return { ...u, index: i }
+      })
+      this.pickerTarget = v
+      this.pickerShow = true
+    },
+    pickerConfirm(v) {
+      console.log(v)
+      let res = v.selectedOptions[0]
+      this.pickerTarget.count = res.value
+      this.pickerTarget.curLevel = res.index
+      this.pickerShow = false
     },
     showCalendar(i) {
       this.currentCalendar = i
