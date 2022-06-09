@@ -42,9 +42,7 @@
       <van-cell-group title="星辰馈赠" inset>
         <van-cell v-for="v in gifts" :key="v" :title="v.name">
           <template #right-icon>
-            <template v-if="v.time">
-              （第 {{v.time}} 抽）
-            </template>
+            <template v-if="v.time"> （第 {{ v.time }} 抽） </template>
             <van-checkbox v-model="v.had" disabled />
           </template>
         </van-cell>
@@ -159,7 +157,7 @@ export default {
       angles_: [Math.PI, Math.PI, Math.PI],
       angles: [Math.PI, Math.PI, Math.PI],
       frame: 0,
-      maxFrame: 144,
+      maxFrame_: undefined,
       maxFrameData: [
         { text: '慢慢速', value: 216 },
         { text: '慢速', value: 144 },
@@ -222,6 +220,19 @@ export default {
       for (let i in this.shapeAngle) result.push(result[i] + this.shapeAngle[i])
       return result
     },
+    maxFrame: {
+      get() {
+        if (this.maxFrame_ === undefined) {
+          let data = localStorage?.getItem('WishSimMaxFrame')
+          return data !== null ? Number(data) : 144
+        }
+        return this.maxFrame_
+      },
+      set(v) {
+        this.maxFrame_ = v
+        localStorage.setItem('WishSimMaxFrame', v)
+      },
+    },
   },
   mounted() {
     let canvas = document.getElementById('canvas')
@@ -254,7 +265,7 @@ export default {
         ...this.$root.dialogSettings,
         message:
           '由于官方未公示该活动概率规则，本工具中使用的概率数据是由面积比例估算而来，与实际情况不符。\n\n本工具默认假设：「恋心」占有 166 的权重，「眩光沙砾」占有 145 的权重，其他奖励均占有 100 的权重，所得到的概率数值与已记录的实际数值稍有偏差。如果您有更好的权重数据，可在此处更改。',
-        confirmButtonColor: this.buttonColor
+        confirmButtonColor: this.buttonColor,
       })
     },
     setMaxFrame(v) {

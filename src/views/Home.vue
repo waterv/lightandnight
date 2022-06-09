@@ -57,6 +57,15 @@
         <van-cell title="欧皇模拟器" is-link to="/common/image" />
       </van-cell-group>
       <van-cell-group title=" " inset>
+        <van-cell
+          title="清空 localStorage"
+          label="清除后，一些设置项将回到默认值。"
+          @click="clearLocalStorage"
+          is-link
+          center
+        />
+      </van-cell-group>
+      <van-cell-group title=" " inset>
         <van-cell title="添加到主屏幕" is-link to="/posts/addtohome" />
         <van-cell title="关于与声明" is-link to="/posts/statement" />
         <van-cell title="更新日志" is-link to="/posts/changelog" />
@@ -72,7 +81,7 @@
 </template>
 
 <script>
-import { CountDown, Tabbar, TabbarItem } from 'vant'
+import { CountDown, Tabbar, TabbarItem, Toast } from 'vant'
 import Navbar from '@/components/Navbar.vue'
 let dayjs = require('dayjs')
 
@@ -202,6 +211,10 @@ export default {
     },
     onActiveChange(active) {
       this.$root.homepageActive = active
+    },
+    clearLocalStorage() {
+      localStorage.clear()
+      Toast({ message: 'localStorage 已清空。', icon: 'passed' })
     },
   },
 }

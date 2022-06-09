@@ -442,13 +442,13 @@ export default {
       list: [],
       listIndex: -1,
 
-      animationType: 2,
+      animationType_: undefined,
       animationData: [
         { name: '不启用动画', value: 0 },
         { name: '动画样式 1', value: 1 },
         { name: '动画样式 2', value: 2 },
       ],
-      shiningType: true,
+      shiningType_: undefined,
     }
   },
   computed: {
@@ -534,6 +534,32 @@ export default {
         i += 1
       }
       return column
+    },
+    animationType: {
+      get() {
+        if (this.animationType_ === undefined) {
+          let data = localStorage?.getItem('GachaSimAnimationType')
+          return data !== null ? Number(data) : 2
+        }
+        return this.animationType_
+      },
+      set(v) {
+        this.animationType_ = v
+        localStorage.setItem('GachaSimAnimationType', v)
+      },
+    },
+    shiningType: {
+      get() {
+        if (this.shiningType_ === undefined) {
+          let data = localStorage.getItem('GachaSimShiningType')
+          return data == 'false' ? false : true
+        }
+        return this.shiningType_
+      },
+      set(v) {
+        this.shiningType_ = v
+        localStorage.setItem('GachaSimShiningType', v)
+      },
     },
   },
   methods: {

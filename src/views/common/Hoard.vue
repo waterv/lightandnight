@@ -199,7 +199,6 @@ export default {
       this.pickerShow = true
     },
     pickerConfirm(v) {
-      console.log(v)
       let res = v.selectedOptions[0]
       this.pickerTarget.count = res.value
       this.pickerTarget.curLevel = res.index
