@@ -1,0 +1,26 @@
+[
+  {
+    "name": "超值月卡",
+    "price": 30,
+    "gem": 10,
+    "coin": 4500,
+    "gachapon": 0,
+    "gachapon10": 0
+  },
+  {
+    "name": "十倍返利",
+    "price": 60,
+    "gem": 20,
+    "coin": 9000,
+    "gachapon": 0,
+    "gachapon10": 0
+  },
+  {
+    "name": "悦享卡",
+    "price": 98,
+    "gem": 32,
+    "coin": 9000,
+    "gachapon": 0,
+    "gachapon10": 0
+  }
+]

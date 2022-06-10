@@ -2,105 +2,181 @@
   <navbar title="礼包性价比计算器" can-return>
     <van-icon name="question-o" @click="showInfo" />
   </navbar>
+  <van-tabs v-model:active="active" sticky offset-top="46">
+    <van-tab title="计算">
+      <van-cell-group title="攻略" inset>
+        <van-cell
+          title="常驻礼包性价比"
+          is-link
+          center
+          url="https://weibo.com/2304898581/Lg2v1rjG8"
+        />
+        <van-cell
+          title="其他攻略"
+          is-link
+          center
+          url="https://weibo.com/u/2304898581"
+        />
+      </van-cell-group>
 
-  <van-cell-group title="攻略" inset>
-    <van-cell
-      title="常驻礼包性价比"
-      is-link
-      center
-      url="https://weibo.com/2304898581/Lg2v1rjG8"
-    />
-    <van-cell
-      title="其他攻略"
-      is-link
-      center
-      url="https://weibo.com/u/2304898581"
-    />
-  </van-cell-group>
+      <van-radio-group v-model="gemRatioSelected">
+        <van-cell-group title="北极星兑换比率" inset>
+          <van-cell title="说明" is-link @click="showGemRatioInfo" />
 
-  <van-radio-group v-model="gemRatioSelected">
-    <van-cell-group title="北极星兑换比率" inset>
-      <van-cell title="说明" is-link @click="showGemRatioInfo" />
+          <van-cell
+            v-for="v in gemRatioData"
+            :key="v"
+            :title="`1 北极星 = ${v.value} 小熊星座`"
+            :label="v.desc"
+            clickable
+            @click="gemRatioSelect(v.value)"
+          >
+            <template #right-icon>
+              <van-radio :name="`${v.value}`" />
+            </template>
+          </van-cell>
 
-      <van-cell
-        v-for="v in gemRatioData"
-        :key="v"
-        :title="`1 北极星 = ${v.value} 小熊星座`"
-        :label="v.desc"
-        clickable
-        @click="gemRatioSelect(v.value)"
-      >
-        <template #right-icon>
-          <van-radio :name="`${v.value}`" />
-        </template>
-      </van-cell>
+          <van-cell title="自定义" center>
+            <template #right-icon>
+              <van-stepper
+                v-model="gemRatio"
+                min="50"
+                input-width="48px"
+                @change="gemRatioSelect(gemRatio)"
+              />
+            </template>
+          </van-cell>
+        </van-cell-group>
+      </van-radio-group>
 
-      <van-cell title="自定义" center>
-        <template #right-icon>
-          <van-stepper
-            v-model="gemRatio"
-            min="50"
-            input-width="48px"
-            @change="gemRatioSelect(gemRatio)"
+      <van-cell-group title="礼包详情" inset>
+        <van-field v-model="name" label="名称" autocomplete="off" />
+        <van-field
+          v-model="price"
+          label="售价"
+          placeholder="单位：RMB"
+          type="number"
+          autocomplete="off"
+        />
+        <van-field
+          v-model="gem"
+          label="北极星"
+          type="number"
+          autocomplete="off"
+        />
+        <van-field
+          v-model="coin"
+          label="小熊星座"
+          type="number"
+          autocomplete="off"
+        />
+        <van-field
+          v-model="gachapon"
+          label="羽毛笔"
+          type="number"
+          autocomplete="off"
+        />
+        <van-field
+          v-model="gachapon10"
+          label="十连签收券"
+          type="number"
+          autocomplete="off"
+        />
+        <van-cell title="计算" is-link @click="calculate" />
+      </van-cell-group>
+
+      <van-cell-group title="计算结果" inset>
+        <van-cell title="包含抽数" :value="gachaCount" />
+        <van-cell title="性价比" :value="ratio" />
+        <van-cell title="每抽价格" :value="pricePerGacha" />
+      </van-cell-group>
+      <van-cell-group title=" " inset>
+        <van-cell title="加入列表" is-link @click="add" />
+        <van-cell title="清除当前输入" is-link @click="clear" />
+      </van-cell-group>
+    </van-tab>
+    <van-tab title="列表">
+      <van-cell-group v-if="showTutorial" title="说明" inset>
+        <van-swipe-cell>
+          <van-cell
+            title="礼包名称"
+            value="性价比"
+            label="点击以选择，左滑以删除"
+            center
           />
-        </template>
-      </van-cell>
-    </van-cell-group>
-  </van-radio-group>
+          <template #right>
+            <van-button
+              text="删除"
+              @click="closeTutorial"
+              class="swipe-button"
+              square
+              type="danger"
+            />
+          </template>
+        </van-swipe-cell>
+      </van-cell-group>
+      <van-cell-group title=" " inset>
+        <van-swipe-cell v-for="(v, i) in packages" :key="v">
+          <van-cell
+            :value="result(v).ratio + '%'"
+            :label="`¥${v.price} = ${result(v).gachaCount} 抽 (${
+              result(v).pricePerGacha
+            } 元/抽)`"
+            @click="selectPackage(i)"
+            center
+            clickable
+          >
+            <template #title>
+              {{ v.name }}
+              <van-tag v-if="v.selected" type="primary">已选</van-tag>
+            </template>
+          </van-cell>
 
-  <van-cell-group title="礼包内容" inset>
-    <van-field
-      v-model="price"
-      label="售价"
-      placeholder="单位：RMB"
-      type="number"
-      autocomplete="off"
-    />
-    <van-field v-model="gem" label="北极星" type="number" autocomplete="off" />
-    <van-field
-      v-model="coin"
-      label="小熊星座"
-      type="number"
-      autocomplete="off"
-    />
-    <van-field
-      v-model="gachapon"
-      label="羽毛笔"
-      type="number"
-      autocomplete="off"
-    />
-    <van-field
-      v-model="gachapon10"
-      label="十连签收券"
-      type="number"
-      autocomplete="off"
-    />
-  </van-cell-group>
-
-  <van-cell-group title=" " inset>
-    <van-cell title="计算" is-link @click="calculate" />
-  </van-cell-group>
-
-  <van-cell-group title="计算结果" inset>
-    <van-cell title="包含抽数" :value="gachaCount" />
-    <van-cell title="性价比" :value="ratio" />
-    <van-cell title="每抽价格" :value="pricePerGacha" />
-    <van-cell title="清空" is-link @click="clear" />
-  </van-cell-group>
+          <template #right>
+            <van-button
+              text="删除"
+              @click="removePackage(i)"
+              class="swipe-button"
+              square
+              type="danger"
+            />
+          </template>
+        </van-swipe-cell>
+      </van-cell-group>
+      <van-cell-group title=" " inset>
+        <van-cell
+          title="已选中礼包总体"
+          :value="`${total.price ? `${total.ratio}%` : '-'}`"
+          :label="`${
+            total.price
+              ? `¥${total.price} = ${total.gachaCount} 抽 (${total.pricePerGacha} 元/抽)`
+              : '未选中'
+          }`"
+          center
+        />
+      </van-cell-group>
+    </van-tab>
+  </van-tabs>
 </template>
 
 <script>
-import { Notify } from 'vant'
+import { Notify, Card, SwipeCell, Toast, Tag } from 'vant'
 import Navbar from '@/components/Navbar.vue'
+let packages = require('@/assets/data/packages.json')
 
 export default {
   name: 'CPR',
   components: {
     [Notify.name]: Notify,
+    [Card.name]: Card,
+    [SwipeCell.name]: SwipeCell,
+    [Toast.name]: Toast,
+    [Tag.name]: Tag,
     Navbar,
   },
   data() {
     return {
+      active: 0,
       gemRatio: 100,
       gemRatioData: [
         { value: 150, desc: '活动十连特惠（20 北极星十连，部分活动出现）' },
@@ -109,6 +185,7 @@ export default {
         { value: 50, desc: '原价兑换' },
       ],
       gemRatioSelected: '100',
+      name: '',
       price: undefined,
       gem: undefined,
       coin: undefined,
@@ -117,7 +194,40 @@ export default {
       gachaCount: '',
       ratio: '',
       pricePerGacha: '',
+      showTutorial: localStorage?.getItem('showTutorial') !== 'false',
+      packages: packages.map(v => {
+        return { ...v }
+      }),
     }
+  },
+  computed: {
+    total() {
+      let v = this.packages.reduce(
+        (acc, v) => {
+          if (v.selected)
+            return {
+              price: acc.price + v.price,
+              gem: acc.gem + v.gem,
+              coin: acc.coin + v.coin,
+              gachapon: acc.gachapon + v.gachapon,
+              gachapon10: acc.gachapon10 + v.gachapon10,
+            }
+          return acc
+        },
+        {
+          price: 0,
+          gem: 0,
+          coin: 0,
+          gachapon: 0,
+          gachapon10: 0,
+        }
+      )
+      v = {
+        ...v,
+        ...this.result(v),
+      }
+      return v
+    },
   },
   methods: {
     showInfo() {
@@ -137,30 +247,69 @@ export default {
     gemRatioSelect(v) {
       this.gemRatio = v
       this.gemRatioSelected = String(v)
+      this.packages.sort((a, b) => {
+        return this.result(b).ratio - this.result(a).ratio
+      })
+    },
+    result(v) {
+      let gachaCount =
+        (v.gem * this.gemRatio + v.coin) / 300 + v.gachapon + 10 * v.gachapon10
+      let result = (gachaCount / v.price) * 18
+      return {
+        gachaCount: Math.round(gachaCount * 100) / 100,
+        ratio: Math.round(result * 100),
+        pricePerGacha: Math.round((18 / result) * 100) / 100,
+      }
     },
     calculate() {
-      let getValue = (v, def) => Number(v ? v : def)
-      let price = getValue(this.price, 0)
-      if (!price) {
-        Notify('请输入礼包售价。')
+      if (!this.price) {
+        Toast({ message: '请输入礼包售价。', icon: 'close' })
         return
       }
-      let gem = getValue(this.gem, 0)
-      let coin = getValue(this.coin, 0)
-      let gachapon = getValue(this.gachapon, 0)
-      let gachapon10 = getValue(this.gachapon10, 0)
-
-      let gachaCount =
-        (gem * this.gemRatio + coin) / 300 + gachapon + 10 * gachapon10
-      if (!gachaCount) {
-        Notify('请输入礼包内容。')
+      let v = {
+        price: Number(this.price),
+        gem: Number(this.gem || 0),
+        coin: Number(this.coin || 0),
+        gachapon: Number(this.gachapon || 0),
+        gachapon10: Number(this.gachapon10 || 0),
+      }
+      let result = this.result(v)
+      if (!result.gachaCount) {
+        Toast({ message: '请输入礼包内容。', icon: 'close' })
         return
       }
 
-      let result = (gachaCount / price) * 18
-      this.gachaCount = String(Math.round(gachaCount * 100) / 100) + ' 抽'
-      this.ratio = String(Math.round(result * 100)) + '%'
-      this.pricePerGacha = String(Math.round((18 / result) * 100) / 100) + ' 元'
+      this.gachaCount = result.gachaCount + ' 抽'
+      this.ratio = result.ratio + '%'
+      this.pricePerGacha = result.pricePerGacha + ' 元'
+    },
+    add() {
+      if (!this.price) {
+        Toast({ message: '请输入礼包售价。', icon: 'close' })
+        return
+      }
+      this.calculate()
+      if (!this.gachaCount) {
+        Toast({ message: '请输入礼包内容。', icon: 'close' })
+        return
+      }
+      if (!this.name) {
+        Toast({ message: '请输入礼包名称。', icon: 'close' })
+        return
+      }
+      this.packages.push({
+        name: this.name,
+        price: Number(this.price),
+        gem: Number(this.gem || 0),
+        coin: Number(this.coin || 0),
+        gachapon: Number(this.gachapon || 0),
+        gachapon10: Number(this.gachapon10 || 0),
+      })
+      this.packages.sort((a, b) => {
+        return this.result(b).ratio - this.result(a).ratio
+      })
+      this.clear()
+      Toast({ message: '已加入列表。', icon: 'passed' })
     },
     clear() {
       this.price = undefined
@@ -172,6 +321,22 @@ export default {
       this.ratio = ''
       this.pricePerGacha = ''
     },
+    closeTutorial() {
+      this.showTutorial = false
+      localStorage.setItem('showTutorial', 'false')
+    },
+    removePackage(i) {
+      this.packages.splice(i, 1)
+    },
+    selectPackage(i) {
+      this.packages[i].selected = !this.packages[i].selected
+    },
   },
 }
 </script>
+
+<style scoped>
+.swipe-button {
+  height: 100%;
+}
+</style>
