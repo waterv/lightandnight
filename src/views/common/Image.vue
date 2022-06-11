@@ -156,10 +156,11 @@ export default {
   mounted() {
     let canvas = document.getElementById('canvas')
     let ctx = canvas.getContext('2d')
-
-    let ratio = this.width / 512
-    canvas.style.width = 512
-    canvas.style.height = 1024
+    canvas.style.width = canvas.width + 'px'
+    canvas.style.height = canvas.height + 'px'
+    canvas.width = 512
+    canvas.height = 1024
+    let ratio = canvas.width / 512
     ctx.scale(ratio, ratio)
     this.draw()
   },
