@@ -3,6 +3,11 @@
 
   <van-tabs v-model:active="active" scrollspy sticky offset-top="46">
     <div class="content">
+      <van-tab title="y22w26">
+        <h2>2022 年第 26 周</h2>
+        <h3>数据更新</h3>
+        <p>1. 活动提醒：移除已结束的「真心话大冒险」第 12 期、「设计专栏」第 5 期活动信息，添加「羁梦星愿・绯红深渊」「星雾谜戏・绯红深渊」活动信息。</p>
+      </van-tab>
       <van-tab title="y22w23">
         <h2>2022 年第 23 周</h2>
         <h3>功能与改进</h3>
