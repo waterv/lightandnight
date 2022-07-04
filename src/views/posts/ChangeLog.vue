@@ -3,6 +3,11 @@
 
   <van-tabs v-model:active="active" scrollspy sticky offset-top="46">
     <div class="content">
+      <van-tab title="y22w27">
+        <h2>2022 年第 27 周</h2>
+        <h3>数据更新</h3>
+        <p>1. 信使花园模拟器：添加常驻卡池「浮世同行・失败者的失败」。</p>
+      </van-tab>
       <van-tab title="y22w26">
         <h2>2022 年第 26 周</h2>
         <h3>数据更新</h3>
