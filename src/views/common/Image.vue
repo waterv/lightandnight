@@ -1,24 +1,15 @@
 <template>
-  <navbar title="欧皇模拟器" no-fix can-return />
+  <navbar title="欧皇模拟器" can-return />
 
   <van-cell-group title="说明" inset>
     <van-cell
       title="说明"
       label="由于引用的图片资源较多，本页可能加载较长时间，请耐心等候。角色与灵犀名需要使用「方正准雅宋 GBK」字体，建议您使用安装有该字体的电脑访问本页。"
     />
-    <van-cell
-      title="获取「方正准雅宋 GBK」字体"
-      is-link
-      @click="showFontInfo"
-    />
+    <van-cell title="获取「方正准雅宋 GBK」字体" is-link @click="showFontInfo" />
   </van-cell-group>
 
   <van-cell-group title="灵犀信息" inset>
-    <van-cell title="New" center>
-      <template #right-icon>
-        <van-switch v-model="isNew" size="24" />
-      </template>
-    </van-cell>
     <van-field
       v-model="signSelected"
       is-link
@@ -28,16 +19,10 @@
       @click="showSignPicker = true"
     />
     <van-field v-model="character" label="角色" autocomplete="off" />
-    <van-field v-model="name" label="灵犀名" autocomplete="off" />
+    <van-field v-model="name" label="灵犀名称" autocomplete="off" />
     <van-cell title="星级" center>
       <template #right-icon>
-        <van-stepper
-          v-model="star"
-          integer
-          min="1"
-          max="8"
-          input-width="64px"
-        />
+        <van-stepper v-model="star" integer min="1" max="8" />
       </template>
     </van-cell>
     <van-cell title="二段光影" center>
@@ -45,35 +30,36 @@
         <van-switch v-model="isSecond" size="24" />
       </template>
     </van-cell>
-    <van-cell title="勿忘" center>
+    <van-cell title="「瑰意」标记" center>
+      <template #right-icon>
+        <van-switch v-model="mark" size="24" />
+      </template>
+    </van-cell>
+  </van-cell-group>
+
+  <van-cell-group title="玩家信息" inset>
+    <van-cell title="获得新卡 (New)" center>
+      <template #right-icon>
+        <van-switch v-model="isNew" size="24" />
+      </template>
+    </van-cell>
+    <van-cell title="获得勿忘" center>
       <template #right-icon>
         <van-switch v-model="isFlower" size="24" @change="onFlowerChange" />
       </template>
     </van-cell>
     <template v-if="isFlower">
-      <van-cell title="勿忘星级" center>
+      <van-cell title="勿忘星级" icon="arrow" center>
         <template #right-icon>
-          <van-stepper
-            v-model="flower"
-            integer
-            min="3"
-            max="6"
-            input-width="64px"
-          />
+          <van-stepper v-model="flower" integer min="3" max="6" input-width="64px" />
         </template>
       </van-cell>
-      <van-cell title="勿忘边框星级" center>
+      <van-cell title="边框星级" icon="arrow" center>
         <template #right-icon>
-          <van-stepper
-            v-model="border"
-            integer
-            min="3"
-            max="6"
-            input-width="64px"
-          />
+          <van-stepper v-model="border" integer min="3" max="6" input-width="64px" />
         </template>
       </van-cell>
-      <van-field v-model="flowerText" label="勿忘数量" autocomplete="off" />
+      <van-field v-model="flowerText" label="数量" left-icon="arrow" autocomplete="off" />
     </template>
   </van-cell-group>
 
@@ -94,19 +80,14 @@
     </van-cell>
   </van-cell-group>
 
-  <van-cell-group title="生成图片" inset>
-    <van-cell
-      title="生成图片"
-      label="请您手动截图并裁剪为合适的尺寸。"
-      center
-      is-link
-      @click="draw"
-    />
+  <van-cell-group title=" " inset>
+    <van-cell title="生成图片" center is-link @click="newDraw" />
   </van-cell-group>
 
   <van-divider />
 
-  <canvas id="canvas" :width="width" :height="2 * width" />
+  <canvas id="canvas" width="512" height="1024" style="display: none" />
+  <img v-if="dataUri" :src="dataUri" style="width: 100%" />
 
   <van-popup v-model:show="showSignPicker" round position="bottom">
     <van-picker :columns="signColumn" @confirm="onSignConfirm" />
@@ -117,6 +98,7 @@
 import { useWindowSize } from '@vant/use'
 import { Uploader, Toast } from 'vant'
 import Navbar from '@/components/Navbar.vue'
+import Jimp from 'jimp'
 
 export default {
   name: 'Image',
@@ -142,6 +124,7 @@ export default {
       character: '蓝星',
       name: '信使巡游',
       sign: 5,
+      mark: 0,
       star: 6,
       isSecond: true,
       isFlower: false,
@@ -151,18 +134,8 @@ export default {
       card: [],
       cardThumb: [],
       width: Math.min(width.value, 425),
+      dataUri: undefined,
     }
-  },
-  mounted() {
-    let canvas = document.getElementById('canvas')
-    let ctx = canvas.getContext('2d')
-    canvas.style.width = canvas.width + 'px'
-    canvas.style.height = canvas.height + 'px'
-    canvas.width = 512
-    canvas.height = 1024
-    let ratio = canvas.width / 512
-    ctx.scale(ratio, ratio)
-    this.draw()
   },
   methods: {
     showFontInfo() {
@@ -170,15 +143,19 @@ export default {
         .alert({
           ...this.$root.dialogSettings,
           message:
-            '使用「方正准雅宋 GBK」字体需要获得授权，其中「个人非商业授权」可按照以下步骤免费获得：\n\n1. 登陆方正字库官网，认真阅读并同意相关许可协议。\n2. 在「方正雅宋家族」页面的「字体样式」下找到「方正准雅宋」，点击它右侧的「获取字体」。\n3. 点击右侧浮动菜单中的「清单 - 字体清单」。\n4. 在弹出的页面中，将「字符集」改为「繁简扩展 (GBK)」，然后点击右下角的「获得字体」。\n5. 再次确认后，即可在「我的字体」中找到「下载字体」。\n\n下载字体并安装后，重新启动浏览器，一般就可以正常调用该字体。',
+            '使用「方正准雅宋 GBK」字体需要获得授权，其中「个人非商业授权」可按照以下步骤免费获得：\n\n' +
+            '1. 登陆方正字库官网，认真阅读并同意相关许可协议。\n' +
+            '2. 在「方正雅宋家族」页面的「字体样式」下找到「方正准雅宋」，点击它右侧的「获取字体」。\n' +
+            '3. 点击右侧浮动菜单中的「清单 - 字体清单」。\n' +
+            '4. 在弹出的页面中，将「字符集」改为「繁简扩展 (GBK)」，然后点击右下角的「获得字体」。\n' +
+            '5. 再次确认后，即可在「我的字体」中找到「下载字体」。\n\n' +
+            '下载字体并安装后，重新启动浏览器，一般就可以正常调用该字体。',
           confirmButtonText: '前往方正字库官网',
           cancelButtonText: '关闭',
           showCancelButton: true,
         })
         .then(() => {
-          window.open(
-            'https://www.foundertype.com/index.php/FontInfo/index/id/193'
-          )
+          window.open('https://www.foundertype.com/index.php/FontInfo/index/id/193')
         })
         .catch(() => {})
     },
@@ -192,241 +169,119 @@ export default {
       this.flower = Math.max(Math.min(this.star, 6), 3)
       this.border = Math.max(Math.min(this.star, 6), 3)
     },
-    blur() {
-      // Via GitHub arahaya/ImageFilters.js
-      var blur = (src, dst, width, height, radius) => {
-        var tableSize = radius * 2 + 1
-        var radiusPlus1 = radius + 1
-        var widthMinus1 = width - 1
-
-        var r, g, b, a
-
-        var srcIndex = 0
-        var dstIndex
-        var p, next, prev
-        var i, l, x, y, nextIndex, prevIndex
-
-        var sumTable = []
-        for (i = 0, l = 256 * tableSize; i < l; i += 1) {
-          sumTable[i] = (i / tableSize) | 0
-        }
-
-        for (y = 0; y < height; y += 1) {
-          r = g = b = a = 0
-          dstIndex = y
-
-          p = srcIndex << 2
-          r += radiusPlus1 * src[p]
-          g += radiusPlus1 * src[p + 1]
-          b += radiusPlus1 * src[p + 2]
-          a += radiusPlus1 * src[p + 3]
-
-          for (i = 1; i <= radius; i += 1) {
-            p = (srcIndex + (i < width ? i : widthMinus1)) << 2
-            r += src[p]
-            g += src[p + 1]
-            b += src[p + 2]
-            a += src[p + 3]
-          }
-
-          for (x = 0; x < width; x += 1) {
-            p = dstIndex << 2
-            dst[p] = sumTable[r]
-            dst[p + 1] = sumTable[g]
-            dst[p + 2] = sumTable[b]
-            dst[p + 3] = sumTable[a]
-
-            nextIndex = x + radiusPlus1
-            if (nextIndex > widthMinus1) {
-              nextIndex = widthMinus1
-            }
-
-            prevIndex = x - radius
-            if (prevIndex < 0) {
-              prevIndex = 0
-            }
-
-            next = (srcIndex + nextIndex) << 2
-            prev = (srcIndex + prevIndex) << 2
-
-            r += src[next] - src[prev]
-            g += src[next + 1] - src[prev + 1]
-            b += src[next + 2] - src[prev + 2]
-            a += src[next + 3] - src[prev + 3]
-
-            dstIndex += height
-          }
-          srcIndex += width
-        }
-      }
-
-      return (srcImageData, hRadius, vRadius, quality) => {
-        var srcPixels = srcImageData.data,
-          srcWidth = srcImageData.width,
-          srcHeight = srcImageData.height,
-          dstImageData = new ImageData(srcWidth, srcHeight),
-          dstPixels = dstImageData.data,
-          tmpImageData = new ImageData(srcWidth, srcHeight),
-          tmpPixels = tmpImageData.data
-
-        for (var i = 0; i < quality; i += 1) {
-          // only use the srcPixels on the first loop
-          blur(
-            i ? dstPixels : srcPixels,
-            tmpPixels,
-            srcWidth,
-            srcHeight,
-            hRadius
-          )
-          blur(tmpPixels, dstPixels, srcHeight, srcWidth, vRadius)
-        }
-
-        return dstImageData
-      }
-    },
-    draw() {
+    newDraw() {
       Toast.loading({
         message: '加载中…',
         forbidClick: true,
         duration: 0,
       })
-
-      let canvas = document.getElementById('canvas')
-      let ctx = canvas.getContext('2d')
-
-      let loadImage = url =>
-        new Promise(resolve => {
-          const image = new Image()
-          image.onload = () => resolve(image)
-          image.src = url
+      let { w, h } = { w: 512, h: 1024 }
+      let asset = fileName => require('@/assets/img/Image/' + fileName)
+      Jimp.read(this.card[0]?.content || asset('card_1.png'))
+        .then(img => {
+          let imgClone = img.clone()
+          img = img.resize(w, h)
+          // Brightness
+          for (let x = 0; x < w; x++)
+            for (let y = 0; y < h; y++) {
+              let { r, g, b, a } = Jimp.intToRGBA(img.getPixelColor(x, y))
+              let p = v => Math.min(255, 2 * v + 25)
+              img.setPixelColor(Jimp.rgbaToInt(p(r), p(g), p(b), a), x, y)
+            }
+          img = img.blur(5)
+          let composite = (img, fileName, x, y, w, h) =>
+            Jimp.read(asset(fileName)).then(src => img.composite(w ? src.resize(w, h) : src, x, y))
+          return composite(img, 'background_top.png', 0, 0)
+            .then(img => composite(img, 'background_bottom.png', 0, 768))
+            .then(img => img.composite(imgClone.resize(w, 768), 0, 128))
+            .then(img => composite(img, 'background_card.png', 0, 384))
+            .then(img => composite(img, 'card_border.png', 0, 104, w, 816))
+            .then(img => (this.isNew ? composite(img, 'new.png', 0, 64, 154, 123) : img))
+            .then(img => composite(img, `sign_${this.sign}.png`, 0, 666))
+            .then(img => composite(img, 'tit.png', 12, 757, 15, 15))
+            .then(img => {
+              if (!this.mark) return img
+              return composite(img, 'mark_1.png', 0, 774, 80, 80)
+            })
+            .then(img => {
+              if (!this.isFlower) return img
+              return composite(img, 'background_float.png', 384, 553, 128, 36)
+                .then(img => composite(img, `border_${this.border}.png`, 384, 539, 72, 72))
+                .then(img => composite(img, `flower_${this.flower}.png`, 384, 539, 72, 72))
+                .then(img =>
+                  Jimp.read(this.cardThumb[0]?.content || asset('card_thumb.png')).then(src =>
+                    img.composite(src.resize(36, 36), 385, 575)
+                  )
+                )
+                .then(img => composite(img, 'border.png', 384, 574, 38, 38))
+            })
+            .then(img => {
+              return Jimp.read(asset('star.png')).then(src => {
+                for (let i = 0; i < this.star; i++)
+                  img = img.composite(src.resize(60, 60), 56 * i + 5, 850)
+                return img
+              })
+            })
         })
-      let loadAsset = fileName => loadImage(require('@/assets/img/' + fileName))
+        .then(img => img.getBase64Async(Jimp.MIME_PNG))
+        .then(dataUri => {
+          let canvas = document.getElementById('canvas')
+          let ctx = canvas.getContext('2d')
+          let loadImage = url =>
+            new Promise(resolve => {
+              const image = new Image()
+              image.onload = () => resolve(image)
+              image.src = url
+            })
+          return Promise.all([
+            loadImage(dataUri),
+            loadImage(this.card[1]?.content || require('@/assets/img/Image/card_2.png')),
+            loadImage(require('@/assets/img/Image/lock.png')),
+          ]).then(imgs => {
+            ctx.drawImage(imgs[0], 0, 0)
+            {
+              ctx.save()
+              ctx.font = '28px FZYaSong-M-GBK, STZhongsong, SimSun, NSimSun, STSong'
+              ctx.textBaseline = 'middle'
+              ctx.fillStyle = '#f9f4db'
+              ctx.fillText(this.character, 30, 765)
+              ctx.font = '44px FZYaSong-M-GBK, STZhongsong, SimSun, NSimSun, STSong'
+              ctx.fillText(this.name, 70, 810)
+              ctx.restore()
+            }
+            if (this.isSecond) {
+              ctx.save()
+              ctx.rotate(Math.PI / 60)
+              ctx.strokeStyle = '#fff'
+              ctx.lineWidth = 5
+              ctx.lineJoin = 'round'
+              ctx.strokeRect(512 * 0.78, 1024 * 0.63, 512 * 0.3, 1024 * 0.225)
 
-      Promise.all([
-        loadAsset('background_t.png'),
-        loadAsset('background_b.png'),
-        loadAsset('background_c.png'),
-        loadAsset('background_f.png'),
-        loadAsset('card_border.png'),
-        loadAsset('new.png'),
-        loadAsset('tit.png'),
-        loadAsset('star.png'),
-        loadAsset('lock.png'),
-        loadAsset('border.png'),
-        loadAsset(`sign_${this.sign}.png`),
-        loadAsset(`flower_${this.flower}.png`),
-        loadAsset(`border_${this.border}.png`),
-        loadImage(
-          this.card.length >= 1
-            ? this.card[0].content
-            : require('@/assets/img/card_1.png')
-        ),
-        loadImage(
-          this.card.length >= 2
-            ? this.card[1].content
-            : require('@/assets/img/card_2.png')
-        ),
-        loadImage(
-          this.cardThumb.length >= 1
-            ? this.cardThumb[0].content
-            : require('@/assets/img/card_thumb.png')
-        ),
-      ]).then(images => {
-        ctx.fillStyle = '#fff'
-        ctx.fillRect(0, 0, 512, 1024)
-
-        ctx.drawImage(images[13], 0, 0, 512, 1024) // Background
-
-        let brightness = image => {
-          let d = image.data
-          for (let i = 0; i < d.length; i += 4) {
-            d[i] = d[i] * 2 + 25
-            d[i + 1] = d[i + 1] * 2 + 25
-            d[i + 2] = d[i + 2] * 2 + 25
-          }
-          return image
-        }
-
-        let img = ctx.getImageData(0, 0, 512, 1024)
-        img = brightness(img)
-        img = this.blur()(img, 5, 15, 3)
-        ctx.putImageData(img, 0, 0)
-
-        ctx.drawImage(images[0], 0, 0) // Background Top
-        ctx.drawImage(images[1], 0, 768) // Background Bottom
-        ctx.drawImage(images[13], 0, 128, 512, 768) // Card
-        ctx.drawImage(images[2], 0, 384) // Background in Card
-        ctx.drawImage(images[4], 0, 104, 512, 816) // Card Border
-
-        if (this.isNew) ctx.drawImage(images[5], 0, 64, 154, 123) // New
-
-        ctx.drawImage(images[6], 12, 757, 15, 15) // Little star in the left of Character name
-        ctx.drawImage(images[10], 0, 666) // Signature
-        ctx.save()
-        ctx.font = '28px FZYaSong-M-GBK, STZhongsong, SimSun, NSimSun, STSong'
-        ctx.textBaseline = 'middle'
-        ctx.fillStyle = '#f9f4db'
-        ctx.fillText(this.character, 30, 765)
-        ctx.font = '44px FZYaSong-M-GBK, STZhongsong, SimSun, NSimSun, STSong'
-        ctx.fillText(this.name, 70, 810)
-        ctx.restore()
-
-        if (this.isSecond) {
-          ctx.save()
-          ctx.rotate(Math.PI / 60)
-          ctx.strokeStyle = '#fff'
-          ctx.lineWidth = 5
-          ctx.lineJoin = 'round'
-          ctx.strokeRect(512 * 0.8, 1024 * 0.63, 512 * 0.3, 1024 * 0.225)
-          ctx.drawImage(
-            images[14],
-            512 * 0.8,
-            1024 * 0.63,
-            512 * 0.3,
-            768 * 0.3
-          )
-          ctx.drawImage(images[8], 512 * 0.8 + 5, 1024 * 0.855 - 30, 20, 24)
-          ctx.font = 'bold 16px sans-serif'
-          ctx.textBaseline = 'bottom'
-          ctx.fillStyle = '#fff'
-          ctx.fillText('二段光影', 512 * 0.8 + 30, 1024 * 0.855 - 5)
-          ctx.restore()
-        }
-
-        if (this.isFlower) {
-          ctx.save()
-          ctx.drawImage(images[3], 512 * 0.75, 1024 * 0.55 - 10, 512 * 0.25, 36)
-          ctx.font = 'bold 18px sans-serif'
-          ctx.textBaseline = 'top'
-          ctx.fillStyle = '#fff'
-          ctx.fillText(this.flowerText, 512 * 0.78 + 72, 1024 * 0.55)
-          ctx.drawImage(images[12], 512 * 0.75, 1024 * 0.55 - 24, 72, 72)
-          ctx.drawImage(images[11], 512 * 0.75, 1024 * 0.55 - 24, 72, 72)
-          ctx.drawImage(images[15], 512 * 0.75 + 1, 1024 * 0.56 + 1, 36, 36)
-          ctx.drawImage(images[9], 512 * 0.75, 1024 * 0.56, 38, 38)
-          ctx.font = 'bold 14px sans-serif'
-          ctx.textAlign = 'center'
-          ctx.fillText(
-            '重复获得的灵犀将转换为对应灵犀品质提升道具',
-            512 * 0.5,
-            1024 * 0.9
-          )
-          ctx.restore()
-        }
-
-        // Stars
-        for (let i = 0; i < this.star; i++)
-          ctx.drawImage(images[7], 5 + 60 * i, 850, 60, 60)
-
-        Toast.clear()
-      })
+              ctx.drawImage(imgs[1], 512 * 0.78, 1024 * 0.63, 512 * 0.3, 768 * 0.3)
+              ctx.drawImage(imgs[2], 512 * 0.78 + 5, 1024 * 0.855 - 30, 20, 24)
+              ctx.font = 'bold 16px sans-serif'
+              ctx.textBaseline = 'bottom'
+              ctx.fillStyle = '#fff'
+              ctx.fillText('二段光影', 512 * 0.78 + 30, 1024 * 0.855 - 5)
+              ctx.restore()
+            }
+            if (this.isFlower) {
+              ctx.save()
+              ctx.font = 'bold 18px sans-serif'
+              ctx.textBaseline = 'top'
+              ctx.fillStyle = '#fff'
+              ctx.fillText(this.flowerText, 512 * 0.78 + 72, 1024 * 0.55)
+              ctx.font = 'bold 14px sans-serif'
+              ctx.textAlign = 'center'
+              ctx.fillText('重复获得的灵犀将转换为对应灵犀品质提升道具', 512 * 0.5, 1024 * 0.9)
+              ctx.restore()
+            }
+            this.dataUri = canvas.toDataURL('image/png')
+            Toast.clear()
+            Toast.success('生成成功，请您长按保存')
+          })
+        })
     },
   },
 }
 </script>
-
-<style scoped>
-.van-theme-dark #canvas {
-  filter: brightness(0.8);
-}
-</style>
