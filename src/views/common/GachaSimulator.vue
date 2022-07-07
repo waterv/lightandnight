@@ -33,11 +33,7 @@
           is-link
           url="https://weibo.com/2304898581/Lw0gD1Qab"
         />
-        <van-cell
-          title="其他攻略"
-          is-link
-          url="https://weibo.com/u/2304898581"
-        />
+        <van-cell title="其他攻略" is-link url="https://weibo.com/u/2304898581" />
       </van-cell-group>
 
       <van-radio-group v-model="animationType">
@@ -54,9 +50,7 @@
             </template>
           </van-cell>
           <van-cell v-if="animationType" title="发光效果">
-            <template #right-icon
-              ><van-switch v-model="shiningType" size="24"
-            /></template>
+            <template #right-icon><van-switch v-model="shiningType" size="24" /></template>
           </van-cell>
         </van-cell-group>
       </van-radio-group>
@@ -75,12 +69,7 @@
       </van-cell-group>
 
       <van-cell-group inset title="当前状态">
-        <van-cell
-          title="水位"
-          :value="waterLevel"
-          is-link
-          @click="showWaterlevelInfo"
-        />
+        <van-cell title="水位" :value="waterLevel" is-link @click="showWaterlevelInfo" />
         <van-cell
           title="6 星出率"
           :value="star6Possibility + '%'"
@@ -96,11 +85,7 @@
           :value="`${poolUsedGachapon} + 10 × ${poolUsedGachapon10} = ${poolGachaTime}`"
         />
         <van-cell title="心迹书简" :value="letter" />
-        <van-cell
-          v-if="pool.limitedLetter"
-          :title="pool.limitedLetter"
-          :value="limitedLetter"
-        />
+        <van-cell v-if="pool.limitedLetter" :title="pool.limitedLetter" :value="limitedLetter" />
       </van-cell-group>
 
       <van-cell-group title="兑换" inset>
@@ -127,16 +112,8 @@
 
     <van-tab title="收信记录">
       <van-dropdown-menu>
-        <van-dropdown-item
-          v-model="optionCharValue"
-          :options="optionChar"
-          @change="listReload"
-        />
-        <van-dropdown-item
-          v-model="optionStarValue"
-          :options="optionStar"
-          @change="listReload"
-        />
+        <van-dropdown-item v-model="optionCharValue" :options="optionChar" @change="listReload" />
+        <van-dropdown-item v-model="optionStarValue" :options="optionStar" @change="listReload" />
       </van-dropdown-menu>
       <van-list @load="listLoad">
         <template v-if="list.length">
@@ -156,16 +133,8 @@
 
     <van-tab title="灵犀统计">
       <van-dropdown-menu>
-        <van-dropdown-item
-          v-model="optionCharValue"
-          :options="optionChar"
-          @change="listReload"
-        />
-        <van-dropdown-item
-          v-model="optionStarValue"
-          :options="optionStar"
-          @change="listReload"
-        />
+        <van-dropdown-item v-model="optionCharValue" :options="optionChar" @change="listReload" />
+        <van-dropdown-item v-model="optionStarValue" :options="optionStar" @change="listReload" />
       </van-dropdown-menu>
       <van-row wrap>
         <template v-for="v in [6, 5, 4, 3]" :key="v">
@@ -235,14 +204,13 @@
       <div class="container">
         <van-row class="content">
           <van-col span="24" class="desc"
-            >自连续不出 6 星的第 60 抽起，每抽都会增加 6 星 10% 的出率，直到抽到
-            6 星、出率恢复为 2% 为止。十连收信必出 5 星或以上灵犀。</van-col
+            >自连续不出 6 星的第 60 抽起，每抽都会增加 6 星 10% 的出率，直到抽到 6 星、出率恢复为 2%
+            为止。十连收信必出 5 星或以上灵犀。</van-col
           >
         </van-row>
         <van-row class="content">
           <van-col span="24" class="desc"
-            >如果对 5 星卡不感兴趣，或者水位大于
-            51，建议用单抽代替十连。</van-col
+            >如果对 5 星卡不感兴趣，或者水位大于 51，建议用单抽代替十连。</van-col
           >
         </van-row>
       </div>
@@ -393,8 +361,7 @@ export default {
     }
 
     let optionChar = [{ text: '不限男主', value: 'all' }]
-    for (let i in data.characters)
-      optionChar.push({ text: data.characters[i], value: i })
+    for (let i in data.characters) optionChar.push({ text: data.characters[i], value: i })
 
     let optionStar = [{ text: '不限星级', value: 'all' }]
     for (let i = 3; i <= 6; i++) optionStar.push({ text: `${i} 星`, value: i })
@@ -453,9 +420,7 @@ export default {
   },
   computed: {
     star6Possibility() {
-      return this.waterLevel < 60
-        ? 2
-        : Math.min(12 + (this.waterLevel - 60) * 10, 100)
+      return this.waterLevel < 60 ? 2 : Math.min(12 + (this.waterLevel - 60) * 10, 100)
     },
     starsPossibility() {
       return {
@@ -568,7 +533,11 @@ export default {
         ...this.$root.dialogSettings,
         title: '水位',
         message:
-          '水位即连续未得到 6 星的抽卡次数。在水位达到 60 后，6 星出率将随水位增加而增加。\n\n常驻卡池「浮世同行」更新时，水位将不会清空；主线轮换卡池「时间的彼岸」中，前一个卡池的水位能够继承到下一个卡池。除了这两种情况外，卡池间不共享水位。',
+          '水位即连续未得到 6 星的抽卡次数。在水位达到 60 后，6 星出率将随水位增加而增加。\n\n' +
+          '- 常驻卡池「浮世同行」不同版本之间共享水位；\n' +
+          '- 轮换卡池「浮世同行・剪影」之间共享水位；\n' +
+          '- 主线卡池「时间的彼岸」系列中，若连续开启两个卡池，则前一个卡池的水位能够继承到下一个卡池。\n\n' +
+          '除了以上情况外，卡池间不共享水位。',
         confirmButtonColor: this.buttonColor,
       })
     },
@@ -610,8 +579,7 @@ export default {
       let generateCardList = list => {
         for (let star in list) {
           poolDetail += `[${star} 星] `
-          for (let i in list[star])
-            poolDetail += getCardInfo(star, list[star][i]).name + '、'
+          for (let i in list[star]) poolDetail += getCardInfo(star, list[star][i]).name + '、'
         }
         poolDetail = poolDetail.slice(0, -1)
       }
@@ -629,14 +597,11 @@ export default {
         generateCardList(pool.add)
         poolDetail += ' 加入所有卡池常驻。'
       }
-      if (pool.inherit)
-        poolDetail += `该卡池的水位将能够继承到「${pool.inherit}」中。`
+      if (pool.inherit) poolDetail += `该卡池的水位将能够继承到「${pool.inherit}」中。`
       if (pool.limitedLetter)
         poolDetail += `该卡池中，每次收信将额外获得「${pool.limitedLetter}」而非「心迹书简」。`
-      if (pool.randomTime)
-        poolDetail += `累计收信 ${pool.randomTime} 次，将随机获赠一张限定灵犀。`
-      if (pool.pickTime)
-        poolDetail += `累计收信 ${pool.pickTime} 次，可自选一张限定灵犀。`
+      if (pool.randomTime) poolDetail += `累计收信 ${pool.randomTime} 次，将随机获赠一张限定灵犀。`
+      if (pool.pickTime) poolDetail += `累计收信 ${pool.pickTime} 次，可自选一张限定灵犀。`
       if (pool.pickPrice)
         poolDetail += `使用 ${pool.pickPrice} 枚「${this.poolLetterName}」可兑换一张自选限定灵犀。`
       return poolDetail + (pool.detail ? pool.detail : '')
@@ -645,13 +610,10 @@ export default {
       if (pool.noShop) return {}
       let shop = {}
       if (pool.up) for (let i in pool.up) shop[i] = [].concat(pool.up[i])
-      if (pool.addCommon)
-        for (let i in pool.addCommon)
-          shop[i] = shop[i].concat(pool.addCommon[i])
+      if (pool.addCommon) for (let i in pool.addCommon) shop[i] = shop[i].concat(pool.addCommon[i])
       let res = { ...shop }
       if (pool.maxBuy)
-        for (let i = 1; i < pool.maxBuy; i++)
-          for (let j in res) res[j] = res[j].concat(shop[j])
+        for (let i = 1; i < pool.maxBuy; i++) for (let j in res) res[j] = res[j].concat(shop[j])
       return res
     },
     shopBuy(v) {
@@ -804,8 +766,7 @@ export default {
       if (random <= this.star6Possibility) {
         this.waterLevel = 0
         let list = []
-        if (random2 <= p && this.pool.up && this.pool.up['6'])
-          list = this.pool.up['6']
+        if (random2 <= p && this.pool.up && this.pool.up['6']) list = this.pool.up['6']
         else {
           list = data.common[this.pool.common]['6']
           if (this.pool.addCommon && this.pool.addCommon['6'])
@@ -827,8 +788,7 @@ export default {
         }
 
       let list = []
-      if (random2 <= p && this.pool.up && this.pool.up['5'])
-        list = this.pool.up['5']
+      if (random2 <= p && this.pool.up && this.pool.up['5']) list = this.pool.up['5']
       else {
         list = data.common[this.pool.common]['5']
         if (this.pool.addCommon && this.pool.addCommon['5'])
@@ -857,10 +817,8 @@ export default {
       for (let i = this.listIndex; i >= 0 && count < 20; i--) {
         this.listIndex = i - 1
         if (
-          (this.optionCharValue == 'all' ||
-            this.optionCharValue == this.cardsRecord[i].char) &&
-          (this.optionStarValue == 'all' ||
-            this.optionStarValue == this.cardsRecord[i].star)
+          (this.optionCharValue == 'all' || this.optionCharValue == this.cardsRecord[i].char) &&
+          (this.optionStarValue == 'all' || this.optionStarValue == this.cardsRecord[i].star)
         ) {
           this.list.push(this.cardsRecord[i])
           count++

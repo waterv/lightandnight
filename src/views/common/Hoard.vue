@@ -4,11 +4,7 @@
   </navbar>
 
   <van-cell-group inset title="攻略">
-    <van-cell
-      title="签到活动汇总"
-      is-link
-      url="https://weibo.com/2304898581/Lp8uxiSt3"
-    />
+    <van-cell title="签到活动汇总" is-link url="https://weibo.com/2304898581/Lp8uxiSt3" />
   </van-cell-group>
 
   <van-cell-group inset title="月卡">
@@ -64,30 +60,10 @@
   </van-cell-group>
 
   <van-cell-group inset title="当前状态">
-    <van-field
-      v-model="currentCoin"
-      type="number"
-      label="小熊星座"
-      autocomplete="off"
-    />
-    <van-field
-      v-model="currentGachapon"
-      type="number"
-      label="羽毛笔"
-      autocomplete="off"
-    />
-    <van-field
-      v-model="currentGachapon10"
-      type="number"
-      label="十连签收券"
-      autocomplete="off"
-    />
-    <van-cell
-      title="目标日期"
-      :value="targetDateString"
-      clickable
-      @click="showCalendar(-1)"
-    />
+    <van-field v-model="currentCoin" type="number" label="小熊星座" autocomplete="off" />
+    <van-field v-model="currentGachapon" type="number" label="羽毛笔" autocomplete="off" />
+    <van-field v-model="currentGachapon10" type="number" label="十连签收券" autocomplete="off" />
+    <van-cell title="目标日期" :value="targetDateString" clickable @click="showCalendar(-1)" />
   </van-cell-group>
 
   <van-cell-group inset title="计算结果">
@@ -141,8 +117,7 @@ export default {
       calendarShow: false,
       startDate: dayjs().toDate(),
       targetDate: dayjs().add(1, 'month').toDate(),
-      targetDateString:
-        dayjs().add(1, 'month').format('M 月 D 日') + ' (一个月后)',
+      targetDateString: dayjs().add(1, 'month').format('M 月 D 日') + ' (一个月后)',
     }
   },
   computed: {
@@ -150,17 +125,13 @@ export default {
       let date = dayjs(this.targetDate)
       let result = this.currentCoin ? Number(this.currentCoin) : 0
       result += (this.currentGachapon ? Number(this.currentGachapon) : 0) * 300
-      result +=
-        (this.currentGachapon10 ? Number(this.currentGachapon10) : 0) * 3000
+      result += (this.currentGachapon10 ? Number(this.currentGachapon10) : 0) * 3000
 
       for (let i in this.card) {
         if (this.card[i].on) {
           let times = this.getDiff(date, this.card[i].unit)
           if (this.card[i].dec)
-            times = Math.min(
-              times,
-              this.getDiff(this.card[i].dec, this.card[i].unit)
-            )
+            times = Math.min(times, this.getDiff(this.card[i].dec, this.card[i].unit))
           result += times * this.card[i].count
         }
       }
@@ -188,7 +159,9 @@ export default {
       this.$dialog.alert({
         ...this.$root.dialogSettings,
         message:
-          '此工具在计算过程中，所有项目均按照「奖励在第一天发放」的规则参与计算，与实际情况存在偏差。\n\n目标日期越远，因奖励发放时间产生的偏差所占比例减小，计算结果相对更加准确；但同时活动等不确定因素也增多。\n\n出于上述原因，本工具仅供粗略计算之用。',
+          '此工具在计算过程中，所有项目均按照「奖励在第一天发放」的规则参与计算，与实际情况存在偏差。\n\n' +
+          '目标日期越远，因奖励发放时间产生的偏差所占比例减小，计算结果相对更加准确；但同时活动等不确定因素也增多。\n\n' +
+          '出于上述原因，本工具仅供粗略计算之用。',
       })
     },
     showPicker(v) {
@@ -209,8 +182,7 @@ export default {
       this.calendarShow = true
     },
     calendarFormatter(day) {
-      if (day.type == 'selected')
-        day.bottomInfo = '余 ' + this.getDiff(day.date) + ' 天'
+      if (day.type == 'selected') day.bottomInfo = '余 ' + this.getDiff(day.date) + ' 天'
       return day
     },
     calendarConfirm(v) {

@@ -8,12 +8,7 @@
       <template v-for="v in events" :key="v">
         <van-cell-group v-if="!v.noavailable" :title="v.name" inset>
           <template v-for="u in v.events" :key="u">
-            <van-cell
-              v-if="u.time !== undefined"
-              :title="u.name"
-              :label="u.desc"
-              center
-            >
+            <van-cell v-if="u.time !== undefined" :title="u.name" :label="u.desc" center>
               <template #right-icon>
                 <van-count-down :time="u.time">
                   <template #default="timeData">
@@ -54,7 +49,7 @@
 
     <template v-if="active == 'settings'">
       <van-cell-group title="实验性功能" inset>
-        <van-cell title="欧皇模拟器" is-link to="/common/image" />
+        <van-cell title="欧皇模拟器" label="出货截图生成器" is-link to="/common/image" center />
       </van-cell-group>
       <van-cell-group title=" " inset>
         <van-cell
@@ -102,21 +97,12 @@ export default {
         let v = events[i].events[j]
         if (v.periodic) {
           count += 1
-          let target = dayjs()
-            .tz()
-            .day(v.day)
-            .hour(0)
-            .minute(0)
-            .second(0)
-            .millisecond(0)
+          let target = dayjs().tz().day(v.day).hour(0).minute(0).second(0).millisecond(0)
 
           if (v.state == '始') target = target.hour(5)
           if (now.day() >= v.day) target = target.add(1, 'week')
           v.time = target.diff(now)
-          v.color =
-            v.state == '止' && v.time <= 86400000
-              ? 'var(--van-red)'
-              : 'var(--van-gray-7)'
+          v.color = v.state == '止' && v.time <= 86400000 ? 'var(--van-red)' : 'var(--van-gray-7)'
         } else {
           let start = dayjs.tz(v.start)
           if (now.isBefore(start)) {
@@ -130,8 +116,7 @@ export default {
               count += 1
               v.time = end.diff(now)
               v.state = '止'
-              v.color =
-                v.time <= 86400000 ? 'var(--van-red)' : 'var(--van-green)'
+              v.color = v.time <= 86400000 ? 'var(--van-red)' : 'var(--van-green)'
             }
           }
         }
@@ -206,7 +191,9 @@ export default {
       this.$dialog.alert({
         ...this.$root.dialogSettings,
         message:
-          '本页展示当前游戏中，各活动的大约开始或结束时间。\n\n因为活动结束常常伴随停服维护，结束时间按 00:00 而非 04:59 计。\n\n信息可能过时或不准确，请以游戏中实际情况为准。',
+          '本页展示当前游戏中，各活动的大约开始或结束时间。\n\n' +
+          '因为活动结束常常伴随停服维护，结束时间按 00:00 而非 04:59 计。\n\n' +
+          '信息可能过时或不准确，请以游戏中实际情况为准。',
       })
     },
     onActiveChange(active) {

@@ -11,12 +11,7 @@
           center
           url="https://weibo.com/2304898581/Lg2v1rjG8"
         />
-        <van-cell
-          title="其他攻略"
-          is-link
-          center
-          url="https://weibo.com/u/2304898581"
-        />
+        <van-cell title="其他攻略" is-link center url="https://weibo.com/u/2304898581" />
       </van-cell-group>
 
       <van-radio-group v-model="gemRatioSelected">
@@ -58,30 +53,10 @@
           type="number"
           autocomplete="off"
         />
-        <van-field
-          v-model="gem"
-          label="北极星"
-          type="number"
-          autocomplete="off"
-        />
-        <van-field
-          v-model="coin"
-          label="小熊星座"
-          type="number"
-          autocomplete="off"
-        />
-        <van-field
-          v-model="gachapon"
-          label="羽毛笔"
-          type="number"
-          autocomplete="off"
-        />
-        <van-field
-          v-model="gachapon10"
-          label="十连签收券"
-          type="number"
-          autocomplete="off"
-        />
+        <van-field v-model="gem" label="北极星" type="number" autocomplete="off" />
+        <van-field v-model="coin" label="小熊星座" type="number" autocomplete="off" />
+        <van-field v-model="gachapon" label="羽毛笔" type="number" autocomplete="off" />
+        <van-field v-model="gachapon10" label="十连签收券" type="number" autocomplete="off" />
         <van-cell title="计算" is-link @click="calculate" />
       </van-cell-group>
 
@@ -98,12 +73,7 @@
     <van-tab title="列表">
       <van-cell-group v-if="showTutorial" title="说明" inset>
         <van-swipe-cell>
-          <van-cell
-            title="礼包名称"
-            value="性价比"
-            label="点击以选择，左滑以删除"
-            center
-          />
+          <van-cell title="礼包名称" value="性价比" label="点击以选择，左滑以删除" center />
           <template #right>
             <van-button
               text="删除"
@@ -119,9 +89,7 @@
         <van-swipe-cell v-for="(v, i) in packages" :key="v">
           <van-cell
             :value="result(v).ratio + '%'"
-            :label="`¥${v.price} = ${result(v).gachaCount} 抽 (${
-              result(v).pricePerGacha
-            } 元/抽)`"
+            :label="`¥${v.price} = ${result(v).gachaCount} 抽 (${result(v).pricePerGacha} 元/抽)`"
             @click="selectPackage(i)"
             center
             clickable
@@ -234,14 +202,19 @@ export default {
       this.$dialog.alert({
         ...this.$root.dialogSettings,
         message:
-          '此工具仅计算礼包用于抽卡的性价比，游戏中显示的性价比计入了「极光币」等培养材料。\n\n不氪立省百分百。',
+          '此工具仅计算礼包用于抽卡的性价比，游戏中显示的性价比计入了「极光币」等培养材料。\n\n' +
+          '不氪立省百分百。',
       })
     },
     showGemRatioInfo() {
       this.$dialog.alert({
         ...this.$root.dialogSettings,
         message:
-          '本游戏中，抽卡道具的原价为：\n\n1 羽毛笔 = 300 小熊星座 = 6 北极星 = 18 元\n\n北极星与其他道具的兑换比率不固定，因此计算性价比时需要分不同情况讨论。\n\n请根据您一般使用北极星兑换小熊星座的途径，选择恰当的兑换比率。\n\n如果还是不明白选什么：重氪选 [50]，其他选 [100]。',
+          '本游戏中，抽卡道具的原价为：\n\n' +
+          '1 羽毛笔 = 300 小熊星座 = 6 北极星 = 18 元\n\n' +
+          '北极星与其他道具的兑换比率不固定，因此计算性价比时需要分不同情况讨论。\n\n' +
+          '根据您一般使用北极星兑换小熊星座的途径，选择恰当的兑换比率。\n\n' +
+          '如果还是不明白选什么：重氪选 [50]，其他选 [100]。',
       })
     },
     gemRatioSelect(v) {
@@ -252,8 +225,7 @@ export default {
       })
     },
     result(v) {
-      let gachaCount =
-        (v.gem * this.gemRatio + v.coin) / 300 + v.gachapon + 10 * v.gachapon10
+      let gachaCount = (v.gem * this.gemRatio + v.coin) / 300 + v.gachapon + 10 * v.gachapon10
       let result = (gachaCount / v.price) * 18
       return {
         gachaCount: Math.round(gachaCount * 100) / 100,

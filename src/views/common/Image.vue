@@ -81,7 +81,7 @@
   </van-cell-group>
 
   <van-cell-group title=" " inset>
-    <van-cell title="生成图片" center is-link @click="newDraw" />
+    <van-cell title="生成图片" center is-link @click="generate" />
   </van-cell-group>
 
   <van-divider />
@@ -169,16 +169,20 @@ export default {
       this.flower = Math.max(Math.min(this.star, 6), 3)
       this.border = Math.max(Math.min(this.star, 6), 3)
     },
-    newDraw() {
-      Toast.loading({
-        message: '加载中…',
+    generate() {
+      let toast = Toast.loading({
+        message: '加载中',
         forbidClick: true,
         duration: 0,
       })
       let { w, h } = { w: 512, h: 1024 }
-      let asset = fileName => require('@/assets/img/Image/' + fileName)
+      let asset = fileName => {
+        toast.message = `${fileName} 加载中`
+        return require('@/assets/img/Image/' + fileName)
+      }
       Jimp.read(this.card[0]?.content || asset('card_1.png'))
         .then(img => {
+          toast.message = '处理背景中'
           let imgClone = img.clone()
           img = img.resize(w, h)
           // Brightness
@@ -189,8 +193,11 @@ export default {
               img.setPixelColor(Jimp.rgbaToInt(p(r), p(g), p(b), a), x, y)
             }
           img = img.blur(5)
-          let composite = (img, fileName, x, y, w, h) =>
-            Jimp.read(asset(fileName)).then(src => img.composite(w ? src.resize(w, h) : src, x, y))
+          let composite = (img, fileName, x, y, w, h) => {
+            return Jimp.read(asset(fileName)).then(src =>
+              img.composite(w ? src.resize(w, h) : src, x, y)
+            )
+          }
           return composite(img, 'background_top.png', 0, 0)
             .then(img => composite(img, 'background_bottom.png', 0, 768))
             .then(img => img.composite(imgClone.resize(w, 768), 0, 128))
@@ -235,8 +242,8 @@ export default {
             })
           return Promise.all([
             loadImage(dataUri),
-            loadImage(this.card[1]?.content || require('@/assets/img/Image/card_2.png')),
-            loadImage(require('@/assets/img/Image/lock.png')),
+            loadImage(this.card[1]?.content || asset('card_2.png')),
+            loadImage(asset('lock.png')),
           ]).then(imgs => {
             ctx.drawImage(imgs[0], 0, 0)
             {
