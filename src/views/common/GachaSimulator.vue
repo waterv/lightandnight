@@ -5,7 +5,7 @@
     <van-tab title="攻略说明">
       <van-cell-group title="攻略与说明" inset>
         <van-cell
-          title="说明"
+          title=""
           label="本工具抽卡机制与游戏中不完全相同，仅作娱乐之用。返回并重新进入本页面即可重置数据。"
         />
         <van-cell

@@ -54,7 +54,7 @@
       </van-radio-group>
 
       <van-cell-group title="奖品权重" inset>
-        <van-cell title="说明" is-link @click="showWeightInfo" />
+        <van-cell title="说明" icon="question-o" is-link @click="showWeightInfo" />
         <van-cell v-for="i in [0, 5]" :key="i" :title="rewards[i].name" center>
           <template #right-icon>
             <van-stepper v-model="rewards[i].weight" min="140" max="175" input-width="64px" />

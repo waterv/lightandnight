@@ -16,7 +16,7 @@
 
       <van-radio-group v-model="gemRatioSelected">
         <van-cell-group title="北极星兑换比率" inset>
-          <van-cell title="说明" is-link @click="showGemRatioInfo" />
+          <van-cell title="说明" icon="question-o" is-link @click="showGemRatioInfo" />
 
           <van-cell
             v-for="v in gemRatioData"

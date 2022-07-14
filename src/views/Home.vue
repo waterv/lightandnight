@@ -49,11 +49,26 @@
 
     <template v-if="active == 'settings'">
       <van-cell-group title="实验性功能" inset>
-        <van-cell title="欧皇模拟器" label="出货截图生成器" is-link to="/common/image" center />
+        <van-cell title="欧皇模拟器 (出货截图生成器)" is-link to="/common/image" center />
       </van-cell-group>
       <van-cell-group title=" " inset>
         <van-cell
-          title="清空 localStorage"
+          v-if="hostname != 'waterv.github.io'"
+          title="Github Pages 镜像"
+          is-link
+          url="//waterv.github.io/lightandnight"
+        />
+        <van-cell
+          v-if="hostname != 'lightandnight.vercel.app'"
+          title="Vercel 镜像"
+          is-link
+          url="//lightandnight.vercel.app"
+        />
+        <van-cell title="" label="不同镜像的内容完全一致，如果您访问某一镜像速度较慢，可选择切换到另一镜像。" />
+      </van-cell-group>
+      <van-cell-group title=" " inset>
+        <van-cell
+          title="清除 localStorage"
           label="清除后，一些设置项将回到默认值。"
           @click="clearLocalStorage"
           is-link
@@ -123,9 +138,9 @@ export default {
       }
       if (count == 0) events[i].noavailable = true
     }
-
     return {
       active: this.$root.homepageActive,
+      hostname: window.location.hostname,
       infoShow: false,
       events,
       tools: [

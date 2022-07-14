@@ -3,7 +3,7 @@
 
   <van-cell-group title="说明" inset>
     <van-cell
-      title="说明"
+      title=""
       label="由于引用的图片资源较多，本页可能加载较长时间，请耐心等候。角色与灵犀名需要使用「方正准雅宋 GBK」字体，建议您使用安装有该字体的电脑访问本页。"
     />
     <van-cell title="获取「方正准雅宋 GBK」字体" is-link @click="showFontInfo" />
