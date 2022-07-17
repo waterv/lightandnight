@@ -83,7 +83,7 @@
     </template>
   </div>
 
-  <van-tabbar v-model="active" @change="onActiveChange">
+  <van-tabbar fixed safe-area-inset-bottom v-model="active" @change="onActiveChange">
     <van-tabbar-item name="events" icon="calendar-o">活动提醒</van-tabbar-item>
     <van-tabbar-item name="calculators" icon="apps-o">实用工具</van-tabbar-item>
     <van-tabbar-item name="settings" icon="setting-o">设置</van-tabbar-item>

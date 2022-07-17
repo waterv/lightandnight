@@ -7,11 +7,11 @@
       <van-cell-group title="攻略" inset>
         <van-cell
           title="常驻礼包性价比"
+          label="来自 @光与夜之恋信使攻略站。"
           is-link
           center
           url="https://weibo.com/2304898581/Lg2v1rjG8"
         />
-        <van-cell title="其他攻略" is-link center url="https://weibo.com/u/2304898581" />
       </van-cell-group>
 
       <van-radio-group v-model="gemRatioSelected">

@@ -1,5 +1,5 @@
 <template>
-  <van-config-provider :theme="theme">
+  <van-config-provider :theme="theme" :theme-vars="themeVars">
     <router-view />
   </van-config-provider>
 </template>
@@ -17,7 +17,12 @@ export default {
         title: '说明',
         messageAlign: 'left',
         closeOnClickOverlay: true,
-        theme: 'round-button',
+      },
+      themeVars: {
+        navBarBackground: '#212121',
+        navBarTitleTextColor: '#ffffff',
+        navBarTextColor: '#ffffff',
+        navBarIconColor: '#ffffff',
       },
       colors: {
         common: {

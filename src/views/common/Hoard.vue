@@ -4,7 +4,13 @@
   </navbar>
 
   <van-cell-group inset title="攻略">
-    <van-cell title="签到活动汇总" is-link url="https://weibo.com/2304898581/Lp8uxiSt3" />
+    <van-cell
+      title="签到活动汇总"
+      label="来自 @光与夜之恋信使攻略站。"
+      is-link
+      center
+      url="https://weibo.com/2304898581/Lp8uxiSt3"
+    />
   </van-cell-group>
 
   <van-cell-group inset title="月卡">

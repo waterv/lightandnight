@@ -14,10 +14,7 @@
       }"
     >
       <div class="card-highlight">
-        <div
-          class="card-background"
-          :style="{ animationDelay: animationDelay }"
-        >
+        <div class="card-background" :style="{ animationDelay: animationDelay }">
           <van-badge
             :content="isNew ? 'New' : count > 1 ? `${count - 1} 花` : undefined"
             :offset="[-6, 0]"
@@ -73,13 +70,19 @@ export default {
 }
 </script>
 
+<style>
+.card .van-badge {
+  text-shadow: none;
+}
+</style>
+
 <style scoped>
 .in-list {
   padding: 4px;
 }
 
 .van-theme-dark .card {
-  filter: brightness(.8);
+  filter: brightness(0.8);
 }
 
 .card .card-background {

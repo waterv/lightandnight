@@ -3,6 +3,7 @@ import App from './App.vue'
 import router from './router'
 
 import '@vant/touch-emulator'
+
 import {
   Col,
   Row,
@@ -28,6 +29,8 @@ import {
   Tabs,
   ConfigProvider,
 } from 'vant'
+
+import './registerServiceWorker'
 
 let dayjs = require('dayjs')
 require('dayjs/locale/zh-cn')

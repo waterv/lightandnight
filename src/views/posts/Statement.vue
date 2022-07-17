@@ -10,7 +10,9 @@
           欢迎大家使用，如果认为好用，欢迎随意分享；如果有任何想法、建议、希望添加的功能，或者发现了任何
           bug，欢迎到 GitHub 提 issue、pull request 或者到我的微博提出。
         </p>
-        <p>本工具并未对宽屏幕进行优化，建议您在移动设备上竖屏使用本工具，以获得较好的显示效果。</p>
+        <p>
+          本工具并未对宽屏幕进行优化，除非单独说明，建议您在移动设备上竖屏使用本工具，以获得较好的显示效果。
+        </p>
         <van-button type="danger" block url="https://weibo.com/paandaa">
           <template #icon><weibo height="12" fill="white" /></template>
           <template #default>作者微博</template></van-button

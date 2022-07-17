@@ -15,6 +15,7 @@
       url="https://weibo.com/2304898581/LgDLGeIYw"
     />
     <van-cell title="「羁梦星愿」礼包性价比" is-link url="https://weibo.com/2304898581/Lh7DbiDhz" />
+    <van-cell title="" label="以上攻略来自 @光与夜之恋信使攻略站。" />
   </van-cell-group>
 
   <van-radio-group v-model="targetWishTimeSelected">
@@ -91,23 +92,13 @@
     :show-confirm="false"
   />
   <van-config-provider :theme-vars="resultTheme">
-    <van-dialog
-      v-model:show="nextMinigameTimeDetail"
-      theme="round-button"
-      closeOnClickOverlay
-      :confirm-button-color="buttonColor"
-    >
+    <van-dialog v-model:show="nextMinigameTimeDetail" closeOnClickOverlay>
       <div class="container">
         <p class="content">打开「星雾谜戏」活动界面，将下图中「??」处出现的数字填写在此处。</p>
         <van-image class="content center" width="80%" :src="require('@/assets/img/wish_01.jpg')" />
       </div>
     </van-dialog>
-    <van-dialog
-      v-model:show="resultShow"
-      theme="round-button"
-      closeOnClickOverlay
-      :confirm-button-color="buttonColor"
-    >
+    <van-dialog v-model:show="resultShow" closeOnClickOverlay>
       <div class="container">
         <van-row class="content">
           <van-col span="16"><strong>项目</strong></van-col>
@@ -159,7 +150,6 @@ export default {
       hasBottlePackBought: false,
       minDate: dayjs().subtract(5, 'hour').subtract(8, 'day').toDate(),
       maxDate: dayjs().subtract(5, 'hour').toDate(),
-      buttonColor: this.$root.colors.events.wish,
       calendarShow: false,
       calendarValue: new Date(),
       calendarString: dayjs().format('M 月 D 日'),

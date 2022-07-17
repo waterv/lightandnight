@@ -21,7 +21,7 @@
             :percentage="(gachaTime / 99) * 100"
             :pivot-text="`${gachaTime}`"
             pivot-color="#6c71c5"
-            :color="buttonColor"
+            :color="$root.colors.events.wish"
           /><small>/ 88 / 95 / 99 抽各有一次保底</small>
         </van-cell>
       </van-cell-group>
@@ -65,12 +65,7 @@
   </van-tabs>
 
   <van-config-provider :theme-vars="dialogTheme">
-    <van-dialog
-      v-model:show="possibilityShow"
-      theme="round-button"
-      :confirm-button-color="buttonColor"
-      closeOnClickOverlay
-    >
+    <van-dialog v-model:show="possibilityShow" closeOnClickOverlay>
       <div class="container">
         <van-row class="content center-row">
           <van-col span="8"><strong>奖品</strong></van-col>
@@ -99,13 +94,7 @@
       </div>
     </van-dialog>
 
-    <van-dialog
-      v-model:show="itemsGotShow"
-      title="恭喜获得"
-      theme="round-button"
-      :confirm-button-color="buttonColor"
-      closeOnClickOverlay
-    >
+    <van-dialog v-model:show="itemsGotShow" title="恭喜获得" closeOnClickOverlay>
       <div class="container" v-if="itemsGot">
         <div class="content" v-for="v in itemsGot" :key="v">{{ v.name }} × {{ v.count }}</div>
       </div>
@@ -167,7 +156,6 @@ export default {
       dialogTheme: {
         dialogFontSize: 'var(--van-font-size-md)',
       },
-      buttonColor: this.$root.colors.events.wish,
     }
   },
   computed: {
@@ -247,7 +235,6 @@ export default {
           '- 「眩光沙砾」占有 145 的权重；\n' +
           '- 其他奖励均占有 100 的权重。\n' +
           '所得到的概率数值与已记录的实际数值稍有偏差。如果您有更好的权重数据，可在此处更改。',
-        confirmButtonColor: this.buttonColor,
       })
     },
     setMaxFrame(v) {

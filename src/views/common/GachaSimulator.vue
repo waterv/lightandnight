@@ -1,61 +1,9 @@
 <template>
-  <navbar title="信使花园模拟器" can-return />
+  <navbar title="信使花园模拟器" can-return>
+    <van-icon name="question-o" @click="showInfo" />
+  </navbar>
 
   <van-tabs v-model:active="active" sticky offset-top="46">
-    <van-tab title="攻略说明">
-      <van-cell-group title="攻略与说明" inset>
-        <van-cell
-          title=""
-          label="本工具抽卡机制与游戏中不完全相同，仅作娱乐之用。返回并重新进入本页面即可重置数据。"
-        />
-        <van-cell
-          title="「浮世同行」数据分析"
-          is-link
-          url="https://weibo.com/2304898581/LbPP0AlN8"
-        />
-        <van-cell
-          title="「尘封的雪影」数据分析"
-          is-link
-          url="https://weibo.com/2304898581/LcrUctQEB"
-        />
-        <van-cell
-          title="「日日夜夜」数据分析"
-          is-link
-          url="https://weibo.com/2304898581/LcIFtaXwt"
-        />
-        <van-cell
-          title="「时间的彼岸」数据分析"
-          is-link
-          url="https://weibo.com/2304898581/Lmq1jEYXe"
-        />
-        <van-cell
-          title="「繁花与序章」数据分析"
-          is-link
-          url="https://weibo.com/2304898581/Lw0gD1Qab"
-        />
-        <van-cell title="其他攻略" is-link url="https://weibo.com/u/2304898581" />
-      </van-cell-group>
-
-      <van-radio-group v-model="animationType">
-        <van-cell-group inset title="收信动画">
-          <van-cell
-            v-for="v in animationData"
-            :key="v"
-            :title="v.name"
-            clickable
-            @click="animationType = v.value"
-          >
-            <template #right-icon>
-              <van-radio :name="v.value" />
-            </template>
-          </van-cell>
-          <van-cell v-if="animationType" title="发光效果">
-            <template #right-icon><van-switch v-model="shiningType" size="24" /></template>
-          </van-cell>
-        </van-cell-group>
-      </van-radio-group>
-    </van-tab>
-
     <van-tab title="信使花园">
       <van-cell-group inset title="卡池">
         <van-field
@@ -66,6 +14,14 @@
           @click="poolSelectShow = true"
         />
         <van-cell title="详情" :label="poolDetail" />
+        <van-cell
+          v-if="pool.tutorial"
+          title="数据分析与抽卡心得"
+          label="来自 @光与夜之恋信使攻略站。"
+          center
+          is-link
+          :url="pool.tutorial"
+        />
       </van-cell-group>
 
       <van-cell-group inset title="当前状态">
@@ -153,6 +109,27 @@
         </template>
       </van-row>
     </van-tab>
+
+    <van-tab title="设置选项">
+      <van-radio-group v-model="animationType">
+        <van-cell-group inset title="收信动画">
+          <van-cell
+            v-for="v in animationData"
+            :key="v"
+            :title="v.name"
+            clickable
+            @click="animationType = v.value"
+          >
+            <template #right-icon>
+              <van-radio :name="v.value" />
+            </template>
+          </van-cell>
+          <van-cell v-if="animationType" title="发光效果">
+            <template #right-icon><van-switch v-model="shiningType" size="24" /></template>
+          </van-cell>
+        </van-cell-group>
+      </van-radio-group>
+    </van-tab>
   </van-tabs>
 
   <van-popup v-model:show="poolSelectShow" round position="bottom">
@@ -181,12 +158,7 @@
   </van-popup>
 
   <van-config-provider :theme-vars="dialogTheme">
-    <van-dialog
-      v-model:show="possibilityShow"
-      theme="round-button"
-      :confirm-button-color="buttonColor"
-      closeOnClickOverlay
-    >
+    <van-dialog v-model:show="possibilityShow" closeOnClickOverlay>
       <div class="container">
         <van-row class="content center-row">
           <van-col span="8"><strong>星级</strong></van-col>
@@ -218,8 +190,6 @@
 
     <van-dialog
       v-model:show="cardNewlyGotShow"
-      theme="round-button"
-      :confirm-button-color="buttonColor"
       closeOnClickOverlay
       @closed="checkRandomTimeReached"
     >
@@ -240,8 +210,6 @@
 
     <van-dialog
       v-model:show="cardsNewlyGotShow"
-      theme="round-button"
-      :confirm-button-color="buttonColor"
       closeOnClickOverlay
       @closed="checkRandomTimeReached"
     >
@@ -398,7 +366,6 @@ export default {
       poolUsedGachapon10: 0,
 
       stars: '★★★★★★',
-      buttonColor: this.$root.colors.common.gacha,
       dialogTheme: {
         dialogFontSize: 'var(--van-font-size-md)',
       },
@@ -528,6 +495,14 @@ export default {
     },
   },
   methods: {
+    showInfo() {
+      this.$dialog.alert({
+        ...this.$root.dialogSettings,
+        message:
+          '本工具抽卡机制与游戏中不完全相同，仅作娱乐之用。\n\n' +
+          '返回并重新进入本页面即可重置数据。',
+      })
+    },
     showWaterlevelInfo() {
       this.$dialog.alert({
         ...this.$root.dialogSettings,
@@ -538,7 +513,6 @@ export default {
           '- 轮换卡池「浮世同行・剪影」之间共享水位；\n' +
           '- 主线卡池「时间的彼岸」系列中，若连续开启两个卡池，则前一个卡池的水位能够继承到下一个卡池。\n\n' +
           '除了以上情况外，卡池间不共享水位。',
-        confirmButtonColor: this.buttonColor,
       })
     },
     gainCard(star, index, args) {
