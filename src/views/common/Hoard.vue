@@ -2,13 +2,7 @@
   <navbar :title="$t('route.common.hoard')" hint="hoard" can-return />
 
   <van-cell-group inset :title="$t('common.tutorial')">
-    <van-cell
-      :title="$t('tutorial.hoard')"
-      :label="$t('common.via', ['@光与夜之恋信使攻略站'])"
-      is-link
-      center
-      :url="$t('tutorial.hoardUrl')"
-    />
+    <tutorial-cell message="hoard" />
   </van-cell-group>
 
   <van-cell-group inset title="月卡">
@@ -112,13 +106,15 @@
 
 <script>
 import Navbar from '@/components/Navbar.vue'
+import TutorialCell from '@/components/TutorialCell.vue'
 let dayjs = require('dayjs')
 
 export default {
   name: 'Hoard',
   components: {
     Navbar,
-  },
+    TutorialCell,
+},
   data() {
     let data = require('@/assets/data/hoard.json')
     for (let i in data) data[i].other = undefined

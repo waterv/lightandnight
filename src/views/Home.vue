@@ -4,37 +4,37 @@
 
   <div class="home">
     <template v-if="active == 'events'">
-      <template v-for="v in events" :key="v"><!-- Category -->
+      <template v-for="v in events" :key="v"
+        ><!-- Category -->
         <van-cell-group v-if="!v.noavailable" :title="v.name" inset>
-
-          <template v-for="u in v.events" :key="u"><!-- Event -->
+          <template v-for="u in v.events" :key="u"
+            ><!-- Event -->
             <van-cell v-if="u.time !== undefined" :title="u.name" :label="u.desc" center>
-
               <template #right-icon>
                 <van-count-down :time="u.time">
                   <template #default="timeData">
                     <span class="block" :style="{ backgroundColor: u.color }">
-                      {{ timeData.days }}
-                    </span><small>d</small>
+                      {{ timeData.days }} </span
+                    ><small>d</small>
                     <span class="block" :style="{ backgroundColor: u.color }">
-                      {{ timeData.hours }}
-                    </span><small>h {{ u.state }}</small>
+                      {{ timeData.hours }} </span
+                    ><small>h {{ u.state }}</small>
                   </template>
                 </van-count-down>
               </template>
-
             </van-cell>
           </template>
-
         </van-cell-group>
       </template>
     </template>
 
     <template v-if="active == 'calculators'">
-      <template v-for="(v, i) in tools" :key="v"><!-- Category -->
+      <template v-for="(v, i) in tools" :key="v"
+        ><!-- Category -->
         <van-divider>{{ $t(`home.category[${i}]`) }}</van-divider>
 
-        <div class="content"><!-- Tool -->
+        <div class="content">
+          <!-- Tool -->
           <van-button
             v-for="u in v"
             :key="u"
@@ -46,7 +46,6 @@
             {{ $t(`route${u.to.replaceAll('/', '.')}`) }}
           </van-button>
         </div>
-
       </template>
     </template>
 
@@ -85,13 +84,6 @@
             <van-switch v-model="appearance" />
           </template>
         </van-cell>
-        <!-- <van-field
-          v-model="langName"
-          is-link
-          readonly
-          :label="$t('settings.lang')"
-          @click="showLangPicker = true"
-        /> --><!-- 预留 -->
       </van-cell-group>
 
       <van-cell-group title=" " inset>
@@ -99,21 +91,38 @@
         <van-cell :title="$t('route.posts.statement')" is-link to="/posts/statement" />
         <van-cell :title="$t('route.posts.changelog')" is-link to="/posts/changelog" />
       </van-cell-group>
+
+      <van-cell-group v-if="$root.developerMode" :title="$t('settings.developer')" inset>
+        <van-field
+          v-model="langName"
+          is-link
+          readonly
+          :label="$t('settings.lang')"
+          @click="showLangPicker = true"
+        />
+        <van-cell :title="$t('settings.vConsole')" is-link center>
+          <template #right-icon>
+            <van-switch v-model="$root.vConsoleOpen" />
+          </template>
+        </van-cell>
+      </van-cell-group>
     </template>
   </div>
 
-  <van-tabbar fixed safe-area-inset-bottom v-model="active" @change="onActiveChange">
-    <van-tabbar-item name="events" icon="calendar-o">{{ $t('home.tabbar.events') }}</van-tabbar-item>
-    <van-tabbar-item name="calculators" icon="apps-o">{{ $t('home.tabbar.calculators') }}</van-tabbar-item>
-    <van-tabbar-item name="settings" icon="setting-o">{{ $t('home.tabbar.settings') }}</van-tabbar-item>
+  <van-tabbar fixed safe-area-inset-bottom placeholder v-model="active" @change="onActiveChange">
+    <van-tabbar-item name="events" icon="calendar-o">{{
+      $t('home.tabbar.events')
+    }}</van-tabbar-item>
+    <van-tabbar-item name="calculators" icon="apps-o">{{
+      $t('home.tabbar.calculators')
+    }}</van-tabbar-item>
+    <van-tabbar-item name="settings" icon="setting-o">{{
+      $t('home.tabbar.settings')
+    }}</van-tabbar-item>
   </van-tabbar>
 
   <van-popup v-model:show="showLangPicker" round position="bottom">
-    <van-picker
-      :columns="langs"
-      @cancel="showLangPicker = false"
-      @confirm="onLangConfirm"
-    />
+    <van-picker :columns="langs" @cancel="showLangPicker = false" @confirm="onLangConfirm" />
   </van-popup>
 </template>
 
@@ -170,7 +179,7 @@ export default {
     return {
       active: this.$root.homepageActive,
       hostname: window.location.hostname,
-      showLangPicker: false,      
+      showLangPicker: false,
       events,
       tools: require('@/assets/data/tools.json'),
       mirrors: require('@/assets/data/mirrors.json'),
@@ -185,7 +194,7 @@ export default {
       },
       set(v) {
         this.$root.theme = v ? 'dark' : ''
-      }
+      },
     },
     lang: {
       get() {
@@ -194,7 +203,7 @@ export default {
       set(v) {
         localStorage.setItem('lang', v)
         this.$i18n.locale = v
-      }
+      },
     },
     langName: {
       get() {
@@ -203,7 +212,7 @@ export default {
       set(v) {
         this.langName_ = v
         localStorage.setItem('langName', v)
-      }
+      },
     },
   },
   methods: {
@@ -214,7 +223,7 @@ export default {
       localStorage.clear()
       Toast({
         message: this.$t('settings.clearLocalStorageToast'),
-        icon: 'passed'
+        icon: 'passed',
       })
     },
     onLangConfirm({ selectedOptions }) {

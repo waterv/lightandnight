@@ -22,7 +22,7 @@ function loadLocaleMessages() {
 export default createI18n({
   legacy: false,
   locale: localStorage?.getItem('lang') || 'zh-CN',
-  fallbackLocale: 'zh-CN',
+  fallbackLocale: '???',
   messages: loadLocaleMessages(),
   globalInjection: true,
   silentFallbackWarn: true,

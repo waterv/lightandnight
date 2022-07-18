@@ -20,13 +20,13 @@ module.exports = {
 
   pluginOptions: {
     i18n: {
-      locale: 'cn',
-      fallbackLocale: 'cn',
+      locale: 'zh-CN',
+      fallbackLocale: '???',
       localeDir: 'i18n',
       enableLegacy: false,
       runtimeOnly: false,
       compositionOnly: false,
-      fullInstall: true
-    }
-  }
+      fullInstall: true,
+    },
+  },
 }

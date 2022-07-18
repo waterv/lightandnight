@@ -25,6 +25,7 @@
     fixed
     safe-area-inset-top
     placeholder
+    @click="developerMode"
   >
     <template #right>
       <template v-if="hint">
@@ -50,6 +51,9 @@ export default {
     canReturn: Boolean,
     hint: String,
   },
+  data: () => ({
+    count: 0,
+  }),
   methods: {
     back() {
       this.$router.back()
@@ -60,6 +64,11 @@ export default {
         message: this.$t(`hint.${this.hint}`),
       })
     },
+    developerMode() {
+      this.count += 1
+      if (this.count > 10)
+        this.$root.developerMode = true
+    }
   },
 }
 </script>

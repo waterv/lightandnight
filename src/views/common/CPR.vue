@@ -2,109 +2,112 @@
   <navbar :title="$t('route.common.cpr')" hint="cpr" can-return />
 
   <van-tabs v-model:active="active" sticky offset-top="46">
-    <van-tab title="计算">
+    <van-tab :title="$t('common.calculate')">
       <van-cell-group inset :title="$t('common.tutorial')">
-        <van-cell
-          :title="$t('tutorial.cpr')"
-          :label="$t('common.via', ['@光与夜之恋信使攻略站'])"
-          is-link
-          center
-          :url="$t('tutorial.cprUrl')"
-        />
+        <tutorial-cell message="cpr" />
       </van-cell-group>
 
-      <van-radio-group v-model="gemRatioSelected">
-        <van-cell-group title="北极星兑换比率" inset>
-          <van-cell title="说明" icon="question-o" is-link @click="showGemRatioInfo" />
+      <van-radio-group v-model="starRatioSelected">
+        <van-cell-group :title="$t('cpr.ratio')" inset>
+          <van-cell
+            :title="$t('common.info')"
+            icon="question-o"
+            is-link
+            @click="showStarRatioInfo"
+          />
 
           <van-cell
-            v-for="v in gemRatioData"
+            v-for="v in starRatioData"
             :key="v"
-            :title="`1 北极星 = ${v.value} 小熊星座`"
+            :title="$t('cpr.ratioNumber', [v.value])"
             :label="v.desc"
             clickable
-            @click="gemRatioSelect(v.value)"
+            @click="starRatioSelect(v.value)"
           >
             <template #right-icon>
               <van-radio :name="`${v.value}`" />
             </template>
           </van-cell>
 
-          <van-cell title="自定义" center>
+          <van-cell :title="$t('common.customize')" center>
             <template #right-icon>
               <van-stepper
-                v-model="gemRatio"
+                v-model="starRatio"
                 min="50"
                 input-width="48px"
-                @change="gemRatioSelect(gemRatio)"
+                @change="starRatioSelect(starRatio)"
               />
             </template>
           </van-cell>
         </van-cell-group>
       </van-radio-group>
 
-      <van-cell-group title="礼包详情" inset>
+      <van-cell-group :title="$t('cpr.detail')" inset>
         <van-field
           v-model="name"
-          label="名称"
-          placeholder="显示在列表中，方便识别用"
+          :label="$t('common.name')"
+          :placeholder="$t('cpr.nameDesc')"
           autocomplete="off"
         />
+        <van-field v-model="price" :label="$t('cpr.price')" type="number" autocomplete="off">
+          <template #right-icon>
+            {{ $t('cpr.priceUnit') }}
+          </template>
+        </van-field>
         <van-field
-          v-model="price"
-          label="售价"
-          placeholder="单位：RMB"
-          type="number"
-          autocomplete="off"
-        />
-        <van-field
+          v-model="star"
           :left-icon="require('@/assets/img/items/star.png')"
-          v-model="gem"
-          label="北极星"
+          :label="$t('items.star')"
           type="number"
           autocomplete="off"
         />
         <van-field
-          :left-icon="require('@/assets/img/items/100003.png')"
           v-model="coin"
-          label="小熊星座"
+          :left-icon="require('@/assets/img/items/100003.png')"
+          :label="$t('items.100003')"
           type="number"
           autocomplete="off"
         />
         <van-field
-          :left-icon="require('@/assets/img/items/100011.png')"
           v-model="gachapon"
-          label="羽毛笔"
+          :left-icon="require('@/assets/img/items/100011.png')"
+          :label="$t('items.100011')"
           type="number"
           autocomplete="off"
         />
         <van-field
-          :left-icon="require('@/assets/img/items/100012.png')"
           v-model="gachapon10"
-          label="十连签收券"
+          :left-icon="require('@/assets/img/items/100012.png')"
+          :label="$t('items.100012')"
           type="number"
           autocomplete="off"
         />
-        <van-cell title="计算" is-link @click="calculate" />
+        <van-cell :title="$t('common.calculate')" is-link @click="calculate" />
       </van-cell-group>
 
-      <van-cell-group title="计算结果" inset>
-        <van-cell title="包含抽数" :value="gachaCount" />
-        <van-cell title="性价比" :value="ratio" />
-        <van-cell title="每抽价格" :value="pricePerGacha" />
+      <van-cell-group :title="$t('common.result')" inset>
+        <van-cell :title="$t('cpr.gachaCount')" :value="gachaCount" />
+        <van-cell :title="$t('cpr.cpr')" :value="ratio" />
+        <van-cell :title="$t('cpr.pricePerGacha')" :value="pricePerGacha" />
       </van-cell-group>
-      <van-cell-group title=" " inset>
-        <van-cell title="加入列表" is-link @click="add" />
-        <van-cell title="清除当前输入" is-link @click="clear" />
+      <van-cell-group title="" inset>
+        <van-cell :title="$t('cpr.add')" is-link @click="add" />
+        <van-cell :title="$t('cpr.clear')" is-link @click="clear" />
       </van-cell-group>
     </van-tab>
-    <van-tab title="列表">
-      <van-cell-group v-if="showTutorial" title="说明" inset>
+
+    <van-tab :title="$t('cpr.list')">
+      <van-cell-group v-if="showTutorial" :title="$t('common.info')" inset>
         <van-swipe-cell>
-          <van-cell title="礼包名称" value="性价比" label="点击以选择，左滑以删除" center />
+          <van-cell
+            :title="$t('cpr.tutorial.name')"
+            :value="$t('cpr.tutorial.cpr')"
+            :label="$t('cpr.tutorial.hint')"
+            center
+          />
           <template #right>
             <van-button
-              text="删除"
+              :text="$t('common.delete')"
               @click="closeTutorial"
               class="swipe-button"
               square
@@ -116,21 +119,21 @@
       <van-cell-group title=" " inset>
         <van-swipe-cell v-for="(v, i) in packages" :key="v">
           <van-cell
-            :value="result(v).ratio + '%'"
-            :label="`¥${v.price} = ${result(v).gachaCount} 抽 (${result(v).pricePerGacha} 元/抽)`"
+            :value="$t('cpr.cprNumber', [result(v).ratio])"
+            :label="$t('cpr.result', [v.price, result(v).gachaCount, result(v).pricePerGacha])"
             @click="selectPackage(i)"
             center
             clickable
           >
             <template #title>
               {{ v.name }}
-              <van-tag v-if="v.selected" type="primary">已选</van-tag>
+              <van-tag v-if="v.selected" type="primary">{{ $t('common.selected') }}</van-tag>
             </template>
           </van-cell>
 
           <template #right>
             <van-button
-              text="删除"
+              :text="$t('common.delete')"
               @click="removePackage(i)"
               class="swipe-button"
               square
@@ -141,13 +144,13 @@
       </van-cell-group>
       <van-cell-group title=" " inset>
         <van-cell
-          title="已选中礼包总体"
-          :value="`${total.price ? `${total.ratio}%` : '-'}`"
-          :label="`${
+          :title="$t('cpr.selected')"
+          :value="total.price ? $t('cpr.cprNumber', [total.ratio]) : '-'"
+          :label="
             total.price
-              ? `¥${total.price} = ${total.gachaCount} 抽 (${total.pricePerGacha} 元/抽)`
-              : '未选中'
-          }`"
+              ? $t('cpr.result', [total.price, total.gachaCount, total.pricePerGacha])
+              : $t('cpr.noSelect')
+          "
           center
         />
       </van-cell-group>
@@ -158,6 +161,7 @@
 <script>
 import { Notify, Card, SwipeCell, Toast, Tag } from 'vant'
 import Navbar from '@/components/Navbar.vue'
+import TutorialCell from '@/components/TutorialCell.vue'
 let packages = require('@/assets/data/packages.json')
 
 export default {
@@ -169,21 +173,20 @@ export default {
     [Toast.name]: Toast,
     [Tag.name]: Tag,
     Navbar,
+    TutorialCell,
   },
   data() {
     return {
       active: 0,
-      gemRatio: 100,
-      gemRatioData: [
-        { value: 150, desc: '活动十连特惠（20 北极星十连，部分活动出现）' },
-        { value: 100, desc: '本月十连特惠、今日星座专享' },
-        { value: 71.33, desc: '福袋（平均值，部分活动出现）' },
-        { value: 50, desc: '原价兑换' },
-      ],
-      gemRatioSelected: '100',
+      starRatio: 100,
+      starRatioData: [150, 100, 71.33, 50].map(value => ({
+        value,
+        desc: this.$t(`cpr.ratios.${value}`),
+      })),
+      starRatioSelected: '100',
       name: '',
       price: undefined,
-      gem: undefined,
+      star: undefined,
       coin: undefined,
       gachapon: undefined,
       gachapon10: undefined,
@@ -199,20 +202,19 @@ export default {
   computed: {
     total() {
       let v = this.packages.reduce(
-        (acc, v) => {
-          if (v.selected)
-            return {
-              price: acc.price + v.price,
-              gem: acc.gem + v.gem,
-              coin: acc.coin + v.coin,
-              gachapon: acc.gachapon + v.gachapon,
-              gachapon10: acc.gachapon10 + v.gachapon10,
-            }
-          return acc
-        },
+        (acc, v) =>
+          v.selected
+            ? {
+                price: acc.price + v.price,
+                star: acc.star + v.star,
+                coin: acc.coin + v.coin,
+                gachapon: acc.gachapon + v.gachapon,
+                gachapon10: acc.gachapon10 + v.gachapon10,
+              }
+            : acc,
         {
           price: 0,
-          gem: 0,
+          star: 0,
           coin: 0,
           gachapon: 0,
           gachapon10: 0,
@@ -226,21 +228,19 @@ export default {
     },
   },
   methods: {
-    showGemRatioInfo() {
+    showStarRatioInfo() {
       this.$dialog.alert({
         ...this.$root.dialogSettings,
-        message: this.$t('hint.cprGemRatio')
+        message: this.$t('hint.cprStarRatio'),
       })
     },
-    gemRatioSelect(v) {
-      this.gemRatio = v
-      this.gemRatioSelected = String(v)
-      this.packages.sort((a, b) => {
-        return this.result(b).ratio - this.result(a).ratio
-      })
+    starRatioSelect(v) {
+      this.starRatio = v
+      this.starRatioSelected = String(v)
+      this.packages.sort((a, b) => this.result(b).ratio - this.result(a).ratio)
     },
     result(v) {
-      let gachaCount = (v.gem * this.gemRatio + v.coin) / 300 + v.gachapon + 10 * v.gachapon10
+      let gachaCount = (v.star * this.starRatio + v.coin) / 300 + v.gachapon + 10 * v.gachapon10
       let result = (gachaCount / v.price) * 18
       return {
         gachaCount: Math.round(gachaCount * 100) / 100,
@@ -249,58 +249,41 @@ export default {
       }
     },
     calculate() {
-      if (!this.price) {
-        Toast({ message: '请输入礼包售价。', icon: 'close' })
-        return
-      }
+      if (!this.price) return Toast({ message: this.$t('cpr.toast.price'), icon: 'close' })
       let v = {
         price: Number(this.price),
-        gem: Number(this.gem || 0),
+        star: Number(this.star || 0),
         coin: Number(this.coin || 0),
         gachapon: Number(this.gachapon || 0),
         gachapon10: Number(this.gachapon10 || 0),
       }
       let result = this.result(v)
-      if (!result.gachaCount) {
-        Toast({ message: '请输入礼包内容。', icon: 'close' })
-        return
-      }
+      if (!result.gachaCount) return Toast({ message: this.$t('cpr.toast.content'), icon: 'close' })
 
-      this.gachaCount = result.gachaCount + ' 抽'
-      this.ratio = result.ratio + '%'
-      this.pricePerGacha = result.pricePerGacha + ' 元'
+      this.gachaCount = this.$t('cpr.gachaCountNumber', [result.gachaCount])
+      this.ratio = this.$t('cpr.cprNumber', [result.ratio])
+      this.pricePerGacha = this.$t('cpr.pricePerGachaNumber', [result.pricePerGacha])
     },
     add() {
-      if (!this.price) {
-        Toast({ message: '请输入礼包售价。', icon: 'close' })
-        return
-      }
+      if (!this.price) return Toast({ message: this.$t('cpr.toast.price'), icon: 'close' })
       this.calculate()
-      if (!this.gachaCount) {
-        Toast({ message: '请输入礼包内容。', icon: 'close' })
-        return
-      }
-      if (!this.name) {
-        Toast({ message: '请输入礼包名称。', icon: 'close' })
-        return
-      }
+      if (!this.gachaCount) return Toast({ message: this.$t('cpr.toast.content'), icon: 'close' })
+      if (!this.name) return Toast({ message: this.$t('cpr.toast.name'), icon: 'close' })
       this.packages.push({
         name: this.name,
         price: Number(this.price),
-        gem: Number(this.gem || 0),
+        star: Number(this.star || 0),
         coin: Number(this.coin || 0),
         gachapon: Number(this.gachapon || 0),
         gachapon10: Number(this.gachapon10 || 0),
       })
-      this.packages.sort((a, b) => {
-        return this.result(b).ratio - this.result(a).ratio
-      })
+      this.packages.sort((a, b) => this.result(b).ratio - this.result(a).ratio)
       this.clear()
-      Toast({ message: '已加入列表。', icon: 'passed' })
+      Toast({ message: this.$t('cpr.toast.success'), icon: 'passed' })
     },
     clear() {
       this.price = undefined
-      this.gem = undefined
+      this.star = undefined
       this.coin = undefined
       this.gachapon = undefined
       this.gachapon10 = undefined
