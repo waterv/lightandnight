@@ -1,93 +1,120 @@
 <template>
-  <navbar title="光夜小工具">
-    <van-icon v-if="active == 'events'" name="question-o" @click="showInfo" />
-  </navbar>
+  <navbar v-if="active != 'events'" :title="$t('app.title')" />
+  <navbar v-else :title="$t('app.title')" hint="events" />
 
   <div class="home">
     <template v-if="active == 'events'">
-      <template v-for="v in events" :key="v">
+      <template v-for="v in events" :key="v"><!-- Category -->
         <van-cell-group v-if="!v.noavailable" :title="v.name" inset>
-          <template v-for="u in v.events" :key="u">
+
+          <template v-for="u in v.events" :key="u"><!-- Event -->
             <van-cell v-if="u.time !== undefined" :title="u.name" :label="u.desc" center>
+
               <template #right-icon>
                 <van-count-down :time="u.time">
                   <template #default="timeData">
-                    <span class="block" :style="{ backgroundColor: u.color }">{{
-                      timeData.days
-                    }}</span
-                    ><small>d</small>
-                    <span class="block" :style="{ backgroundColor: u.color }">{{
-                      timeData.hours
-                    }}</span
-                    ><small>h {{ u.state }}</small>
+                    <span class="block" :style="{ backgroundColor: u.color }">
+                      {{ timeData.days }}
+                    </span><small>d</small>
+                    <span class="block" :style="{ backgroundColor: u.color }">
+                      {{ timeData.hours }}
+                    </span><small>h {{ u.state }}</small>
                   </template>
                 </van-count-down>
               </template>
+
             </van-cell>
           </template>
+
         </van-cell-group>
       </template>
     </template>
 
     <template v-if="active == 'calculators'">
-      <template v-for="v in tools" :key="v">
-        <van-divider>{{ v.name }}</van-divider>
-        <div class="content">
+      <template v-for="(v, i) in tools" :key="v"><!-- Category -->
+        <van-divider>{{ $t(`home.category[${i}]`) }}</van-divider>
+
+        <div class="content"><!-- Tool -->
           <van-button
-            v-for="u in v.children"
+            v-for="u in v"
             :key="u"
             block
             :to="u.to"
             :color="u.background"
             :style="u.color ? `color: ${u.color} !important;` : ''"
           >
-            {{ u.name }}
+            {{ $t(`route${u.to.replaceAll('/', '.')}`) }}
           </van-button>
         </div>
+
       </template>
     </template>
 
     <template v-if="active == 'settings'">
-      <van-cell-group title="实验性功能" inset>
-        <van-cell title="欧皇模拟器 (出货截图生成器)" is-link to="/common/image" center />
+      <!-- Mirrors -->
+      <van-cell-group :title="$t('settings.mirror')" inset>
+        <template v-for="v in mirrors" :key="v">
+          <van-cell
+            v-if="hostname != v.hostname"
+            :title="`${v.name} ${$t('settings.mirror')}`"
+            :url="v.url"
+            is-link
+          />
+        </template>
+        <van-cell title="" :label="$t('settings.mirrorDesc')" />
       </van-cell-group>
-      <van-cell-group title=" " inset>
+
+      <!-- Cache -->
+      <van-cell-group :title="$t('settings.cache')" inset>
         <van-cell
-          v-if="hostname != 'waterv.github.io'"
-          title="Github Pages 镜像"
-          is-link
-          url="//waterv.github.io/lightandnight"
-        />
-        <van-cell
-          v-if="hostname != 'lightandnight.vercel.app'"
-          title="Vercel 镜像"
-          is-link
-          url="//lightandnight.vercel.app"
-        />
-        <van-cell title="" label="不同镜像的内容完全一致，如果您访问某一镜像速度较慢，可选择切换到另一镜像。" />
-      </van-cell-group>
-      <van-cell-group title=" " inset>
-        <van-cell
-          title="清除 localStorage"
-          label="清除后，一些设置项将回到默认值。"
+          :title="$t('settings.clearLocalStorage')"
           @click="clearLocalStorage"
           is-link
           center
         />
+        <van-cell title="" :label="$t('settings.clearCacheDesc')" />
       </van-cell-group>
+
       <van-cell-group title=" " inset>
-        <van-cell title="添加到主屏幕" is-link to="/posts/addtohome" />
-        <van-cell title="关于与声明" is-link to="/posts/statement" />
-        <van-cell title="更新日志" is-link to="/posts/changelog" />
+        <van-cell
+          :title="$t('settings.appearance', [$t(`settings.appearances[${Number(appearance)}]`)])"
+          :label="$t('settings.appearanceDesc')"
+          center
+        >
+          <template #right-icon>
+            <van-switch v-model="appearance" />
+          </template>
+        </van-cell>
+        <!-- <van-field
+          v-model="langName"
+          is-link
+          readonly
+          :label="$t('settings.lang')"
+          @click="showLangPicker = true"
+        /> --><!-- 预留 -->
+      </van-cell-group>
+
+      <van-cell-group title=" " inset>
+        <van-cell :title="$t('route.posts.addtohome')" is-link to="/posts/addtohome" />
+        <van-cell :title="$t('route.posts.statement')" is-link to="/posts/statement" />
+        <van-cell :title="$t('route.posts.changelog')" is-link to="/posts/changelog" />
       </van-cell-group>
     </template>
   </div>
 
   <van-tabbar fixed safe-area-inset-bottom v-model="active" @change="onActiveChange">
-    <van-tabbar-item name="events" icon="calendar-o">活动提醒</van-tabbar-item>
-    <van-tabbar-item name="calculators" icon="apps-o">实用工具</van-tabbar-item>
-    <van-tabbar-item name="settings" icon="setting-o">设置</van-tabbar-item>
+    <van-tabbar-item name="events" icon="calendar-o">{{ $t('home.tabbar.events') }}</van-tabbar-item>
+    <van-tabbar-item name="calculators" icon="apps-o">{{ $t('home.tabbar.calculators') }}</van-tabbar-item>
+    <van-tabbar-item name="settings" icon="setting-o">{{ $t('home.tabbar.settings') }}</van-tabbar-item>
   </van-tabbar>
+
+  <van-popup v-model:show="showLangPicker" round position="bottom">
+    <van-picker
+      :columns="langs"
+      @cancel="showLangPicker = false"
+      @confirm="onLangConfirm"
+    />
+  </van-popup>
 </template>
 
 <script>
@@ -104,6 +131,7 @@ export default {
     Navbar,
   },
   data() {
+    // Process events data
     let events = require('@/assets/data/events.json')
     let now = dayjs()
     for (let i in events) {
@@ -138,85 +166,61 @@ export default {
       }
       if (count == 0) events[i].noavailable = true
     }
+
     return {
       active: this.$root.homepageActive,
       hostname: window.location.hostname,
-      infoShow: false,
+      showLangPicker: false,      
       events,
-      tools: [
-        {
-          name: '抽卡模拟',
-          children: [
-            {
-              name: '信使花园模拟器',
-              background: this.$root.colors.common.gacha,
-              to: '/common/gacha',
-            },
-            {
-              name: '羁梦星愿模拟器',
-              background: this.$root.colors.events.wish,
-              to: '/events/wish/sim',
-            },
-          ],
-        },
-        {
-          name: '通用工具',
-          children: [
-            {
-              name: '囤囤鼠计算器',
-              background: this.$root.colors.common.hoard,
-              color: 'rgba(69, 90, 100, .8)',
-              to: '/common/hoard',
-            },
-            {
-              name: '礼包性价比计算器',
-              background: this.$root.colors.common.cpr,
-              color: 'rgba(85, 76, 60, .8)',
-              to: '/common/cpr',
-            },
-            {
-              name: '灵犀养成计算器',
-              background: this.$root.colors.common.level,
-              color: 'rgba(109, 46, 43, 0.8)',
-              to: '/common/level',
-            },
-            {
-              name: '道具合成计算器',
-              background: this.$root.colors.common.item,
-              color: 'rgba(78, 68, 91, 0.8)',
-              to: '/common/item',
-            },
-          ],
-        },
-        {
-          name: '限时活动',
-          children: [
-            {
-              name: '羁梦星愿计算器',
-              background: this.$root.colors.events.wish,
-              to: '/events/wish',
-            },
-          ],
-        },
-      ],
+      tools: require('@/assets/data/tools.json'),
+      mirrors: require('@/assets/data/mirrors.json'),
+      langs: require('@/assets/data/langs.json'),
+      langName_: undefined,
     }
   },
-  methods: {
-    showInfo() {
-      this.$dialog.alert({
-        ...this.$root.dialogSettings,
-        message:
-          '本页展示当前游戏中，各活动的大约开始或结束时间。\n\n' +
-          '因为活动结束常常伴随停服维护，结束时间按 00:00 而非 04:59 计。\n\n' +
-          '信息可能过时或不准确，请以游戏中实际情况为准。',
-      })
+  computed: {
+    appearance: {
+      get() {
+        return this.$root.theme == 'dark'
+      },
+      set(v) {
+        this.$root.theme = v ? 'dark' : ''
+      }
     },
+    lang: {
+      get() {
+        return localStorage.getItem('lang') || 'zh-CN'
+      },
+      set(v) {
+        localStorage.setItem('lang', v)
+        this.$i18n.locale = v
+      }
+    },
+    langName: {
+      get() {
+        return this.langName_ || localStorage.getItem('langName') || '简体中文'
+      },
+      set(v) {
+        this.langName_ = v
+        localStorage.setItem('langName', v)
+      }
+    },
+  },
+  methods: {
     onActiveChange(active) {
       this.$root.homepageActive = active
     },
     clearLocalStorage() {
       localStorage.clear()
-      Toast({ message: 'localStorage 已清空。', icon: 'passed' })
+      Toast({
+        message: this.$t('settings.clearLocalStorageToast'),
+        icon: 'passed'
+      })
+    },
+    onLangConfirm({ selectedOptions }) {
+      this.showLangPicker = false
+      this.langName = selectedOptions[0].text
+      this.lang = selectedOptions[0].value
     },
   },
 }

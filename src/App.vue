@@ -24,18 +24,6 @@ export default {
         navBarTextColor: '#ffffff',
         navBarIconColor: '#ffffff',
       },
-      colors: {
-        common: {
-          cpr: 'linear-gradient(135deg, #fbe9c3, #e6d8be)',
-          gacha: 'linear-gradient(135deg, #91c4cc, #b7ddc0)',
-          hoard: 'linear-gradient(135deg, #bbe0f5, #e0f8e0)',
-          level: 'linear-gradient(135deg, #fbe4e2, #f3b0a6)',
-          item: 'linear-gradient(135deg, #f3d7d3, #c4c7e8)',
-        },
-        events: {
-          wish: 'linear-gradient(135deg, #6c71c5, #93a9da)',
-        },
-      },
     }
   },
   mounted() {

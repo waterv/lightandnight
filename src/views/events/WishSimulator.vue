@@ -21,7 +21,7 @@
             :percentage="(gachaTime / 99) * 100"
             :pivot-text="`${gachaTime}`"
             pivot-color="#6c71c5"
-            :color="$root.colors.events.wish"
+            color="linear-gradient(135deg, #6c71c5, #93a9da)"
           /><small>/ 88 / 95 / 99 抽各有一次保底</small>
         </van-cell>
       </van-cell-group>

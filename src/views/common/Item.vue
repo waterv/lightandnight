@@ -1,5 +1,5 @@
 <template>
-  <navbar title="道具合成计算器" can-return />
+  <navbar :title="$t('route.common.item')" can-return />
 
   <van-tabs v-model:active="active" sticky offset-top="46">
     <van-tab title="设计师证明">
@@ -13,17 +13,16 @@
         />
       </van-cell-group>
 
-      <van-cell-group title="目前持有" inset>
+      <van-cell-group :title="$t('common.currentStatus')" inset>
         <template v-for="i in [0, 1, 2, 3]" :key="i">
-          <van-cell v-if="i < aTarget" :title="aName[i]" center>
+          <van-cell
+            v-if="i < aTarget"
+            :title="aName[i]"
+            :icon="require(`@/assets/img/items/${aId[i]}.png`)"
+            center
+          >
             <template #right-icon>
-              <van-stepper
-                v-model="a[i]"
-                integer
-                min="0"
-                input-width="64px"
-                @change="calculateA"
-              />
+              <van-stepper v-model="a[i]" integer min="0" input-width="64px" @change="calculateA" />
             </template>
           </van-cell>
         </template>
@@ -31,22 +30,27 @@
 
       <van-cell-group title="合成路线" inset>
         <template v-for="i in [1, 2, 3, 4]" :key="i">
-          <van-cell v-if="i <= aTarget" :title="aName[i]" :value="aNeed[i]" />
+          <van-cell
+            v-if="i <= aTarget"
+            :title="aName[i]"
+            :icon="require(`@/assets/img/items/${aId[i]}.png`)"
+            :value="aNeed[i]"
+          />
         </template>
       </van-cell-group>
     </van-tab>
 
     <van-tab title="工艺学习">
-      <van-cell-group title="目前持有" inset>
-        <van-cell v-for="i in [0, 1]" :key="i" :title="bName[i]" center>
+      <van-cell-group :title="$t('common.currentStatus')" inset>
+        <van-cell
+          v-for="i in [0, 1]"
+          :key="i"
+          :title="bName[i]"
+          :icon="require(`@/assets/img/items/${bId[i]}.png`)"
+          center
+        >
           <template #right-icon>
-            <van-stepper
-              v-model="b[i]"
-              integer
-              min="0"
-              input-width="64px"
-              @change="calculateB"
-            />
+            <van-stepper v-model="b[i]" integer min="0" input-width="64px" @change="calculateB" />
           </template>
         </van-cell>
         <van-cell title="清空" is-link @click="b = [0, 0]" />
@@ -57,6 +61,7 @@
           v-for="i in [1, 2]"
           :key="i"
           :title="bName[i]"
+          :icon="require(`@/assets/img/items/${bId[i]}.png`)"
           :value="bNeed[i]"
         />
       </van-cell-group>
@@ -82,22 +87,22 @@ export default {
     Navbar,
   },
   data() {
+    let aId = [200102, 200103, 200104, 200105, 200106]
+    let aName = aId.map(v => this.$t(`items.${v}`))
+    let bId = [200011, 200012, 200013]
+    let bName = bId.map(v => this.$t(`items.${v}`))
     return {
       active: 0,
       showPicker: false,
       a: [0, 0, 0, 0, 0],
-      aName: [
-        '设计助理证明',
-        '初级设计师证明',
-        '设计师证明',
-        '资深设计师证明',
-        '创意总监证明',
-      ],
+      aName,
+      aId,
       aNeed: [0, 0, 0, 0, 0],
       aTarget: 4,
-      aTargetString: '创意总监证明',
+      aTargetString: aName[4], // 4 is aTarget
       b: [0, 0],
-      bName: ['一级材料', '二级材料', '三级材料'],
+      bName,
+      bId,
       bNeed: [0, 0, 0],
     }
   },
@@ -106,7 +111,7 @@ export default {
       return this.aName.slice(2).map((v, i) => {
         return { text: v, value: i + 2 }
       })
-    }
+    },
   },
   methods: {
     confirmA(v) {
@@ -118,25 +123,17 @@ export default {
     calculateA() {
       this.aNeed = [0, 0, 0, 0, 0]
       let maxB = a => Math.floor(a / 2)
-      let maxC = (a, b) =>
-        Math.min(Math.floor((a + 2 * b) / 8), Math.floor(a / 2))
+      let maxC = (a, b) => Math.min(Math.floor((a + 2 * b) / 8), Math.floor(a / 2))
       let maxD = (a, b, c) => {
-        if (Math.floor((b + maxB(a)) / 2) < Math.floor(c / 3))
-          return Math.floor((b + maxB(a)) / 2)
-        else if (
-          Math.floor((c + maxC(a, b)) / 3) <
-          Math.floor((b - 3 * maxC(a, b)) / 2)
-        )
+        if (Math.floor((b + maxB(a)) / 2) < Math.floor(c / 3)) return Math.floor((b + maxB(a)) / 2)
+        else if (Math.floor((c + maxC(a, b)) / 3) < Math.floor((b - 3 * maxC(a, b)) / 2))
           return Math.floor((c + maxC(a, b)) / 3)
         else return Math.floor((8 * c + 2 * b + a) / 28)
       }
       let maxE = (a, b, c, d) => {
         if (Math.floor((c + maxC(a, b)) / 2) < Math.floor(d / 3))
           return Math.floor((c + maxC(a, b)) / 2)
-        else if (
-          Math.floor((d + maxD(a, b, c)) / 3) <
-          Math.floor((c - 3 * maxC(a, b, c)) / 2)
-        )
+        else if (Math.floor((d + maxD(a, b, c)) / 3) < Math.floor((c - 3 * maxC(a, b, c)) / 2))
           return Math.floor((d + maxD(a, b, c)) / 3)
         else return Math.round((a + 2 * b + 8 * c + 28 * d) / 100) // 摆烂了
       }

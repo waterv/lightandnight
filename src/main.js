@@ -1,9 +1,9 @@
 import { createApp } from 'vue'
-import App from './App.vue'
 import router from './router'
-
+import i18n from './i18n'
+import App from './App.vue'
+import './registerServiceWorker'
 import '@vant/touch-emulator'
-
 import {
   Col,
   Row,
@@ -30,22 +30,23 @@ import {
   ConfigProvider,
 } from 'vant'
 
-import './registerServiceWorker'
-
+// day.js configures
 let dayjs = require('dayjs')
+
 require('dayjs/locale/zh-cn')
 dayjs.locale('zh-cn')
-var utc = require('dayjs/plugin/utc')
-var timezone = require('dayjs/plugin/timezone')
+
+let utc = require('dayjs/plugin/utc')
 dayjs.extend(utc)
+
+let timezone = require('dayjs/plugin/timezone')
 dayjs.extend(timezone)
 dayjs.tz.setDefault('Asia/Shanghai')
 
 const app = createApp(App)
-
-app.use(router)
-
 app
+  .use(i18n)
+  .use(router)
   .use(Col)
   .use(Row)
   .use(Divider)

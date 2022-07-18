@@ -1,0 +1,12 @@
+[
+  {
+    "name": "GitHub Pages",
+    "hostname": "waterv.github.io",
+    "url": "https://waterv.github.io/lightandnight"
+  },
+  {
+    "name": "Vercel",
+    "hostname": "lightandnight.vercel.app",
+    "url": "https://lightandnight.vercel.app"
+  }
+]

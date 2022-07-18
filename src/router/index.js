@@ -37,7 +37,7 @@ const routes = [
     component: () => import('../views/events/Wish.vue'),
   },
   {
-    path: '/events/wish/sim',
+    path: '/events/wishsim',
     component: () => import('../views/events/WishSimulator.vue'),
   },
   {

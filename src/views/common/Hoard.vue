@@ -1,15 +1,13 @@
 <template>
-  <navbar title="囤囤鼠计算器" can-return>
-    <van-icon name="question-o" @click="showInfo" />
-  </navbar>
+  <navbar :title="$t('route.common.hoard')" hint="hoard" can-return />
 
-  <van-cell-group inset title="攻略">
+  <van-cell-group inset :title="$t('common.tutorial')">
     <van-cell
-      title="签到活动汇总"
-      label="来自 @光与夜之恋信使攻略站。"
+      :title="$t('tutorial.hoard')"
+      :label="$t('common.via', ['@光与夜之恋信使攻略站'])"
       is-link
       center
-      url="https://weibo.com/2304898581/Lp8uxiSt3"
+      :url="$t('tutorial.hoardUrl')"
     />
   </van-cell-group>
 
@@ -65,10 +63,28 @@
     />
   </van-cell-group>
 
-  <van-cell-group inset title="当前状态">
-    <van-field v-model="currentCoin" type="number" label="小熊星座" autocomplete="off" />
-    <van-field v-model="currentGachapon" type="number" label="羽毛笔" autocomplete="off" />
-    <van-field v-model="currentGachapon10" type="number" label="十连签收券" autocomplete="off" />
+  <van-cell-group inset :title="$t('common.currentStatus')">
+    <van-field
+      :left-icon="require('@/assets/img/items/100003.png')"
+      :label="$t('items.100003')"
+      v-model="currentCoin"
+      type="number"
+      autocomplete="off"
+    />
+    <van-field
+      :left-icon="require('@/assets/img/items/100011.png')"
+      :label="$t('items.100011')"
+      v-model="currentGachapon"
+      type="number"
+      autocomplete="off"
+    />
+    <van-field
+      :left-icon="require('@/assets/img/items/100012.png')"
+      :label="$t('items.100012')"
+      v-model="currentGachapon10"
+      type="number"
+      autocomplete="off"
+    />
     <van-cell title="目标日期" :value="targetDateString" clickable @click="showCalendar(-1)" />
   </van-cell-group>
 
@@ -160,15 +176,6 @@ export default {
   methods: {
     getDiff(date, unit) {
       return Math.ceil(dayjs(date).diff(dayjs(), unit ? unit : 'day', true))
-    },
-    showInfo() {
-      this.$dialog.alert({
-        ...this.$root.dialogSettings,
-        message:
-          '此工具在计算过程中，所有项目均按照「奖励在第一天发放」的规则参与计算，与实际情况存在偏差。\n\n' +
-          '目标日期越远，因奖励发放时间产生的偏差所占比例减小，计算结果相对更加准确；但同时活动等不确定因素也增多。\n\n' +
-          '出于上述原因，本工具仅供粗略计算之用。',
-      })
     },
     showPicker(v) {
       this.pickerColumn = v.level.map((u, i) => {

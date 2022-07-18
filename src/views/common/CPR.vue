@@ -1,16 +1,15 @@
 <template>
-  <navbar title="礼包性价比计算器" can-return>
-    <van-icon name="question-o" @click="showInfo" />
-  </navbar>
+  <navbar :title="$t('route.common.cpr')" hint="cpr" can-return />
+
   <van-tabs v-model:active="active" sticky offset-top="46">
     <van-tab title="计算">
-      <van-cell-group title="攻略" inset>
+      <van-cell-group inset :title="$t('common.tutorial')">
         <van-cell
-          title="常驻礼包性价比"
-          label="来自 @光与夜之恋信使攻略站。"
+          :title="$t('tutorial.cpr')"
+          :label="$t('common.via', ['@光与夜之恋信使攻略站'])"
           is-link
           center
-          url="https://weibo.com/2304898581/Lg2v1rjG8"
+          :url="$t('tutorial.cprUrl')"
         />
       </van-cell-group>
 
@@ -45,7 +44,12 @@
       </van-radio-group>
 
       <van-cell-group title="礼包详情" inset>
-        <van-field v-model="name" label="名称" autocomplete="off" />
+        <van-field
+          v-model="name"
+          label="名称"
+          placeholder="显示在列表中，方便识别用"
+          autocomplete="off"
+        />
         <van-field
           v-model="price"
           label="售价"
@@ -53,10 +57,34 @@
           type="number"
           autocomplete="off"
         />
-        <van-field v-model="gem" label="北极星" type="number" autocomplete="off" />
-        <van-field v-model="coin" label="小熊星座" type="number" autocomplete="off" />
-        <van-field v-model="gachapon" label="羽毛笔" type="number" autocomplete="off" />
-        <van-field v-model="gachapon10" label="十连签收券" type="number" autocomplete="off" />
+        <van-field
+          :left-icon="require('@/assets/img/items/star.png')"
+          v-model="gem"
+          label="北极星"
+          type="number"
+          autocomplete="off"
+        />
+        <van-field
+          :left-icon="require('@/assets/img/items/100003.png')"
+          v-model="coin"
+          label="小熊星座"
+          type="number"
+          autocomplete="off"
+        />
+        <van-field
+          :left-icon="require('@/assets/img/items/100011.png')"
+          v-model="gachapon"
+          label="羽毛笔"
+          type="number"
+          autocomplete="off"
+        />
+        <van-field
+          :left-icon="require('@/assets/img/items/100012.png')"
+          v-model="gachapon10"
+          label="十连签收券"
+          type="number"
+          autocomplete="off"
+        />
         <van-cell title="计算" is-link @click="calculate" />
       </van-cell-group>
 
@@ -198,23 +226,10 @@ export default {
     },
   },
   methods: {
-    showInfo() {
-      this.$dialog.alert({
-        ...this.$root.dialogSettings,
-        message:
-          '此工具仅计算礼包用于抽卡的性价比，游戏中显示的性价比计入了「极光币」等培养材料。\n\n' +
-          '不氪立省百分百。',
-      })
-    },
     showGemRatioInfo() {
       this.$dialog.alert({
         ...this.$root.dialogSettings,
-        message:
-          '本游戏中，抽卡道具的原价为：\n\n' +
-          '1 羽毛笔 = 300 小熊星座 = 6 北极星 = 18 元\n\n' +
-          '北极星与其他道具的兑换比率不固定，因此计算性价比时需要分不同情况讨论。\n\n' +
-          '根据您一般使用北极星兑换小熊星座的途径，选择恰当的兑换比率。\n\n' +
-          '如果还是不明白选什么：重氪选 [50]，其他选 [100]。',
+        message: this.$t('hint.cprGemRatio')
       })
     },
     gemRatioSelect(v) {

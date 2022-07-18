@@ -1,5 +1,5 @@
 <template>
-  <navbar title="灵犀养成计算器" can-return>
+  <navbar :title="$t('route.common.level')" can-return>
     <van-icon
       v-if="card.length > 1 && active"
       name="delete-o"
@@ -10,14 +10,56 @@
 
   <van-tabs v-model:active="active" sticky offset-top="46">
     <van-tab title="计算">
-      <van-cell-group inset title="当前状态">
-        <van-field v-model="current.coin" type="number" label="极光币" autocomplete="off" />
-        <van-field v-model="current.初心" type="number" label="初心" autocomplete="off" />
-        <van-field v-model="current.慕心" type="number" label="慕心" autocomplete="off" />
-        <van-field v-model="current.恋心" type="number" label="恋心" autocomplete="off" />
-        <van-field v-model="current.眩光沙砾" type="number" label="眩光沙砾" autocomplete="off" />
-        <van-field v-model="current.稀愿珍宝" type="number" label="稀愿珍宝" autocomplete="off" />
-        <van-field v-model="current.心愿海螺" type="number" label="心愿海螺" autocomplete="off" />
+      <van-cell-group inset :title="$t('common.currentStatus')">
+        <van-field
+          :left-icon="require('@/assets/img/items/coin.png')"
+          :label="$t('items.coin')"
+          v-model="current.coin"
+          type="number"
+          autocomplete="off"
+        />
+        <van-field
+          :left-icon="require('@/assets/img/items/120001.png')"
+          :label="$t('items.120001')"
+          v-model="current.初心"
+          type="number"
+          autocomplete="off"
+        />
+        <van-field
+          :left-icon="require('@/assets/img/items/120002.png')"
+          :label="$t('items.120002')"
+          v-model="current.慕心"
+          type="number"
+          autocomplete="off"
+        />
+        <van-field
+          :left-icon="require('@/assets/img/items/120003.png')"
+          :label="$t('items.120003')"
+          v-model="current.恋心"
+          type="number"
+          autocomplete="off"
+        />
+        <van-field
+          :left-icon="require('@/assets/img/items/230001.png')"
+          :label="$t('items.230001')"
+          v-model="current.眩光沙砾"
+          type="number"
+          autocomplete="off"
+        />
+        <van-field
+          :left-icon="require('@/assets/img/items/231001.png')"
+          :label="$t('items.231001')"
+          v-model="current.稀愿珍宝"
+          type="number"
+          autocomplete="off"
+        />
+        <van-field
+          :left-icon="require('@/assets/img/items/231002.png')"
+          :label="$t('items.231002')"
+          v-model="current.心愿海螺"
+          type="number"
+          autocomplete="off"
+        />
         <van-cell title="外婆小铺双倍">
           <template #right-icon><van-switch v-model="grandmaDouble" size="24" /></template>
         </van-cell>
@@ -28,13 +70,13 @@
         <van-cell title="计算" @click="calculate" center is-link />
       </van-cell-group>
 
-      <van-cell-group title="所需资源" inset>
-        <van-cell title="极光币" :value="coin" />
-        <van-cell title="经验" :value="exp" />
-        <van-cell title="折合为慕心" :value="慕心" icon="arrow" />
-        <van-cell title="眩光沙砾" :value="眩光沙砾" />
-        <van-cell title="稀愿珍宝" :value="稀愿珍宝" />
-        <van-cell title="心愿海螺" :value="心愿海螺" />
+      <van-cell-group title="仍需资源" inset>
+        <van-cell :icon="require('@/assets/img/items/coin.png')" :title="$t('items.coin')" :value="coin" />
+        <van-cell :icon="require('@/assets/img/items/120001.png')" title="经验" :value="exp" />
+        <van-cell :icon="require('@/assets/img/items/120002.png')" :title="$t('common.equalsTo', [$t('items.120002')])" :value="慕心" />
+        <van-cell :icon="require('@/assets/img/items/230001.png')" :title="$t('items.230001')" :value="眩光沙砾" />
+        <van-cell :icon="require('@/assets/img/items/231001.png')" :title="$t('items.231001')" :value="稀愿珍宝" />
+        <van-cell :icon="require('@/assets/img/items/231002.png')" :title="$t('items.231002')" :value="心愿海螺" />
       </van-cell-group>
 
       <van-cell-group title="预计刷取" inset>
@@ -59,7 +101,7 @@
           :value="外婆小铺6"
           center
         />
-        <van-cell title="花费灵感" :value="灵感" />
+        <van-cell :icon="require('@/assets/img/items/flower.png')" title="花费灵感" :value="灵感" />
       </van-cell-group>
     </van-tab>
     <template v-for="(v, i) in card" :key="v">
