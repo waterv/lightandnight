@@ -40,8 +40,8 @@ export default {
   data() {
     let eventsResult = this.events?.events?.map(event => {
       let now = dayjs(),
-        start = dayjs(event.start),
-        end = dayjs(event.end),
+        start = dayjs.tz(event.start),
+        end = dayjs.tz(event.end),
         target,
         state
       if (event.periodic) {
@@ -65,7 +65,7 @@ export default {
           ? { state: this.$t('common.eventEnd'), target: end }
           : { state: undefined, target: undefined })
       }
-      return { ...event, state, time: target.diff(now) }
+      return { ...event, state, time: target?.diff(now) }
     })
     let available = false
     eventsResult?.forEach(event => {
