@@ -33,9 +33,6 @@ import {
 // day.js configures
 let dayjs = require('dayjs')
 
-require('dayjs/locale/zh-cn')
-dayjs.locale('zh-cn')
-
 let utc = require('dayjs/plugin/utc')
 dayjs.extend(utc)
 
