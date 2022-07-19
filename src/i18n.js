@@ -1,4 +1,23 @@
 import { createI18n } from 'vue-i18n'
+let locale = localStorage?.getItem('lang') || 'zh-CN'
+
+import { Locale } from 'vant'
+import enUS from 'vant/es/locale/lang/en-US'
+let dayjs = require('dayjs')
+
+switch (locale) {
+  case 'zh-CN':
+    require('dayjs/locale/zh-cn')
+    dayjs.locale('zh-cn')
+    break
+  case 'en-US':
+    require('dayjs/locale/en')
+    dayjs.locale('en')
+    Locale.use('en-US', enUS)
+    break
+  case '???':
+    break
+}
 
 /**
  * Load locale messages
@@ -21,7 +40,7 @@ function loadLocaleMessages() {
 
 export default createI18n({
   legacy: false,
-  locale: localStorage?.getItem('lang') || 'zh-CN',
+  locale,
   fallbackLocale: '???',
   messages: loadLocaleMessages(),
   globalInjection: true,

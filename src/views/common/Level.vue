@@ -214,9 +214,9 @@
 
 <script>
 import Navbar from '@/components/Navbar.vue'
-let levelResource = require('@/assets/data/levelResource.json')
-let skillResource = require('@/assets/data/skillResource.json')
-let levelInitial = require('@/assets/data/levelInitial.json')
+let levelResource = require('@/data/levelResource.json')
+let skillResource = require('@/data/skillResource.json')
+let levelInitial = require('@/data/levelInitial.json')
 
 export default {
   name: 'Level',

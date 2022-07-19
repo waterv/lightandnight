@@ -4,37 +4,13 @@
 
   <div class="home">
     <template v-if="active == 'events'">
-      <template v-for="v in events" :key="v"
-        ><!-- Category -->
-        <van-cell-group v-if="!v.noavailable" :title="v.name" inset>
-          <template v-for="u in v.events" :key="u"
-            ><!-- Event -->
-            <van-cell v-if="u.time !== undefined" :title="u.name" :label="u.desc" center>
-              <template #right-icon>
-                <van-count-down :time="u.time">
-                  <template #default="timeData">
-                    <span class="block" :style="{ backgroundColor: u.color }">
-                      {{ timeData.days }} </span
-                    ><small>d</small>
-                    <span class="block" :style="{ backgroundColor: u.color }">
-                      {{ timeData.hours }} </span
-                    ><small>h {{ u.state }}</small>
-                  </template>
-                </van-count-down>
-              </template>
-            </van-cell>
-          </template>
-        </van-cell-group>
-      </template>
+      <events-block v-for="v in events" :key="v" :events="v" />
     </template>
 
     <template v-if="active == 'calculators'">
-      <template v-for="(v, i) in tools" :key="v"
-        ><!-- Category -->
+      <template v-for="(v, i) in tools" :key="v">
         <van-divider>{{ $t(`home.category[${i}]`) }}</van-divider>
-
         <div class="content">
-          <!-- Tool -->
           <van-button
             v-for="u in v"
             :key="u"
@@ -50,7 +26,7 @@
     </template>
 
     <template v-if="active == 'settings'">
-      <!-- Mirrors -->
+      <!-- Mirror -->
       <van-cell-group :title="$t('settings.mirror')" inset>
         <template v-for="v in mirrors" :key="v">
           <van-cell
@@ -74,9 +50,10 @@
         <van-cell title="" :label="$t('settings.clearCacheDesc')" />
       </van-cell-group>
 
-      <van-cell-group title=" " inset>
+      <!-- Appearance -->
+      <van-cell-group :title="$t('settings.appearance')" inset>
         <van-cell
-          :title="$t('settings.appearance', [$t(`settings.appearances[${Number(appearance)}]`)])"
+          :title="$t(`settings.appearances[${Number(appearance)}]`)"
           :label="$t('settings.appearanceDesc')"
           center
         >
@@ -86,19 +63,44 @@
         </van-cell>
       </van-cell-group>
 
+      <!-- About -->
       <van-cell-group title=" " inset>
-        <van-cell :title="$t('route.posts.addtohome')" is-link to="/posts/addtohome" />
-        <van-cell :title="$t('route.posts.statement')" is-link to="/posts/statement" />
-        <van-cell :title="$t('route.posts.changelog')" is-link to="/posts/changelog" />
+        <van-cell
+          :title="$t('route.posts.addtohome')"
+          is-link
+          to="/posts/addtohome"
+        />
+        <van-cell
+          :title="$t('route.posts.statement')"
+          is-link
+          to="/posts/statement"
+        />
+        <van-cell
+          :title="$t('route.posts.changelog')"
+          is-link
+          to="/posts/changelog"
+        />
       </van-cell-group>
 
-      <van-cell-group v-if="$root.developerMode" :title="$t('settings.developer')" inset>
+      <!-- Developer -->
+      <van-cell-group
+        v-if="$root.developerMode"
+        :title="$t('settings.developer')"
+        inset
+      >
         <van-field
           v-model="langName"
           is-link
           readonly
           :label="$t('settings.lang')"
           @click="showLangPicker = true"
+        />
+        <van-field
+          v-model="$root.server"
+          is-link
+          readonly
+          :label="$t('settings.server')"
+          @click="showServerPicker = true"
         />
         <van-cell :title="$t('settings.vConsole')" is-link center>
           <template #right-icon>
@@ -109,7 +111,13 @@
     </template>
   </div>
 
-  <van-tabbar fixed safe-area-inset-bottom placeholder v-model="active" @change="onActiveChange">
+  <van-tabbar
+    fixed
+    safe-area-inset-bottom
+    placeholder
+    v-model="active"
+    @change="onActiveChange"
+  >
     <van-tabbar-item name="events" icon="calendar-o">{{
       $t('home.tabbar.events')
     }}</van-tabbar-item>
@@ -122,69 +130,105 @@
   </van-tabbar>
 
   <van-popup v-model:show="showLangPicker" round position="bottom">
-    <van-picker :columns="langs" @cancel="showLangPicker = false" @confirm="onLangConfirm" />
+    <van-picker
+      :columns="langs"
+      @cancel="showLangPicker = false"
+      @confirm="onLangConfirm"
+    />
+  </van-popup>
+  <van-popup v-model:show="showServerPicker" round position="bottom">
+    <van-picker
+      :columns="servers"
+      @cancel="showServerPicker = false"
+      @confirm="onServerConfirm"
+    />
   </van-popup>
 </template>
 
 <script>
-import { CountDown, Tabbar, TabbarItem, Toast } from 'vant'
+import { Tabbar, TabbarItem, Toast } from 'vant'
 import Navbar from '@/components/Navbar.vue'
-let dayjs = require('dayjs')
+import EventsBlock from '@/components/EventsBlock.vue'
 
 export default {
   name: 'App',
   components: {
-    [CountDown.name]: CountDown,
     [Tabbar.name]: Tabbar,
     [TabbarItem.name]: TabbarItem,
     Navbar,
+    EventsBlock,
   },
   data() {
-    // Process events data
-    let events = require('@/assets/data/events.json')
-    let now = dayjs()
-    for (let i in events) {
-      let count = 0
-      for (let j in events[i].events) {
-        let v = events[i].events[j]
-        if (v.periodic) {
-          count += 1
-          let target = dayjs().tz().day(v.day).hour(0).minute(0).second(0).millisecond(0)
-
-          if (v.state == '始') target = target.hour(5)
-          if (now.day() >= v.day) target = target.add(1, 'week')
-          v.time = target.diff(now)
-          v.color = v.state == '止' && v.time <= 86400000 ? 'var(--van-red)' : 'var(--van-gray-7)'
-        } else {
-          let start = dayjs.tz(v.start)
-          if (now.isBefore(start)) {
-            count += 1
-            v.time = start.diff(now)
-            v.state = '始'
-            v.color = 'var(--van-blue)'
-          } else {
-            let end = dayjs.tz(v.end)
-            if (now.isBefore(end)) {
-              count += 1
-              v.time = end.diff(now)
-              v.state = '止'
-              v.color = v.time <= 86400000 ? 'var(--van-red)' : 'var(--van-green)'
-            }
-          }
-        }
-      }
-      if (count == 0) events[i].noavailable = true
-    }
-
     return {
+      events: require(`@/data/${this.$root.server}/events.json`),
+      tools: [
+        [
+          {
+            background: 'linear-gradient(135deg, #91c4cc, #b7ddc0)',
+            to: '/common/gacha',
+          },
+          {
+            background: 'linear-gradient(135deg, #6c71c5, #93a9da)',
+            to: '/events/wishsim',
+          },
+        ],
+        [
+          {
+            background: 'linear-gradient(135deg, #bbe0f5, #e0f8e0)',
+            color: 'rgba(69, 90, 100, .8)',
+            to: '/common/hoard',
+          },
+          {
+            background: 'linear-gradient(135deg, #fbe9c3, #e6d8be)',
+            color: 'rgba(85, 76, 60, .8)',
+            to: '/common/cpr',
+          },
+          {
+            background: 'linear-gradient(135deg, #fbe4e2, #f3b0a6)',
+            color: 'rgba(109, 46, 43, 0.8)',
+            to: '/common/level',
+          },
+          {
+            background: 'linear-gradient(135deg, #f3d7d3, #c4c7e8)',
+            color: 'rgba(78, 68, 91, 0.8)',
+            to: '/common/item',
+          },
+        ],
+        [
+          {
+            background: 'linear-gradient(135deg, #6c71c5, #93a9da)',
+            to: '/events/wish',
+          },
+        ],
+        [
+          {
+            background: 'linear-gradient(135deg, #91c4cc, #b7ddc0)',
+            to: '/common/image',
+          },
+        ],
+      ],
+      mirrors: [
+        {
+          name: 'GitHub Pages',
+          hostname: 'waterv.github.io',
+          url: 'https://waterv.github.io/lightandnight',
+        },
+        {
+          name: 'Vercel',
+          hostname: 'lightandnight.vercel.app',
+          url: 'https://lightandnight.vercel.app',
+        },
+      ],
+      langs: [
+        { text: '简体中文', value: 'zh-CN' },
+        { text: '???', value: '???' },
+      ],
+      servers: [{ text: 'CN', value: 'CN' }],
+      langName_: undefined,
+      showLangPicker: false,
+      showServerPicker: false,
       active: this.$root.homepageActive,
       hostname: window.location.hostname,
-      showLangPicker: false,
-      events,
-      tools: require('@/assets/data/tools.json'),
-      mirrors: require('@/assets/data/mirrors.json'),
-      langs: require('@/assets/data/langs.json'),
-      langName_: undefined,
     }
   },
   computed: {
@@ -203,6 +247,10 @@ export default {
       set(v) {
         localStorage.setItem('lang', v)
         this.$i18n.locale = v
+        if (v != '???') {
+          let dayjs = require('dayjs')
+          dayjs.locale(v.toLowerCase())
+        }
       },
     },
     langName: {
@@ -231,6 +279,10 @@ export default {
       this.langName = selectedOptions[0].text
       this.lang = selectedOptions[0].value
     },
+    onServerConfirm({ selectedOptions }) {
+      this.showServerPicker = false
+      this.$root.server = selectedOptions[0].value
+    },
   },
 }
 </script>
@@ -238,16 +290,6 @@ export default {
 <style scoped>
 .home {
   padding-bottom: 54px;
-}
-
-.block {
-  display: inline-block;
-  width: 22px;
-  margin: 0 2px;
-  color: white;
-  font-size: 12px;
-  text-align: center;
-  border-radius: 4px;
 }
 
 .van-theme-dark .block {

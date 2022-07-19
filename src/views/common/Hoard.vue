@@ -116,12 +116,9 @@ export default {
     TutorialCell,
 },
   data() {
-    let data = require('@/assets/data/hoard.json')
+    let {data, card} = require(`@/data/${this.$root.server}/hoard.json`)
     for (let i in data) data[i].other = undefined
-
-    let card = require('@/assets/data/vip.json')
     for (let i in card) card[i].dec = undefined
-
     return {
       card,
       data,

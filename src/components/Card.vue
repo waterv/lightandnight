@@ -14,9 +14,18 @@
       }"
     >
       <div class="card-highlight">
-        <div class="card-background" :style="{ animationDelay: animationDelay }">
+        <div
+          class="card-background"
+          :style="{ animationDelay: animationDelay }"
+        >
           <van-badge
-            :content="isNew ? 'New' : count > 1 ? `${count - 1} 花` : undefined"
+            :content="
+              isNew
+                ? 'New'
+                : count > 1
+                ? $t('gacha.cardNumber', [count - 1])
+                : undefined
+            "
             :offset="[-6, 0]"
             class="card-inner"
             color="rgba(187, 134, 68, .7)"
@@ -52,7 +61,7 @@ export default {
   },
   data() {
     return {
-      stars: '★★★★★★',
+      stars: this.$t('gacha.stars'),
     }
   },
   computed: {

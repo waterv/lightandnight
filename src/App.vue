@@ -13,6 +13,7 @@ export default {
     if (window.matchMedia('(prefers-color-scheme: dark)').matches) theme = 'dark'
     return {
       theme,
+      server_: localStorage?.getItem('server') || 'CN',
       developerMode: false,
       vConsoleOpen_: false,
       vConsole: undefined,
@@ -31,6 +32,15 @@ export default {
     }
   },
   computed: {
+    server: {
+      get() {
+        return this.server_
+      },
+      set(v) {
+        this.server_ = v
+        localStorage.setItem('server', v)
+      }
+    },
     vConsoleOpen: {
       get() {
         return this.vConsoleOpen_

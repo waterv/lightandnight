@@ -162,7 +162,6 @@
 import { Notify, Card, SwipeCell, Toast, Tag } from 'vant'
 import Navbar from '@/components/Navbar.vue'
 import TutorialCell from '@/components/TutorialCell.vue'
-let packages = require('@/assets/data/packages.json')
 
 export default {
   name: 'CPR',
@@ -194,9 +193,7 @@ export default {
       ratio: '',
       pricePerGacha: '',
       showTutorial: localStorage?.getItem('showTutorial') !== 'false',
-      packages: packages.map(v => {
-        return { ...v }
-      }),
+      packages: require(`@/data/${this.$root.server}/packages.json`).map(v => ({ ...v })),
     }
   },
   computed: {

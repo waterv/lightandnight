@@ -1,7 +1,7 @@
 <template>
-  <navbar title="404 Not Found" />
-  <van-empty description="似乎走错路了……">
-    <van-button type="primary" to="/">回到首页</van-button>
+  <navbar :title="$t('route.notfound')" />
+  <van-empty :description="$t('common.notfound')">
+    <van-button type="primary" to="/">{{ $t('common.back') }}</van-button>
   </van-empty>
 </template>
 

@@ -31,11 +31,12 @@
     "clearCacheDesc": "清除缓存后，一些设置项将回到默认值。",
     "clearLocalStorage": "清除 localStorage",
     "clearLocalStorageToast": "localStorage 已清空。",
-    "appearance": "外观：{0}",
+    "appearance": "外观",
     "appearances": ["光", "夜"],
     "appearanceDesc": "若您的设备不支持切换亮 / 暗色模式，可在此手动切换。",
     "developer": "开发人员选项",
     "lang": "语言",
+    "server": "服务器",
     "vConsole": "vConsole",
     "lab": "实验性功能"
   },
@@ -44,12 +45,18 @@
     "calculate": "计算",
     "currentStatus": "当前状态",
     "customize": "自定义",
+    "detail": "详情",
     "equalsTo": "折合为{0}",
+    "eventEnd": "止",
+    "eventStart": "始",
     "delete": "删除",
     "info": "说明",
     "name": "名称",
+    "notfound": "似乎走错路了……",
+    "percentage": "{0}%",
     "result": "结果",
     "selected": "已选",
+    "settings": "设置",
     "tutorial": "攻略"
   },
   "pwa": {
@@ -76,6 +83,7 @@
     "230001": "眩光沙砾",
     "231001": "稀愿珍宝",
     "231002": "心愿海螺",
+    "300013": "羽色缎带",
     "300395": "霜白书简",
     "300402": "星愿瓶",
     "301030": "甜心书简",
@@ -88,7 +96,7 @@
     "tabbar": {
       "events": "活动提醒",
       "calculators": "工具箱",
-      "settings": "设置"
+      "settings": "@:common.settings"
     },
     "category": ["抽卡模拟", "通用工具", "限时活动", "奇奇怪怪"]
   },
@@ -110,9 +118,9 @@
     "gachaCount": "包含抽数",
     "gachaCountNumber": "{0} 抽",
     "cpr": "性价比",
-    "cprNumber": "{0} %",
+    "cprNumber": "@:common.percentage",
     "pricePerGacha": "每抽价格",
-    "pricePerGachaNumber": "{0} ¥",
+    "pricePerGachaNumber": "{0}¥",
     "add": "加入列表",
     "clear": "清除当前输入",
     "list": "列表",
@@ -131,16 +139,100 @@
       "success": "已加入列表。"
     }
   },
+  "gacha": {
+    "tabbar": ["信使花园", "收信记录", "灵犀统计", "@:common.settings"],
+    "pool": "卡池",
+    "poolName": "{0} [{1}]",
+    "poolYear": "{0} 年",
+    "poolType": {
+      "common": "常驻卡池",
+      "limited": "限定卡池"
+    },
+    "cardName": "{0}・{1}",
+    "cardNumber": "{0} 花",
+    "choosePool": "请选择卡池",
+    "commonPool": "浮世同行",
+    "desc": {
+      "cardStar": "[{0} 星] ",
+      "cardName": "{0}、",
+      "up": "{0} 将获得 {1}% 概率 UP。",
+      "addCommon": "{0} 也将加入卡池但不享受概率 UP。",
+      "noShop": "以上灵犀将不会额外开放书简兑换。",
+      "add": "当日维护更新后，{0} 加入所有卡池常驻。",
+      "inherit": "该卡池的水位将能够继承到「{0}」中。",
+      "limitedLetter": "该卡池中，每次收信将额外获得「{0}」而非「心迹书简」。",
+      "randomTime": "累计收信 {0} 次，将随机获赠一张限定灵犀。",
+      "pickTime": "累计收信 {0} 次，可自选一张限定灵犀。",
+      "pickPrice": "使用 {0} 枚「{1}」可兑换一张自选限定灵犀。"
+    },
+    "star": "{0} 星",
+    "stars": "★★★★★★",
+    "waterLevel": "水位",
+    "star6Possibility": "6 星出率",
+    "possibilityTitle": ["星级", "当前出率", "已抽取"],
+    "gachaTime": {
+      "total": "总抽数",
+      "pool": "当前卡池抽数",
+      "number": "{0} + 10 × {1} = {2}"
+    },
+    "buy": {
+      "title": "兑换",
+      "common": "兑换常驻灵犀",
+      "limited": "兑换限定灵犀",
+      "pick": "兑换自选灵犀",
+      "price": "{0} 星 ({1} {2})",
+      "time": "{0} 次收信"
+    },
+    "notify": {
+      "failure": "{0}不足。",
+      "pickFailure": "抽数不足。",
+      "success": "兑换成功。"
+    },
+    "gacha": {
+      "title": "抽卡",
+      "1": "收取一次",
+      "10": "收取十次"
+    },
+    "tag": {
+      "single": "单抽",
+      "shop": "兑换",
+      "pick": "自选",
+      "random": "随机"
+    },
+    "settings": {
+      "animation": "收信动画",
+      "animations": ["不启用动画", "动画样式 1", "动画样式 2"],
+      "shining": "发光效果",
+      "allchar": "不限男主",
+      "allstar": "不限星级"
+    }
+  },
+  "phone": {},
   "hint": {
     "cpr": "此工具仅计算礼包用于抽卡的性价比，游戏中显示的性价比计入了极光币等培养材料。\n\n不氪立省百分百。",
     "cprStarRatio": "本游戏中，抽卡道具的原价为：\n\n1 羽毛笔 = 300 小熊星座 = 6 北极星 = 18 元\n\n北极星与其他道具的兑换比率不固定，因此计算性价比时需要分不同情况讨论。\n\n根据您一般使用北极星兑换小熊星座的途径，选择恰当的兑换比率。\n\n如果还是不明白选什么：重氪选 [50]，其他选 [100]。",
     "events": "本页展示当前游戏中，各活动的大约开始或结束时间。\n\n因为活动结束常常伴随停服维护，结束时间按 00:00 而非 04:59 计。\n\n信息可能过时或不准确，请以游戏中实际情况为准。",
+    "gacha": "本工具抽卡机制与游戏中不完全相同，仅作娱乐之用。\n\n返回并重新进入本页面即可重置数据。",
+    "gachaWaterLevel": "水位即连续未得到 6 星的抽卡次数。在水位达到 60 后，6 星出率将随水位增加而增加。\n\n- 常驻卡池「浮世同行」不同版本之间共享水位；\n- 轮换卡池「浮世同行・剪影」之间共享水位；\n- 主线卡池「时间的彼岸」系列中，若连续开启两个卡池，则前一个卡池的水位能够继承到下一个卡池。\n\n除了以上情况外，卡池间不共享水位。",
+    "gachaBuyCommon": "截止目前，新加入常驻卡池的 5、6 星灵犀还没有开启书简兑换的记录。",
+    "gachaPossibility": [
+      "自连续不出 6 星的第 60 抽起，每抽都会增加 6 星 10% 的出率，直到抽到 6 星、出率恢复为 2% 为止。十连收信必出 5 星或以上灵犀。",
+      "如果对 5 星卡不感兴趣，或者水位大于 51，建议用单抽代替十连。"
+    ],
     "hoard": "此工具在计算过程中，所有项目均按照「奖励在第一天发放」的规则参与计算，与实际情况存在偏差。\n\n目标日期越远，因奖励发放时间产生的偏差所占比例减小，计算结果相对更加准确；但同时活动等不确定因素也增多。\n\n出于上述原因，本工具仅供粗略计算之用。"
   },
   "tutorial": {
     "via": "来自 {0}。{1}",
     "messager": "{'@'}光与夜之恋信使攻略站",
     "cpr": ["常驻礼包性价比", "https://weibo.com/2304898581/Lg2v1rjG8", "@:tutorial.messager"],
+    "gacha": [
+      ["数据分析与抽卡心得", "https://weibo.com/2304898581/LbPP0AlN8", "@:tutorial.messager"],
+      ["数据分析与抽卡心得", "https://weibo.com/2304898581/LcrUctQEB", "@:tutorial.messager"],
+      ["数据分析与抽卡心得", "https://weibo.com/2304898581/LcIFtaXwt", "@:tutorial.messager"],
+      ["数据分析与抽卡心得", "https://weibo.com/2304898581/Lmq1jEYXe", "@:tutorial.messager"],
+      ["数据分析与抽卡心得", "https://weibo.com/2304898581/Lw0gD1Qab", "@:tutorial.messager"],
+      ["数据分析与抽卡心得", "https://weibo.com/2304898581/LApMPoGKJ", "@:tutorial.messager"]
+    ],
     "hoard": ["签到活动汇总", "https://weibo.com/2304898581/Lp8uxiSt3", "@:tutorial.messager"]
   }
 }
