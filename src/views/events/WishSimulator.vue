@@ -1,11 +1,20 @@
 <template>
   <navbar title="羁梦星愿模拟器" can-return />
   <van-tabs v-model:active="active" sticky offset-top="46">
-    <canvas v-show="active == 0" id="canvas" :width="width" :height="width"></canvas>
+    <canvas v-show="active == 0" id="canvas" :width="width" :height="width">
+    </canvas>
     <van-tab title="羁梦星愿">
       <van-cell-group title="抽卡" inset>
-        <van-cell v-if="remainGifts" title="许愿" is-link @click="gacha3Times" />
-        <van-cell v-else :title="`恭喜您 ${this.gachaTime} 次许愿获得全部星辰馈赠！`" />
+        <van-cell
+          v-if="remainGifts"
+          title="许愿"
+          is-link
+          @click="gacha3Times"
+        />
+        <van-cell
+          v-else
+          :title="`恭喜您 ${this.gachaTime} 次许愿获得全部星辰馈赠！`"
+        />
       </van-cell-group>
 
       <van-cell-group title="当前状态" inset>
@@ -22,7 +31,8 @@
             :pivot-text="`${gachaTime}`"
             pivot-color="#6c71c5"
             color="linear-gradient(135deg, #6c71c5, #93a9da)"
-          /><small>/ 88 / 95 / 99 抽各有一次保底</small>
+          />
+          <small>/ 88 / 95 / 99 抽各有一次保底</small>
         </van-cell>
       </van-cell-group>
 
@@ -54,10 +64,20 @@
       </van-radio-group>
 
       <van-cell-group title="奖品权重" inset>
-        <van-cell title="说明" icon="question-o" is-link @click="showWeightInfo" />
+        <van-cell
+          title="说明"
+          icon="question-o"
+          is-link
+          @click="showWeightInfo"
+        />
         <van-cell v-for="i in [0, 5]" :key="i" :title="rewards[i].name" center>
           <template #right-icon>
-            <van-stepper v-model="rewards[i].weight" min="140" max="175" input-width="64px" />
+            <van-stepper
+              v-model="rewards[i].weight"
+              min="140"
+              max="175"
+              input-width="64px"
+            />
           </template>
         </van-cell>
       </van-cell-group>
@@ -82,36 +102,42 @@
       <van-divider />
       <div class="container">
         <van-row class="content">
-          <van-col span="24" class="desc"
-            >除了「恋心」数目无限外，其余奖励全部获得后，其概率会均摊增加到其余奖励上。</van-col
-          >
+          <van-col span="24" class="desc">
+            除了「恋心」数目无限外，其余奖励全部获得后，其概率会均摊增加到其余奖励上。
+          </van-col>
         </van-row>
         <van-row class="content">
-          <van-col span="24" class="desc"
-            >若 3 颗球同时落入浅色区域，则可以随机获取 1 份「星辰馈赠」且不会重复。</van-col
-          >
+          <van-col span="24" class="desc">
+            若 3 颗球同时落入浅色区域，则可以随机获取 1
+            份「星辰馈赠」且不会重复。
+          </van-col>
         </van-row>
       </div>
     </van-dialog>
 
-    <van-dialog v-model:show="itemsGotShow" title="恭喜获得" closeOnClickOverlay>
+    <van-dialog
+      v-model:show="itemsGotShow"
+      title="恭喜获得"
+      closeOnClickOverlay
+    >
       <div class="container" v-if="itemsGot">
-        <div class="content" v-for="v in itemsGot" :key="v">{{ v.name }} × {{ v.count }}</div>
+        <div class="content" v-for="v in itemsGot" :key="v">
+          {{ v.name }} × {{ v.count }}
+        </div>
       </div>
     </van-dialog>
   </van-config-provider>
 </template>
 
 <script>
-import { Progress, Notify } from 'vant'
+import { showDialog, showNotify, Progress } from 'vant'
 import { useWindowSize } from '@vant/use'
 import Navbar from '@/components/Navbar.vue'
 
 export default {
-  name: 'Wish',
+  name: 'WishSimulator',
   components: {
     [Progress.name]: Progress,
-    [Notify.name]: Notify,
     Navbar,
   },
   data() {
@@ -166,7 +192,9 @@ export default {
       }, 0)
     },
     possibilities() {
-      return this.rewards.map(item => (item.remain === 0 ? 0 : item.weight / this.totalWeight))
+      return this.rewards.map(item =>
+        item.remain === 0 ? 0 : item.weight / this.totalWeight
+      )
     },
     possibilitiesString() {
       return this.possibilities.map(p => Math.round(p * 10000) / 100 + '%')
@@ -195,7 +223,7 @@ export default {
       },
       set(v) {
         this.maxFrame_ = v
-        localStorage.setItem('WishSimMaxFrame', v)
+        localStorage?.setItem('WishSimMaxFrame', v)
       },
     },
   },
@@ -226,7 +254,7 @@ export default {
   },
   methods: {
     showWeightInfo() {
-      this.$dialog.alert({
+      showDialog({
         ...this.$root.dialogSettings,
         message:
           '由于官方未公示该活动概率具体计算规则，本工具中使用的概率数据是由面积比例估算而来，与实际情况不符。\n\n' +
@@ -258,7 +286,9 @@ export default {
         if (!result[reward]) result[reward] = { ...this.rewards[reward] }
         else result[reward].count += this.rewards[reward].count
         angles.push(
-          this.initialAngle + this.beginAngle[reward] + this.shapeAngle[reward] * Math.random()
+          this.initialAngle +
+            this.beginAngle[reward] +
+            this.shapeAngle[reward] * Math.random()
         )
       }
       this.frame = 0
@@ -268,22 +298,23 @@ export default {
         this.frame += 1
         if (this.frame <= this.maxFrame) requestAnimationFrame(animate)
         else {
-          if (isGift) Notify({ type: 'success', message: '恭喜获得星辰馈赠！' })
+          if (isGift)
+            showNotify({ type: 'success', message: '恭喜获得星辰馈赠！' })
           if (!isGift && this.remainGifts == 3 && this.gachaTime == 88) {
             isGift = true
-            Notify({
+            showNotify({
               type: 'success',
               message: '您已经许愿 88 次，获得星辰馈赠！',
             })
           } else if (!isGift && this.remainGifts == 2 && this.gachaTime == 95) {
             isGift = true
-            Notify({
+            showNotify({
               type: 'success',
               message: '您已经许愿 95 次，获得星辰馈赠！',
             })
           } else if (!isGift && this.remainGifts == 1 && this.gachaTime == 99) {
             isGift = true
-            Notify({
+            showNotify({
               type: 'success',
               message: '您已经许愿 99 次，获得星辰馈赠！',
             })
@@ -381,13 +412,19 @@ export default {
 
         let x =
           centerX +
-          textRadius * Math.cos(initialAngle + this.beginAngle[i] + this.shapeAngle[i] / 2)
+          textRadius *
+            Math.cos(initialAngle + this.beginAngle[i] + this.shapeAngle[i] / 2)
         let y =
           centerY +
-          textRadius * Math.sin(initialAngle + this.beginAngle[i] + this.shapeAngle[i] / 2)
+          textRadius *
+            Math.sin(initialAngle + this.beginAngle[i] + this.shapeAngle[i] / 2)
         ctx.fillText(this.rewards[i].name, x, y)
         if (this.rewards[i].remain)
-          ctx.fillText(`× ${this.rewards[i].count} × ${this.rewards[i].remain}`, x, y + 12)
+          ctx.fillText(
+            `× ${this.rewards[i].count} × ${this.rewards[i].remain}`,
+            x,
+            y + 12
+          )
         else ctx.fillText(`× ${this.rewards[i].count} × ∞`, x, y + 12)
       }
 
@@ -414,7 +451,11 @@ export default {
 
       if (this.remainGifts == 0) {
         ctx.fillStyle = '#fff'
-        ctx.fillText(`恭喜您 ${this.gachaTime} 次许愿获得全部星辰馈赠！`, centerX, centerY)
+        ctx.fillText(
+          `恭喜您 ${this.gachaTime} 次许愿获得全部星辰馈赠！`,
+          centerX,
+          centerY
+        )
       }
     },
   },

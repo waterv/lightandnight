@@ -59,7 +59,8 @@ export default {
         } else state = this.$t('common.eventEnd')
         if (event.day <= now.day()) target = target.add(1, 'week')
       } else {
-        ({ state, target } = now.isBefore(start)
+        // eslint-disable-next-line
+        ;({ state, target } = now.isBefore(start)
           ? { state: this.$t('common.eventStart'), target: start }
           : now.isBefore(end)
           ? { state: this.$t('common.eventEnd'), target: end }

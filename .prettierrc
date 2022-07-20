@@ -1,0 +1,25 @@
+{
+  "arrowParens": "avoid",
+  "bracketSpacing": true,
+  "printWidth": 80,
+  "semi": false,
+  "singleQuote": true,
+  "tabWidth": 2,
+  "trailingComma": "es5",
+  "useTabs": false,
+  "htmlWhitespaceSensitivity": "css",
+  "overrides": [
+    {
+      "files": "*.html",
+      "options": {
+        "printWidth": 999
+      }
+    },
+    {
+      "files": "*.json",
+      "options": {
+        "printWidth": 999
+      }
+    }
+  ]
+}

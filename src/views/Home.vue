@@ -64,11 +64,12 @@
       </van-cell-group>
 
       <!-- About -->
-      <van-cell-group title=" " inset>
+      <van-cell-group :title="$t('settings.about')" inset>
+        <van-cell :title="$t('settings.version')" :value="version" />
         <van-cell
-          :title="$t('route.posts.addtohome')"
+          :title="$t('settings.addtohome')"
           is-link
-          to="/posts/addtohome"
+          @click="showAddToHome = true"
         />
         <van-cell
           :title="$t('route.posts.statement')"
@@ -118,47 +119,88 @@
     v-model="active"
     @change="onActiveChange"
   >
-    <van-tabbar-item name="events" icon="calendar-o">{{
-      $t('home.tabbar.events')
-    }}</van-tabbar-item>
-    <van-tabbar-item name="calculators" icon="apps-o">{{
-      $t('home.tabbar.calculators')
-    }}</van-tabbar-item>
-    <van-tabbar-item name="settings" icon="setting-o">{{
-      $t('home.tabbar.settings')
-    }}</van-tabbar-item>
+    <van-tabbar-item name="events" icon="calendar-o">
+      {{ $t('home.tabbar.events') }}
+    </van-tabbar-item>
+    <van-tabbar-item name="calculators" icon="apps-o">
+      {{ $t('home.tabbar.calculators') }}
+    </van-tabbar-item>
+    <van-tabbar-item name="settings" icon="setting-o">
+      {{ $t('home.tabbar.settings') }}
+    </van-tabbar-item>
   </van-tabbar>
 
-  <van-popup v-model:show="showLangPicker" round position="bottom">
+  <van-popup
+    v-model:show="showLangPicker"
+    round
+    position="bottom"
+    safe-area-inset-bottom
+  >
     <van-picker
       :columns="langs"
       @cancel="showLangPicker = false"
       @confirm="onLangConfirm"
     />
   </van-popup>
-  <van-popup v-model:show="showServerPicker" round position="bottom">
+  <van-popup
+    v-model:show="showServerPicker"
+    round
+    position="bottom"
+    safe-area-inset-bottom
+  >
     <van-picker
       :columns="servers"
       @cancel="showServerPicker = false"
       @confirm="onServerConfirm"
     />
   </van-popup>
+  <van-popup
+    v-model:show="showAddToHome"
+    round
+    position="bottom"
+    :style="{ height: '40%' }"
+    safe-area-inset-bottom
+  >
+    <div class="content">
+      <h3 v-t="'settings.addtohome'" />
+      <p v-t="'settings.addtohomeDesc'" />
+      <van-tabs v-model:active="isIos" type="card">
+        <van-tab title="Android">
+          <i18n-t keypath="settings.addtohomeAndroid" scope="global" tag="p">
+            <van-icon name="ellipsis" id="a2h-android-icon" />
+          </i18n-t>
+        </van-tab>
+        <van-tab title="iOS">
+          <i18n-t keypath="settings.addtohomeIos" scope="global" tag="p">
+            <template #share><share-ios height="14" :fill="fill" /></template>
+            <template #add><add-ios height="14" :fill="fill" /></template>
+          </i18n-t>
+        </van-tab>
+      </van-tabs>
+    </div>
+  </van-popup>
 </template>
 
 <script>
-import { Tabbar, TabbarItem, Toast } from 'vant'
+import { showDialog, showToast, Tabbar, TabbarItem, Tag } from 'vant'
 import Navbar from '@/components/Navbar.vue'
 import EventsBlock from '@/components/EventsBlock.vue'
+import ShareIos from '@/icons/ShareIos.vue'
+import AddIos from '@/icons/AddIos.vue'
 
 export default {
   name: 'App',
   components: {
     [Tabbar.name]: Tabbar,
     [TabbarItem.name]: TabbarItem,
+    [Tag.name]: Tag,
     Navbar,
     EventsBlock,
+    ShareIos,
+    AddIos,
   },
   data() {
+    let dayjs = require('dayjs')
     return {
       events: require(`@/data/${this.$root.server}/events.json`),
       tools: [
@@ -200,12 +242,6 @@ export default {
             to: '/events/wish',
           },
         ],
-        [
-          {
-            background: 'linear-gradient(135deg, #91c4cc, #b7ddc0)',
-            to: '/common/image',
-          },
-        ],
       ],
       mirrors: [
         {
@@ -227,8 +263,17 @@ export default {
       langName_: undefined,
       showLangPicker: false,
       showServerPicker: false,
+      showAddToHome: false,
+      isIos: Number(
+        !!navigator?.userAgent?.match(
+          /ip[honead]{2,4}\b(?:.*os ([\w]+) like mac|; opera)/i
+        )
+      ), // Copied from faisalman/ua-parser-js
       active: this.$root.homepageActive,
       hostname: window.location.hostname,
+      version: dayjs(require('@/data/app/time.json').time).format(
+        'YYYY-MM-DD HH:mm:ss'
+      ),
     }
   },
   computed: {
@@ -242,34 +287,48 @@ export default {
     },
     lang: {
       get() {
-        return localStorage.getItem('lang') || 'zh-CN'
+        return localStorage?.getItem('lang') || 'zh-CN'
       },
       set(v) {
-        localStorage.setItem('lang', v)
+        localStorage?.setItem('lang', v)
         this.$i18n.locale = v
-        if (v != '???') {
-          let dayjs = require('dayjs')
-          dayjs.locale(v.toLowerCase())
-        }
       },
     },
     langName: {
       get() {
-        return this.langName_ || localStorage.getItem('langName') || '简体中文'
+        return this.langName_ || localStorage?.getItem('langName') || '简体中文'
       },
       set(v) {
         this.langName_ = v
-        localStorage.setItem('langName', v)
+        localStorage?.setItem('langName', v)
       },
     },
+    fill() {
+      return this.$root.theme == 'dark'
+        ? 'rgba(255, 255, 255, 0.75)'
+        : '#323233'
+    },
+  },
+  mounted() {
+    let userVersion = localStorage?.getItem('version') || 0
+    let { version, message } = require('@/data/app/announce.json')
+    if (userVersion < version) {
+      showDialog({
+        ...this.$root.dialogSettings,
+        title: this.$t('common.announce'),
+        message,
+      }).then(() => {
+        localStorage?.setItem('version', version)
+      })
+    }
   },
   methods: {
     onActiveChange(active) {
       this.$root.homepageActive = active
     },
     clearLocalStorage() {
-      localStorage.clear()
-      Toast({
+      localStorage?.clear()
+      showToast({
         message: this.$t('settings.clearLocalStorageToast'),
         icon: 'passed',
       })
@@ -302,5 +361,9 @@ export default {
 
 .van-theme-dark .van-button {
   filter: brightness(0.8);
+}
+
+#a2h-android-icon {
+  transform: rotate(90deg);
 }
 </style>

@@ -49,7 +49,12 @@
           :placeholder="$t('cpr.nameDesc')"
           autocomplete="off"
         />
-        <van-field v-model="price" :label="$t('cpr.price')" type="number" autocomplete="off">
+        <van-field
+          v-model="price"
+          :label="$t('cpr.price')"
+          type="number"
+          autocomplete="off"
+        >
           <template #right-icon>
             {{ $t('cpr.priceUnit') }}
           </template>
@@ -120,14 +125,22 @@
         <van-swipe-cell v-for="(v, i) in packages" :key="v">
           <van-cell
             :value="$t('cpr.cprNumber', [result(v).ratio])"
-            :label="$t('cpr.result', [v.price, result(v).gachaCount, result(v).pricePerGacha])"
+            :label="
+              $t('cpr.result', [
+                v.price,
+                result(v).gachaCount,
+                result(v).pricePerGacha,
+              ])
+            "
             @click="selectPackage(i)"
             center
             clickable
           >
             <template #title>
               {{ v.name }}
-              <van-tag v-if="v.selected" type="primary">{{ $t('common.selected') }}</van-tag>
+              <van-tag v-if="v.selected" type="primary">
+                {{ $t('common.selected') }}
+              </van-tag>
             </template>
           </van-cell>
 
@@ -148,7 +161,11 @@
           :value="total.price ? $t('cpr.cprNumber', [total.ratio]) : '-'"
           :label="
             total.price
-              ? $t('cpr.result', [total.price, total.gachaCount, total.pricePerGacha])
+              ? $t('cpr.result', [
+                  total.price,
+                  total.gachaCount,
+                  total.pricePerGacha,
+                ])
               : $t('cpr.noSelect')
           "
           center
@@ -159,17 +176,15 @@
 </template>
 
 <script>
-import { Notify, Card, SwipeCell, Toast, Tag } from 'vant'
+import { showDialog, showToast, Card, SwipeCell, Tag } from 'vant'
 import Navbar from '@/components/Navbar.vue'
 import TutorialCell from '@/components/TutorialCell.vue'
 
 export default {
-  name: 'CPR',
+  name: 'CprCalculator',
   components: {
-    [Notify.name]: Notify,
     [Card.name]: Card,
     [SwipeCell.name]: SwipeCell,
-    [Toast.name]: Toast,
     [Tag.name]: Tag,
     Navbar,
     TutorialCell,
@@ -193,7 +208,9 @@ export default {
       ratio: '',
       pricePerGacha: '',
       showTutorial: localStorage?.getItem('showTutorial') !== 'false',
-      packages: require(`@/data/${this.$root.server}/packages.json`).map(v => ({ ...v })),
+      packages: require(`@/data/${this.$root.server}/packages.json`).map(v => ({
+        ...v,
+      })),
     }
   },
   computed: {
@@ -226,7 +243,7 @@ export default {
   },
   methods: {
     showStarRatioInfo() {
-      this.$dialog.alert({
+      showDialog({
         ...this.$root.dialogSettings,
         message: this.$t('hint.cprStarRatio'),
       })
@@ -237,7 +254,10 @@ export default {
       this.packages.sort((a, b) => this.result(b).ratio - this.result(a).ratio)
     },
     result(v) {
-      let gachaCount = (v.star * this.starRatio + v.coin) / 300 + v.gachapon + 10 * v.gachapon10
+      let gachaCount =
+        (v.star * this.starRatio + v.coin) / 300 +
+        v.gachapon +
+        10 * v.gachapon10
       let result = (gachaCount / v.price) * 18
       return {
         gachaCount: Math.round(gachaCount * 100) / 100,
@@ -246,7 +266,8 @@ export default {
       }
     },
     calculate() {
-      if (!this.price) return Toast({ message: this.$t('cpr.toast.price'), icon: 'close' })
+      if (!this.price)
+        return showToast({ message: this.$t('cpr.toast.price'), icon: 'close' })
       let v = {
         price: Number(this.price),
         star: Number(this.star || 0),
@@ -255,17 +276,29 @@ export default {
         gachapon10: Number(this.gachapon10 || 0),
       }
       let result = this.result(v)
-      if (!result.gachaCount) return Toast({ message: this.$t('cpr.toast.content'), icon: 'close' })
+      if (!result.gachaCount)
+        return showToast({
+          message: this.$t('cpr.toast.content'),
+          icon: 'close',
+        })
 
       this.gachaCount = this.$t('cpr.gachaCountNumber', [result.gachaCount])
       this.ratio = this.$t('cpr.cprNumber', [result.ratio])
-      this.pricePerGacha = this.$t('cpr.pricePerGachaNumber', [result.pricePerGacha])
+      this.pricePerGacha = this.$t('cpr.pricePerGachaNumber', [
+        result.pricePerGacha,
+      ])
     },
     add() {
-      if (!this.price) return Toast({ message: this.$t('cpr.toast.price'), icon: 'close' })
+      if (!this.price)
+        return showToast({ message: this.$t('cpr.toast.price'), icon: 'close' })
       this.calculate()
-      if (!this.gachaCount) return Toast({ message: this.$t('cpr.toast.content'), icon: 'close' })
-      if (!this.name) return Toast({ message: this.$t('cpr.toast.name'), icon: 'close' })
+      if (!this.gachaCount)
+        return showToast({
+          message: this.$t('cpr.toast.content'),
+          icon: 'close',
+        })
+      if (!this.name)
+        return showToast({ message: this.$t('cpr.toast.name'), icon: 'close' })
       this.packages.push({
         name: this.name,
         price: Number(this.price),
@@ -276,7 +309,7 @@ export default {
       })
       this.packages.sort((a, b) => this.result(b).ratio - this.result(a).ratio)
       this.clear()
-      Toast({ message: this.$t('cpr.toast.success'), icon: 'passed' })
+      showToast({ message: this.$t('cpr.toast.success'), icon: 'passed' })
     },
     clear() {
       this.price = undefined
@@ -290,7 +323,7 @@ export default {
     },
     closeTutorial() {
       this.showTutorial = false
-      localStorage.setItem('showTutorial', 'false')
+      localStorage?.setItem('showTutorial', 'false')
     },
     removePackage(i) {
       this.packages.splice(i, 1)

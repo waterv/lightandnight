@@ -79,7 +79,12 @@
       type="number"
       autocomplete="off"
     />
-    <van-cell title="目标日期" :value="targetDateString" clickable @click="showCalendar(-1)" />
+    <van-cell
+      title="目标日期"
+      :value="targetDateString"
+      clickable
+      @click="showCalendar(-1)"
+    />
   </van-cell-group>
 
   <van-cell-group inset title="计算结果">
@@ -92,9 +97,15 @@
     :formatter="calendarFormatter"
     :min-date="startDate"
     @confirm="calendarConfirm"
+    safe-area-inset-bottom
   />
 
-  <van-popup v-model:show="pickerShow" round position="bottom">
+  <van-popup
+    v-model:show="pickerShow"
+    round
+    position="bottom"
+    safe-area-inset-bottom
+  >
     <van-picker
       :columns="pickerColumn"
       :default-index="0"
@@ -110,13 +121,13 @@ import TutorialCell from '@/components/TutorialCell.vue'
 let dayjs = require('dayjs')
 
 export default {
-  name: 'Hoard',
+  name: 'HoardCalculator',
   components: {
     Navbar,
     TutorialCell,
-},
+  },
   data() {
-    let {data, card} = require(`@/data/${this.$root.server}/hoard.json`)
+    let { data, card } = require(`@/data/${this.$root.server}/hoard.json`)
     for (let i in data) data[i].other = undefined
     for (let i in card) card[i].dec = undefined
     return {
@@ -132,7 +143,8 @@ export default {
       calendarShow: false,
       startDate: dayjs().toDate(),
       targetDate: dayjs().add(1, 'month').toDate(),
-      targetDateString: dayjs().add(1, 'month').format('M 月 D 日') + ' (一个月后)',
+      targetDateString:
+        dayjs().add(1, 'month').format('M 月 D 日') + ' (一个月后)',
     }
   },
   computed: {
@@ -140,13 +152,17 @@ export default {
       let date = dayjs(this.targetDate)
       let result = this.currentCoin ? Number(this.currentCoin) : 0
       result += (this.currentGachapon ? Number(this.currentGachapon) : 0) * 300
-      result += (this.currentGachapon10 ? Number(this.currentGachapon10) : 0) * 3000
+      result +=
+        (this.currentGachapon10 ? Number(this.currentGachapon10) : 0) * 3000
 
       for (let i in this.card) {
         if (this.card[i].on) {
           let times = this.getDiff(date, this.card[i].unit)
           if (this.card[i].dec)
-            times = Math.min(times, this.getDiff(this.card[i].dec, this.card[i].unit))
+            times = Math.min(
+              times,
+              this.getDiff(this.card[i].dec, this.card[i].unit)
+            )
           result += times * this.card[i].count
         }
       }
@@ -188,7 +204,8 @@ export default {
       this.calendarShow = true
     },
     calendarFormatter(day) {
-      if (day.type == 'selected') day.bottomInfo = '余 ' + this.getDiff(day.date) + ' 天'
+      if (day.type == 'selected')
+        day.bottomInfo = '余 ' + this.getDiff(day.date) + ' 天'
       return day
     },
     calendarConfirm(v) {

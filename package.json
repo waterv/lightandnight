@@ -5,33 +5,47 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint",
-    "i18n:report": "vue-cli-service i18n:report --src \"./src/**/*.?(js|vue)\" --locales \"./src/i18n/**/*.json\""
+    "lint": "vue-cli-service lint"
   },
   "dependencies": {
     "@vant/touch-emulator": "^1.3.2",
+    "assert": "^2.0.0",
+    "browserify-zlib": "^0.2.0",
+    "buffer": "^6.0.3",
     "core-js": "^3.23.5",
-    "dayjs": "^1.11.3",
-    "jimp": "^0.16.1",
+    "dayjs": "^1.11.4",
+    "https-browserify": "^1.0.0",
+    "path-browserify": "^1.0.1",
+    "querystring-es3": "^0.2.1",
     "register-service-worker": "^1.7.1",
-    "vant": "^4.0.0-alpha.3",
+    "stream-browserify": "^3.0.0",
+    "stream-http": "^3.2.0",
+    "timers-browserify": "^2.0.12",
+    "unplugin-vue-components": "^0.21.1",
+    "url": "^0.11.0",
+    "util": "^0.12.4",
+    "vant": "^4.0.0-beta.0",
     "vconsole": "^3.14.6",
     "vue": "^3.2.37",
     "vue-i18n": "^9.1.0",
     "vue-router": "^4.1.2"
   },
   "devDependencies": {
+    "@babel/core": "^7.12.16",
+    "@babel/eslint-parser": "^7.12.16",
     "@intlify/vue-i18n-loader": "^4.2.0",
-    "@vue/cli-plugin-babel": "^4.5.19",
-    "@vue/cli-plugin-eslint": "^4.5.19",
-    "@vue/cli-plugin-pwa": "^4.5.19",
-    "@vue/cli-plugin-router": "^4.5.19",
-    "@vue/cli-service": "^4.5.19",
+    "@types/node": "^18.0.6",
+    "@vue/cli-plugin-babel": "^5.0.8",
+    "@vue/cli-plugin-eslint": "^5.0.8",
+    "@vue/cli-plugin-pwa": "^5.0.8",
+    "@vue/cli-plugin-router": "^5.0.8",
+    "@vue/cli-service": "^5.0.8",
     "@vue/compiler-sfc": "^3.2.37",
-    "babel-eslint": "^10.1.0",
     "babel-plugin-import": "^1.13.5",
-    "eslint": "^6.7.2",
-    "eslint-plugin-vue": "^7.0.0",
+    "eslint": "^7.32.0",
+    "eslint-plugin-vue": "^8.0.3",
+    "fs-extra": "^10.1.0",
+    "lint-staged": "^13.0.3",
     "vue-cli-plugin-i18n": "~2.3.1"
   },
   "eslintConfig": {
@@ -44,13 +58,27 @@
       "eslint:recommended"
     ],
     "parserOptions": {
-      "parser": "babel-eslint"
+      "parser": "@babel/eslint-parser"
     },
     "rules": {}
   },
   "browserslist": [
     "> 1%",
     "last 2 versions",
-    "not dead"
-  ]
+    "not dead",
+    "not ie 11"
+  ],
+  "gitHooks": {
+    "pre-commit": "lint-staged && node tools/updateTime.js && git add src/data/app/time.json"
+  },
+  "lint-staged": {
+    "*.{js,vue}": [
+      "prettier --write",
+      "git add"
+    ],
+    "src/data/*/*.json": [
+      "prettier --write",
+      "git add"
+    ]
+  }
 }

@@ -5,3 +5,9 @@
     />
   </svg>
 </template>
+
+<script>
+export default {
+  name: 'WeiboIcon',
+}
+</script>

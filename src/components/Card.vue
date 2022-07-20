@@ -44,7 +44,7 @@
 import { Badge } from 'vant'
 
 export default {
-  name: 'Card',
+  name: 'GachaSimulatorCard',
   components: {
     [Badge.name]: Badge,
   },

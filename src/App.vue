@@ -10,7 +10,8 @@ import VConsole from 'vconsole'
 export default {
   data() {
     let theme = ''
-    if (window.matchMedia('(prefers-color-scheme: dark)').matches) theme = 'dark'
+    if (window.matchMedia('(prefers-color-scheme: dark)').matches)
+      theme = 'dark'
     return {
       theme,
       server_: localStorage?.getItem('server') || 'CN',
@@ -38,8 +39,8 @@ export default {
       },
       set(v) {
         this.server_ = v
-        localStorage.setItem('server', v)
-      }
+        localStorage?.setItem('server', v)
+      },
     },
     vConsoleOpen: {
       get() {
@@ -53,13 +54,15 @@ export default {
     },
   },
   mounted() {
-    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
-      if (event.matches) {
-        this.theme = 'dark'
-      } else {
-        this.theme = ''
-      }
-    })
+    window
+      .matchMedia('(prefers-color-scheme: dark)')
+      .addEventListener('change', event => {
+        if (event.matches) {
+          this.theme = 'dark'
+        } else {
+          this.theme = ''
+        }
+      })
   },
 }
 </script>
@@ -73,9 +76,9 @@ body {
   overflow-x: hidden;
   color: #323233;
   font-size: 14px;
-  font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica,
-    'Segoe UI', Arial, Roboto, 'PingFang SC', miui, 'Hiragino Sans GB', 'Microsoft Yahei',
-    sans-serif;
+  font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Helvetica Neue',
+    Helvetica, 'Segoe UI', Arial, Roboto, 'PingFang SC', miui,
+    'Hiragino Sans GB', 'Microsoft Yahei', sans-serif;
   background-color: #f7f8fa;
   -webkit-font-smoothing: antialiased;
 }

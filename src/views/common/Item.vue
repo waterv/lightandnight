@@ -22,7 +22,13 @@
             center
           >
             <template #right-icon>
-              <van-stepper v-model="a[i]" integer min="0" input-width="64px" @change="calculateA" />
+              <van-stepper
+                v-model="a[i]"
+                integer
+                min="0"
+                input-width="64px"
+                @change="calculateA"
+              />
             </template>
           </van-cell>
         </template>
@@ -50,7 +56,13 @@
           center
         >
           <template #right-icon>
-            <van-stepper v-model="b[i]" integer min="0" input-width="64px" @change="calculateB" />
+            <van-stepper
+              v-model="b[i]"
+              integer
+              min="0"
+              input-width="64px"
+              @change="calculateB"
+            />
           </template>
         </van-cell>
         <van-cell title="清空" is-link @click="b = [0, 0]" />
@@ -68,7 +80,12 @@
     </van-tab>
   </van-tabs>
 
-  <van-popup v-model:show="showPicker" round position="bottom">
+  <van-popup
+    v-model:show="showPicker"
+    round
+    position="bottom"
+    safe-area-inset-bottom
+  >
     <van-picker
       :columns="aColumns"
       :default-index="2"
@@ -82,7 +99,7 @@
 import Navbar from '@/components/Navbar.vue'
 
 export default {
-  name: 'Item',
+  name: 'ItemCalculator',
   components: {
     Navbar,
   },
@@ -123,17 +140,25 @@ export default {
     calculateA() {
       this.aNeed = [0, 0, 0, 0, 0]
       let maxB = a => Math.floor(a / 2)
-      let maxC = (a, b) => Math.min(Math.floor((a + 2 * b) / 8), Math.floor(a / 2))
+      let maxC = (a, b) =>
+        Math.min(Math.floor((a + 2 * b) / 8), Math.floor(a / 2))
       let maxD = (a, b, c) => {
-        if (Math.floor((b + maxB(a)) / 2) < Math.floor(c / 3)) return Math.floor((b + maxB(a)) / 2)
-        else if (Math.floor((c + maxC(a, b)) / 3) < Math.floor((b - 3 * maxC(a, b)) / 2))
+        if (Math.floor((b + maxB(a)) / 2) < Math.floor(c / 3))
+          return Math.floor((b + maxB(a)) / 2)
+        else if (
+          Math.floor((c + maxC(a, b)) / 3) <
+          Math.floor((b - 3 * maxC(a, b)) / 2)
+        )
           return Math.floor((c + maxC(a, b)) / 3)
         else return Math.floor((8 * c + 2 * b + a) / 28)
       }
       let maxE = (a, b, c, d) => {
         if (Math.floor((c + maxC(a, b)) / 2) < Math.floor(d / 3))
           return Math.floor((c + maxC(a, b)) / 2)
-        else if (Math.floor((d + maxD(a, b, c)) / 3) < Math.floor((c - 3 * maxC(a, b, c)) / 2))
+        else if (
+          Math.floor((d + maxD(a, b, c)) / 3) <
+          Math.floor((c - 3 * maxC(a, b, c)) / 2)
+        )
           return Math.floor((d + maxD(a, b, c)) / 3)
         else return Math.round((a + 2 * b + 8 * c + 28 * d) / 100) // 摆烂了
       }

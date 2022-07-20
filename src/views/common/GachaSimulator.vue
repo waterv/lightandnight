@@ -99,9 +99,9 @@
             <template #title>
               <van-tag plain>{{ v.star }}</van-tag>
               {{ v.name }}
-              <van-tag v-if="v.single" plain>{{
-                $t('gacha.tag.single')
-              }}</van-tag>
+              <van-tag v-if="v.single" plain>
+                {{ $t('gacha.tag.single') }}
+              </van-tag>
               <van-tag v-if="v.shop">{{ $t('gacha.tag.shop') }}</van-tag>
               <van-tag v-if="v.pick">{{ $t('gacha.tag.pick') }}</van-tag>
               <van-tag v-if="v.random">{{ $t('gacha.tag.random') }}</van-tag>
@@ -127,7 +127,7 @@
       <van-row wrap>
         <template v-for="v in [6, 5, 4, 3]" :key="v">
           <template v-for="u in cardsGot[v]" :key="u">
-            <card
+            <gacha-simulator-card
               v-if="
                 (optionCharValue == 'all' || optionCharValue == u.char) &&
                 (optionStarValue == 'all' || optionStarValue == v)
@@ -202,18 +202,18 @@
         <van-divider dashed />
         <van-row v-for="i in [3, 4, 5, 6]" :key="i" class="content center-row">
           <van-col span="8">{{ $t('gacha.star', [i]) }}</van-col>
-          <van-col span="8">{{
-            $t('common.percentage', [starsPossibility[i]])
-          }}</van-col>
+          <van-col span="8">
+            {{ $t('common.percentage', [starsPossibility[i]]) }}
+          </van-col>
           <van-col span="8">{{ starsGotFromGacha[i] }}</van-col>
         </van-row>
       </div>
       <van-divider />
       <div class="container">
         <van-row class="content" v-for="i in [0, 1]" :key="i">
-          <van-col span="24" class="desc">{{
-            $t(`hint.gachaPossibility[${i}]`)
-          }}</van-col>
+          <van-col span="24" class="desc">
+            {{ $t(`hint.gachaPossibility[${i}]`) }}
+          </van-col>
         </van-row>
       </div>
     </van-dialog>
@@ -225,7 +225,7 @@
     >
       <div class="container" v-if="cardNewlyGot">
         <van-row class="content" gutter="5">
-          <card
+          <gacha-simulator-card
             :index="0"
             :name="cardNewlyGot.name"
             :star="cardNewlyGot.star"
@@ -247,7 +247,7 @@
         <template v-for="(v, i) in [0, 1, 3, 4, 6, 7, 9]" :key="i">
           <van-row class="content" gutter="5">
             <template v-if="i % 2">
-              <card
+              <gacha-simulator-card
                 :index="v"
                 :name="cardsNewlyGot[v].name"
                 :star="cardsNewlyGot[v].star"
@@ -255,7 +255,7 @@
                 :ani="animationType"
                 :shining="shiningType"
               />
-              <card
+              <gacha-simulator-card
                 :index="v + 1"
                 :name="cardsNewlyGot[v + 1].name"
                 :star="cardsNewlyGot[v + 1].star"
@@ -265,7 +265,7 @@
               />
             </template>
             <template v-else>
-              <card
+              <gacha-simulator-card
                 :index="v"
                 :name="cardsNewlyGot[v].name"
                 :star="cardsNewlyGot[v].star"
@@ -283,21 +283,28 @@
 </template>
 
 <script>
-import { Cascader, DropdownMenu, DropdownItem, List, Tag, Notify } from 'vant'
-import Card from '@/components/Card.vue'
+import {
+  showDialog,
+  showNotify,
+  Cascader,
+  DropdownMenu,
+  DropdownItem,
+  List,
+  Tag,
+} from 'vant'
+import GachaSimulatorCard from '@/components/Card.vue'
 import Navbar from '@/components/Navbar.vue'
 import TutorialCell from '@/components/TutorialCell.vue'
 
 export default {
-  name: 'Gacha',
+  name: 'GachaSimulator',
   components: {
     [Cascader.name]: Cascader,
     [DropdownMenu.name]: DropdownMenu,
     [DropdownItem.name]: DropdownItem,
     [List.name]: List,
     [Tag.name]: Tag,
-    [Notify.name]: Notify,
-    Card,
+    GachaSimulatorCard,
     Navbar,
     TutorialCell,
   },
@@ -497,20 +504,20 @@ export default {
       },
       set(v) {
         this.animationType_ = v
-        localStorage.setItem('GachaSimAnimationType', v)
+        localStorage?.setItem('GachaSimAnimationType', v)
       },
     },
     shiningType: {
       get() {
         if (this.shiningType_ === undefined) {
-          let data = localStorage.getItem('GachaSimShiningType')
+          let data = localStorage?.getItem('GachaSimShiningType')
           return data == 'false' ? false : true
         }
         return this.shiningType_
       },
       set(v) {
         this.shiningType_ = v
-        localStorage.setItem('GachaSimShiningType', v)
+        localStorage?.setItem('GachaSimShiningType', v)
       },
     },
   },
@@ -535,7 +542,7 @@ export default {
       return list[Math.floor(list.length * Math.random())]
     },
     showWaterlevelInfo() {
-      this.$dialog.alert({
+      showDialog({
         ...this.$root.dialogSettings,
         title: this.$t('gacha.waterLevel'),
         message: this.$t('hint.gachaWaterLevel'),
@@ -642,12 +649,12 @@ export default {
       let price = star == 5 ? 80 : 180
 
       if (this.letter.common < price)
-        return Notify(
+        return showNotify(
           this.$t('gacha.notify.failure', [this.$t('items.100013')])
         )
       this.letter.common -= price
 
-      Notify({ message: this.$t('gacha.notify.success'), type: 'success' })
+      showNotify({ message: this.$t('gacha.notify.success'), type: 'success' })
       let item = this.gainCard(star, index, {
         pool: this.$t('gacha.commonPool'),
         shop: true,
@@ -662,17 +669,19 @@ export default {
 
       if (this.pool.limitedLetter) {
         if (this.letter.limited < price)
-          return Notify(this.$t('gacha.notify.failure', [this.poolLetterName]))
+          return showNotify(
+            this.$t('gacha.notify.failure', [this.poolLetterName])
+          )
         this.letter.limited -= price
       } else {
         if (this.letter.common < price)
-          return Notify(
+          return showNotify(
             this.$t('gacha.notify.failure', [this.$t('items.100013')])
           )
         this.letter.common -= price
       }
 
-      Notify({ message: this.$t('gacha.notify.success'), type: 'success' })
+      showNotify({ message: this.$t('gacha.notify.success'), type: 'success' })
       let arrayIndex = v.selectedValues[1]
       this.limitedShop[star].splice(arrayIndex, 1)
       if (this.limitedShop[star].length == 0) delete this.limitedShop[star]
@@ -689,13 +698,13 @@ export default {
         // 使用书简兑换
         if (this.pool.limitedLetter) {
           if (this.letter.limited < this.pool.pickPrice)
-            return Notify(
+            return showNotify(
               this.$t('gacha.notify.failure', [this.poolLetterName])
             )
           this.letter.limited -= this.pool.pickPrice
         } else {
           if (this.letter.common < this.pool.pickPrice)
-            return Notify(
+            return showNotify(
               this.$t('gacha.notify.failure', [this.$t('items.100013')])
             )
           this.letter.common -= this.pool.pickPrice
@@ -704,11 +713,11 @@ export default {
       } else if (type == 2) {
         // 到达抽数赠送
         if (this.gachaTime.pool < this.pool.pickTime)
-          return Notify(this.$t('gacha.notify.pickFailure'))
+          return showNotify(this.$t('gacha.notify.pickFailure'))
         this.pool.pickTime = undefined
       }
 
-      Notify({ message: this.$t('gacha.notify.success'), type: 'success' })
+      showNotify({ message: this.$t('gacha.notify.success'), type: 'success' })
       let item = this.gainCard(6, index, {
         pick: true,
       })
@@ -767,8 +776,6 @@ export default {
 
       if (this.pool.limitedLetter) this.letter.limited += 1
       else this.letter.common += 1
-
-      console.log(this.shopColumn)
 
       return item
     },

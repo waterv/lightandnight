@@ -1,8 +1,10 @@
 <template>
   <van-count-down :time="time">
     <template #default="timeData">
-      <span class="block"> {{ timeData.days }} </span><small>d</small>
-      <span class="block"> {{ timeData.hours }} </span><small>h {{ state }}</small>
+      <span class="block"> {{ timeData.days }} </span>
+      <small>d</small>
+      <span class="block"> {{ timeData.hours }} </span>
+      <small>h {{ state }}</small>
     </template>
   </van-count-down>
 </template>

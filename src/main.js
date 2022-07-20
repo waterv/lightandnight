@@ -29,6 +29,9 @@ import {
   Tabs,
   ConfigProvider,
 } from 'vant'
+import 'vant/es/toast/style'
+import 'vant/es/dialog/style'
+import 'vant/es/notify/style'
 
 // day.js configures
 let dayjs = require('dayjs')

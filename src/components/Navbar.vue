@@ -39,10 +39,10 @@
 </template>
 
 <script>
-import { NavBar } from 'vant'
+import { NavBar, showDialog } from 'vant'
 
 export default {
-  name: 'Navbar',
+  name: 'MyNavbar',
   components: {
     [NavBar.name]: NavBar,
   },
@@ -59,16 +59,14 @@ export default {
       this.$router.back()
     },
     showInfo() {
-      this.$dialog.alert({
+      showDialog({
         ...this.$root.dialogSettings,
         message: this.$t(`hint.${this.hint}`),
       })
     },
     developerMode() {
-      this.count += 1
-      if (this.count > 10)
-        this.$root.developerMode = true
-    }
+      if (++this.count > 10) this.$root.developerMode = true
+    },
   },
 }
 </script>

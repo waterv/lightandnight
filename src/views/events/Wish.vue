@@ -14,7 +14,11 @@
       is-link
       url="https://weibo.com/2304898581/LgDLGeIYw"
     />
-    <van-cell title="「羁梦星愿」礼包性价比" is-link url="https://weibo.com/2304898581/Lh7DbiDhz" />
+    <van-cell
+      title="「羁梦星愿」礼包性价比"
+      is-link
+      url="https://weibo.com/2304898581/Lh7DbiDhz"
+    />
     <van-cell title="" label="以上攻略来自 @光与夜之恋信使攻略站。" />
   </van-cell-group>
 
@@ -45,38 +49,60 @@
   </van-radio-group>
 
   <van-cell-group title="当前状态" inset>
-    <van-cell title="" label="若计算还未开始的活动，只需改动「持有永久星愿瓶」。" />
+    <van-cell
+      title=""
+      label="若计算还未开始的活动，只需改动「持有永久星愿瓶」。"
+    />
     <van-cell center>
-      <template #title
-        ><div @click="nextMinigameTimeDetail = true">星雾谜戏 <van-icon name="question-o" /></div
-      ></template>
-      <template #right-icon><van-stepper v-model="nextMinigameTime" integer min="1" /></template>
+      <template #title>
+        <div @click="nextMinigameTimeDetail = true">
+          星雾谜戏 <van-icon name="question-o" />
+        </div>
+      </template>
+      <template #right-icon>
+        <van-stepper v-model="nextMinigameTime" integer min="1" />
+      </template>
     </van-cell>
     <van-cell title="持有限时星愿瓶" center>
-      <template #right-icon><van-stepper v-model="freeBottle" integer min="0" /></template>
+      <template #right-icon>
+        <van-stepper v-model="freeBottle" integer min="0" />
+      </template>
     </van-cell>
     <van-cell title="持有永久星愿瓶" center>
-      <template #right-icon><van-stepper v-model="paidBottle" integer min="0" /></template>
+      <template #right-icon>
+        <van-stepper v-model="paidBottle" integer min="0" />
+      </template>
     </van-cell>
     <van-cell title="「星星驿站」星愿瓶剩余库存" center>
-      <template #right-icon
-        ><van-stepper v-model="shopFreeBottleRemain" integer min="0" max="20"
-      /></template>
+      <template #right-icon>
+        <van-stepper v-model="shopFreeBottleRemain" integer min="0" max="20" />
+      </template>
     </van-cell>
     <van-cell title="已许愿次数" center>
-      <template #right-icon><van-stepper v-model="wishedTime" integer min="0" max="99" /></template>
+      <template #right-icon>
+        <van-stepper v-model="wishedTime" integer min="0" max="99" />
+      </template>
     </van-cell>
-    <van-cell title="活动开始日期" :value="calendarString" clickable @click="calendarShow = true" />
+    <van-cell
+      title="活动开始日期"
+      :value="calendarString"
+      clickable
+      @click="calendarShow = true"
+    />
     <van-cell title="已购买今日 2 北极星「每日星愿瓶」">
-      <template #right-icon
-        ><van-switch v-model="hasDiscountBottleBoughtToday" size="24"
-      /></template>
+      <template #right-icon>
+        <van-switch v-model="hasDiscountBottleBoughtToday" size="24" />
+      </template>
     </van-cell>
     <van-cell title="已购买本次 9 北极星「星愿瓶礼盒」">
-      <template #right-icon><van-switch v-model="hasBottlePackBought" size="24" /></template>
+      <template #right-icon>
+        <van-switch v-model="hasBottlePackBought" size="24" />
+      </template>
     </van-cell>
     <van-cell title="错过限时星愿瓶" center>
-      <template #right-icon><van-stepper v-model="lostBottle" integer min="0" /></template>
+      <template #right-icon>
+        <van-stepper v-model="lostBottle" integer min="0" />
+      </template>
     </van-cell>
   </van-cell-group>
 
@@ -94,11 +120,21 @@
   <van-config-provider :theme-vars="resultTheme">
     <van-dialog v-model:show="nextMinigameTimeDetail" closeOnClickOverlay>
       <div class="container">
-        <p class="content">打开「星雾谜戏」活动界面，将下图中「??」处出现的数字填写在此处。</p>
-        <van-image class="content center" width="80%" :src="require('@/assets/img/wish_01.jpg')" />
+        <p class="content">
+          打开「星雾谜戏」活动界面，将下图中「??」处出现的数字填写在此处。
+        </p>
+        <van-image
+          class="content center"
+          width="80%"
+          :src="require('@/assets/img/wish_01.jpg')"
+        />
       </div>
     </van-dialog>
-    <van-dialog v-model:show="resultShow" closeOnClickOverlay>
+    <van-dialog
+      v-model:show="resultShow"
+      closeOnClickOverlay
+      safe-area-inset-bottom
+    >
       <div class="container">
         <van-row class="content">
           <van-col span="16"><strong>项目</strong></van-col>
@@ -106,9 +142,13 @@
           <van-col span="4"><strong>北极星</strong></van-col>
         </van-row>
         <template v-for="(v, i) in result" :key="v">
-          <van-divider v-if="result[i].length == 1" dashed>{{ result[i][0] }}</van-divider>
+          <van-divider v-if="result[i].length == 1" dashed>
+            {{ result[i][0] }}
+          </van-divider>
           <van-row v-else class="content">
-            <van-col v-for="(span, i) in [16, 4, 4]" :key="span" :span="span">{{ v[i] }}</van-col>
+            <van-col v-for="(span, i) in [16, 4, 4]" :key="span" :span="span">
+              {{ v[i] }}
+            </van-col>
           </van-row>
         </template>
       </div>
@@ -121,7 +161,7 @@ import Navbar from '@/components/Navbar.vue'
 let dayjs = require('dayjs')
 
 export default {
-  name: 'Wish',
+  name: 'WishCalculator',
   components: {
     Navbar,
   },
@@ -191,7 +231,8 @@ export default {
 
       let freeBottle = getValue(this.freeBottle, 0)
       let paidBottle = getValue(this.paidBottle, 0)
-      if (freeBottle + paidBottle) result.push(['当前持有', freeBottle + paidBottle])
+      if (freeBottle + paidBottle)
+        result.push(['当前持有', freeBottle + paidBottle])
 
       let lostBottle = getValue(this.lostBottle, 0)
       if (lostBottle) result.push(['错过的星愿瓶', -lostBottle])
@@ -212,7 +253,9 @@ export default {
         let hasBottlePackBought = this.hasBottlePackBought
         let shopDiscountBottleRemain =
           8 -
-          dayjs().subtract(5, 'hour').diff(dayjs.tz(this.calendarValue), 'day') -
+          dayjs()
+            .subtract(5, 'hour')
+            .diff(dayjs.tz(this.calendarValue), 'day') -
           Number(hasDiscountBottleBoughtToday)
         let gemsNeed = 0
 
@@ -231,10 +274,17 @@ export default {
             result.push(['星愿瓶礼盒', 6, 9])
           }
           if (bottleNeed > 0 && shopDiscountBottleRemain) {
-            let discountBottleBuy = Math.min(bottleNeed, shopDiscountBottleRemain)
+            let discountBottleBuy = Math.min(
+              bottleNeed,
+              shopDiscountBottleRemain
+            )
             bottleNeed -= discountBottleBuy
             gemsNeed += discountBottleBuy * 2
-            result.push(['每日星愿瓶', discountBottleBuy, discountBottleBuy * 2])
+            result.push([
+              '每日星愿瓶',
+              discountBottleBuy,
+              discountBottleBuy * 2,
+            ])
           }
           if (bottleNeed > 0) {
             gemsNeed += bottleNeed * 3

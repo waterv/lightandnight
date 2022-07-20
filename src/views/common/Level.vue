@@ -61,7 +61,9 @@
           autocomplete="off"
         />
         <van-cell title="外婆小铺双倍">
-          <template #right-icon><van-switch v-model="grandmaDouble" size="24" /></template>
+          <template #right-icon>
+            <van-switch v-model="grandmaDouble" size="24" />
+          </template>
         </van-cell>
       </van-cell-group>
 
@@ -71,12 +73,36 @@
       </van-cell-group>
 
       <van-cell-group title="仍需资源" inset>
-        <van-cell :icon="require('@/assets/img/items/coin.png')" :title="$t('items.coin')" :value="coin" />
-        <van-cell :icon="require('@/assets/img/items/120001.png')" title="经验" :value="exp" />
-        <van-cell :icon="require('@/assets/img/items/120002.png')" :title="$t('common.equalsTo', [$t('items.120002')])" :value="慕心" />
-        <van-cell :icon="require('@/assets/img/items/230001.png')" :title="$t('items.230001')" :value="眩光沙砾" />
-        <van-cell :icon="require('@/assets/img/items/231001.png')" :title="$t('items.231001')" :value="稀愿珍宝" />
-        <van-cell :icon="require('@/assets/img/items/231002.png')" :title="$t('items.231002')" :value="心愿海螺" />
+        <van-cell
+          :icon="require('@/assets/img/items/coin.png')"
+          :title="$t('items.coin')"
+          :value="coin"
+        />
+        <van-cell
+          :icon="require('@/assets/img/items/120001.png')"
+          title="经验"
+          :value="exp"
+        />
+        <van-cell
+          :icon="require('@/assets/img/items/120002.png')"
+          :title="$t('common.equalsTo', [$t('items.120002')])"
+          :value="慕心"
+        />
+        <van-cell
+          :icon="require('@/assets/img/items/230001.png')"
+          :title="$t('items.230001')"
+          :value="眩光沙砾"
+        />
+        <van-cell
+          :icon="require('@/assets/img/items/231001.png')"
+          :title="$t('items.231001')"
+          :value="稀愿珍宝"
+        />
+        <van-cell
+          :icon="require('@/assets/img/items/231002.png')"
+          :title="$t('items.231002')"
+          :value="心愿海螺"
+        />
       </van-cell-group>
 
       <van-cell-group title="预计刷取" inset>
@@ -84,9 +110,24 @@
           title=""
           label="刷取副本及其掉落内容按日常副本及其保底计。注意：外婆小铺 6-7 使用「重现五次」才有保底。"
         />
-        <van-cell title="遇见极光 5" label="10 灵感 = 7200 极光币" :value="遇见极光" center />
-        <van-cell title="遇见初心 5" label="10 灵感 = 4 慕心" :value="遇见初心" center />
-        <van-cell title="遇见铭迹 5" label="10 灵感 = 30 眩光沙砾" :value="遇见铭迹" center />
+        <van-cell
+          title="遇见极光 5"
+          label="10 灵感 = 7200 极光币"
+          :value="遇见极光"
+          center
+        />
+        <van-cell
+          title="遇见初心 5"
+          label="10 灵感 = 4 慕心"
+          :value="遇见初心"
+          center
+        />
+        <van-cell
+          title="遇见铭迹 5"
+          label="10 灵感 = 30 眩光沙砾"
+          :value="遇见铭迹"
+          center
+        />
         <van-cell
           title="外婆小铺 3-7"
           :label="`7 灵感 ≈ ${grandmaDouble ? 2 : 1} 稀愿珍宝`"
@@ -101,54 +142,76 @@
           :value="外婆小铺6"
           center
         />
-        <van-cell :icon="require('@/assets/img/items/flower.png')" title="花费灵感" :value="灵感" />
+        <van-cell
+          :icon="require('@/assets/img/items/flower.png')"
+          title="花费灵感"
+          :value="灵感"
+        />
       </van-cell-group>
     </van-tab>
     <template v-for="(v, i) in card" :key="v">
       <van-tab :title="`灵犀 ${i + 1}`">
         <van-cell-group title="当前状态" inset>
           <van-cell title="星级" center>
-            <template #right-icon
-              ><van-stepper
+            <template #right-icon>
+              <van-stepper
                 v-model="v.current.star"
                 integer
                 min="1"
                 max="6"
                 @change="v.target.star = v.current.star"
-            /></template>
+              />
+            </template>
           </van-cell>
           <van-cell title="开花" center>
-            <template #right-icon
-              ><van-stepper v-model="v.current.rank" integer min="0" max="5"
-            /></template>
+            <template #right-icon>
+              <van-stepper v-model="v.current.rank" integer min="0" max="5" />
+            </template>
           </van-cell>
           <van-cell title="等级" center>
-            <template #right-icon
-              ><van-stepper
+            <template #right-icon>
+              <van-stepper
                 v-model="v.current.level"
                 integer
                 min="1"
                 :max="maxLevel(v.current.star)"
-            /></template>
+              />
+            </template>
           </van-cell>
-          <van-cell v-if="isBreakAvailable(v.current)" title="已突破" icon="arrow">
-            <template #right-icon><van-switch v-model="v.current.isBreak" size="24" /></template>
+          <van-cell
+            v-if="isBreakAvailable(v.current)"
+            title="已突破"
+            icon="arrow"
+          >
+            <template #right-icon>
+              <van-switch v-model="v.current.isBreak" size="24" />
+            </template>
           </van-cell>
           <template v-for="i in [0, 1, 2]" :key="i">
             <template v-if="v.current.rank >= i">
               <van-cell :title="`铭迹 ${i + 1} 星级`" center>
-                <template #right-icon
-                  ><van-stepper v-model="v.current.skill[i].star" integer min="0" max="4"
-                /></template>
+                <template #right-icon>
+                  <van-stepper
+                    v-model="v.current.skill[i].star"
+                    integer
+                    min="0"
+                    max="4"
+                  />
+                </template>
               </van-cell>
-              <van-cell v-if="v.current.skill[i].star" :title="`铭迹 ${i + 1} 等级`" center>
-                <template #right-icon
-                  ><van-stepper
+              <van-cell
+                v-if="v.current.skill[i].star"
+                :title="`铭迹 ${i + 1} 等级`"
+                center
+              >
+                <template #right-icon>
+                  <van-stepper
                     v-model="v.current.skill[i].level"
                     integer
                     min="1"
                     :max="maxSkillLevel(v.current.skill[i].star)"
-                /></template>
+                  />
+                </template>
               </van-cell>
             </template>
           </template>
@@ -156,44 +219,68 @@
 
         <van-cell-group title="养成目标" inset>
           <van-cell v-if="v.current.star > 3" title="星级" center>
-            <template #right-icon
-              ><van-stepper v-model="v.target.star" integer :min="v.current.star" max="6"
-            /></template>
+            <template #right-icon>
+              <van-stepper
+                v-model="v.target.star"
+                integer
+                :min="v.current.star"
+                max="6"
+              />
+            </template>
           </van-cell>
           <van-cell title="开花" center>
-            <template #right-icon
-              ><van-stepper v-model="v.target.rank" integer :min="v.current.rank" max="5"
-            /></template>
+            <template #right-icon>
+              <van-stepper
+                v-model="v.target.rank"
+                integer
+                :min="v.current.rank"
+                max="5"
+              />
+            </template>
           </van-cell>
           <van-cell title="等级" center>
-            <template #right-icon
-              ><van-stepper
+            <template #right-icon>
+              <van-stepper
                 v-model="v.target.level"
                 integer
                 :min="v.current.level"
                 :max="maxLevel(v.target.star)"
-            /></template>
+              />
+            </template>
           </van-cell>
-          <van-cell v-if="isBreakAvailable(v.target)" title="已突破" icon="arrow">
-            <template #right-icon><van-switch v-model="v.target.isBreak" size="24" /></template>
+          <van-cell
+            v-if="isBreakAvailable(v.target)"
+            title="已突破"
+            icon="arrow"
+          >
+            <template #right-icon>
+              <van-switch v-model="v.target.isBreak" size="24" />
+            </template>
           </van-cell>
           <van-cell v-if="v.current.star >= 5" title="二段光影">
-            <template #right-icon><van-switch v-model="v.target.second" size="24" /></template>
+            <template #right-icon>
+              <van-switch v-model="v.target.second" size="24" />
+            </template>
           </van-cell>
           <template v-for="i in [0, 1, 2]" :key="i">
             <template v-if="v.target.rank >= i">
               <van-cell :title="`铭迹 ${i + 1} 星级`" center>
-                <template #right-icon
-                  ><van-stepper
+                <template #right-icon>
+                  <van-stepper
                     v-model="v.target.skill[i].star"
                     integer
                     :min="v.current.skill[i].star"
                     max="4"
-                /></template>
+                  />
+                </template>
               </van-cell>
-              <van-cell v-if="v.target.skill[i].star" :title="`铭迹 ${i + 1} 等级`" center>
-                <template #right-icon
-                  ><van-stepper
+              <van-cell
+                v-if="v.target.skill[i].star"
+                :title="`铭迹 ${i + 1} 等级`"
+                center
+              >
+                <template #right-icon>
+                  <van-stepper
                     v-model="v.target.skill[i].level"
                     integer
                     :min="
@@ -202,7 +289,8 @@
                         : v.current.skill[i].level
                     "
                     :max="maxSkillLevel(v.target.skill[i].star)"
-                /></template>
+                  />
+                </template>
               </van-cell>
             </template>
           </template>
@@ -219,7 +307,7 @@ let skillResource = require('@/data/skillResource.json')
 let levelInitial = require('@/data/levelInitial.json')
 
 export default {
-  name: 'Level',
+  name: 'LevelCalculator',
   components: {
     Navbar,
   },
@@ -351,7 +439,10 @@ export default {
 
       this.coin = Math.max(this.coin - this.current.coin, 0)
       this.exp = Math.max(
-        this.exp - 500 * this.current.初心 - 2000 * this.current.慕心 - 5000 * this.current.恋心,
+        this.exp -
+          500 * this.current.初心 -
+          2000 * this.current.慕心 -
+          5000 * this.current.恋心,
         0
       )
       this.眩光沙砾 = Math.max(this.眩光沙砾 - this.current.眩光沙砾, 0)
@@ -363,7 +454,9 @@ export default {
       this.遇见初心 = Math.ceil(this.慕心 / 4)
       this.外婆小铺3 = Math.ceil(this.稀愿珍宝 / ratio)
       this.外婆小铺6 = Math.ceil((this.心愿海螺 / ratio) * 5)
-      this.遇见铭迹 = Math.ceil(Math.max(this.眩光沙砾 - this.外婆小铺6 * ratio, 0) / 30)
+      this.遇见铭迹 = Math.ceil(
+        Math.max(this.眩光沙砾 - this.外婆小铺6 * ratio, 0) / 30
+      )
     },
   },
 }
