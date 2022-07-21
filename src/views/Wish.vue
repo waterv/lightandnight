@@ -98,7 +98,7 @@
     <van-dialog v-model:show="showNextMinigameDetail" closeOnClickOverlay>
       <div class="container">
         <p class="content" v-t="'wish.nextMinigameDesc'" />
-        <van-image class="content" :src="require('@/assets/img/wish.jpg')" />
+        <van-image class="content" :src="require('@/assets/wish.jpg')" />
       </div>
     </van-dialog>
     <van-dialog
@@ -140,7 +140,10 @@ export default {
   },
   data() {
     return {
-      presetTargets: require(`@/data/${this.$root.server}/wish.json`),
+      presetTargets: [64, 68, 72, 76, 80, 88, 95, 99].map(count => ({
+        count,
+        desc: this.$t(`wish.presets.${count}`),
+      })),
       target: 64,
       targetString: '64',
       nextMinigame: 1,

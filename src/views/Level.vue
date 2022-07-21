@@ -12,49 +12,49 @@
     <van-tab :title="$t('common.calculate')">
       <van-cell-group inset :title="$t('common.currentStatus')">
         <van-field
-          :left-icon="require('@/assets/img/items/coin.png')"
+          :left-icon="require('@/assets/items/coin.png')"
           :label="$t('items.coin')"
           v-model="current.coin"
           type="number"
           autocomplete="off"
         />
         <van-field
-          :left-icon="require('@/assets/img/items/120001.png')"
+          :left-icon="require('@/assets/items/120001.png')"
           :label="$t('items.120001')"
           v-model="current.初心"
           type="number"
           autocomplete="off"
         />
         <van-field
-          :left-icon="require('@/assets/img/items/120002.png')"
+          :left-icon="require('@/assets/items/120002.png')"
           :label="$t('items.120002')"
           v-model="current.慕心"
           type="number"
           autocomplete="off"
         />
         <van-field
-          :left-icon="require('@/assets/img/items/120003.png')"
+          :left-icon="require('@/assets/items/120003.png')"
           :label="$t('items.120003')"
           v-model="current.恋心"
           type="number"
           autocomplete="off"
         />
         <van-field
-          :left-icon="require('@/assets/img/items/230001.png')"
+          :left-icon="require('@/assets/items/230001.png')"
           :label="$t('items.230001')"
           v-model="current.眩光沙砾"
           type="number"
           autocomplete="off"
         />
         <van-field
-          :left-icon="require('@/assets/img/items/231001.png')"
+          :left-icon="require('@/assets/items/231001.png')"
           :label="$t('items.231001')"
           v-model="current.稀愿珍宝"
           type="number"
           autocomplete="off"
         />
         <van-field
-          :left-icon="require('@/assets/img/items/231002.png')"
+          :left-icon="require('@/assets/items/231002.png')"
           :label="$t('items.231002')"
           v-model="current.心愿海螺"
           type="number"
@@ -79,32 +79,32 @@
 
       <van-cell-group :title="$t('level.need')" inset>
         <van-cell
-          :icon="require('@/assets/img/items/coin.png')"
+          :icon="require('@/assets/items/coin.png')"
           :title="$t('items.coin')"
           :value="coin"
         />
         <van-cell
-          :icon="require('@/assets/img/items/120001.png')"
+          :icon="require('@/assets/items/120001.png')"
           :title="$t('level.exp')"
           :value="exp"
         />
         <van-cell
-          :icon="require('@/assets/img/items/120002.png')"
+          :icon="require('@/assets/items/120002.png')"
           :title="$t('common.equalsTo', [$t('items.120002')])"
           :value="慕心"
         />
         <van-cell
-          :icon="require('@/assets/img/items/230001.png')"
+          :icon="require('@/assets/items/230001.png')"
           :title="$t('items.230001')"
           :value="眩光沙砾"
         />
         <van-cell
-          :icon="require('@/assets/img/items/231001.png')"
+          :icon="require('@/assets/items/231001.png')"
           :title="$t('items.231001')"
           :value="稀愿珍宝"
         />
         <van-cell
-          :icon="require('@/assets/img/items/231002.png')"
+          :icon="require('@/assets/items/231002.png')"
           :title="$t('items.231002')"
           :value="心愿海螺"
         />
@@ -151,7 +151,7 @@
           center
         />
         <van-cell
-          :icon="require('@/assets/img/items/flower.png')"
+          :icon="require('@/assets/items/flower.png')"
           :title="$t('items.flower')"
           :value="灵感"
         />

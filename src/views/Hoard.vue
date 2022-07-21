@@ -59,21 +59,21 @@
 
   <van-cell-group inset :title="$t('common.currentStatus')">
     <van-field
-      :left-icon="require('@/assets/img/items/100003.png')"
+      :left-icon="require('@/assets/items/100003.png')"
       :label="$t('items.100003')"
       v-model="currentBear"
       type="number"
       autocomplete="off"
     />
     <van-field
-      :left-icon="require('@/assets/img/items/100011.png')"
+      :left-icon="require('@/assets/items/100011.png')"
       :label="$t('items.100011')"
       v-model="currentGachapon"
       type="number"
       autocomplete="off"
     />
     <van-field
-      :left-icon="require('@/assets/img/items/100012.png')"
+      :left-icon="require('@/assets/items/100012.png')"
       :label="$t('items.100012')"
       v-model="currentGachapon10"
       type="number"

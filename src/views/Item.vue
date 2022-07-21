@@ -18,7 +18,7 @@
           <van-cell
             v-if="i < aTarget"
             :title="aName[i]"
-            :icon="require(`@/assets/img/items/${aId[i]}.png`)"
+            :icon="require(`@/assets/items/${aId[i]}.png`)"
             center
           >
             <template #right-icon>
@@ -39,7 +39,7 @@
           <van-cell
             v-if="i <= aTarget"
             :title="aName[i]"
-            :icon="require(`@/assets/img/items/${aId[i]}.png`)"
+            :icon="require(`@/assets/items/${aId[i]}.png`)"
             :value="aNeed[i]"
           />
         </template>
@@ -52,7 +52,7 @@
           v-for="i in [0, 1]"
           :key="i"
           :title="bName[i]"
-          :icon="require(`@/assets/img/items/${bId[i]}.png`)"
+          :icon="require(`@/assets/items/${bId[i]}.png`)"
           center
         >
           <template #right-icon>
@@ -73,7 +73,7 @@
           v-for="i in [1, 2]"
           :key="i"
           :title="bName[i]"
-          :icon="require(`@/assets/img/items/${bId[i]}.png`)"
+          :icon="require(`@/assets/items/${bId[i]}.png`)"
           :value="bNeed[i]"
         />
       </van-cell-group>

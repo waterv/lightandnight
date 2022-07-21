@@ -61,28 +61,28 @@
         </van-field>
         <van-field
           v-model="star"
-          :left-icon="require('@/assets/img/items/star.png')"
+          :left-icon="require('@/assets/items/star.png')"
           :label="$t('items.star')"
           type="number"
           autocomplete="off"
         />
         <van-field
           v-model="bear"
-          :left-icon="require('@/assets/img/items/100003.png')"
+          :left-icon="require('@/assets/items/100003.png')"
           :label="$t('items.100003')"
           type="number"
           autocomplete="off"
         />
         <van-field
           v-model="gachapon"
-          :left-icon="require('@/assets/img/items/100011.png')"
+          :left-icon="require('@/assets/items/100011.png')"
           :label="$t('items.100011')"
           type="number"
           autocomplete="off"
         />
         <van-field
           v-model="gachapon10"
-          :left-icon="require('@/assets/img/items/100012.png')"
+          :left-icon="require('@/assets/items/100012.png')"
           :label="$t('items.100012')"
           type="number"
           autocomplete="off"

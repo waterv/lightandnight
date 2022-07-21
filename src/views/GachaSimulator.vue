@@ -310,7 +310,10 @@ export default {
   },
   data() {
     // 初始化卡池数据
-    let d = require(`@/data/${this.$root.server}/cards.json`),
+    let d = {
+        characters: [0, 1, 2, 3, 4].map(i => this.$t(`characters[${i}]`)),
+        ...require(`@/data/${this.$root.server}/cards.json`),
+      },
       year = 1919,
       poolSelectValue = ['common', 'limited'].map(value => ({
         text: this.$t(`gacha.poolType.${value}`),

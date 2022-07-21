@@ -236,6 +236,12 @@ export default {
             to: '/wish',
           },
         ],
+        [
+          {
+            background: 'linear-gradient(135deg, #91c4cc, #b7ddc0)',
+            to: '/image',
+          },
+        ],
       ],
       mirrors: [
         {
@@ -301,7 +307,7 @@ export default {
     },
   },
   mounted() {
-    let userVersion = localStorage?.getItem('version') || 0
+    let userVersion = Number(localStorage?.getItem('version') || 0)
     let { version, message } = require('@/data/app/announce.json')
     if (userVersion < version) {
       showDialog({
