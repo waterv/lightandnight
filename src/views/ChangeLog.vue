@@ -1,5 +1,5 @@
 <template>
-  <navbar :title="$t('route.posts.changelog')" can-return />
+  <navbar :title="$t('route.changelog')" can-return />
 
   <van-tabs v-model:active="active" scrollspy sticky offset-top="46">
     <div class="content">

@@ -1,71 +1,71 @@
 <template>
-  <navbar title="羁梦星愿模拟器" can-return />
+  <navbar :title="$t('route.wishsim')" can-return />
+
   <van-tabs v-model:active="active" sticky offset-top="46">
     <canvas v-show="active == 0" id="canvas" :width="width" :height="width">
     </canvas>
-    <van-tab title="羁梦星愿">
-      <van-cell-group title="抽卡" inset>
+    <van-tab :title="$t('wishsim.tabbar[0]')">
+      <van-cell-group :title="$t('common.gacha')" inset>
         <van-cell
           v-if="remainGifts"
-          title="许愿"
+          :title="$t('wishsim.gacha')"
           is-link
           @click="gacha3Times"
         />
-        <van-cell
-          v-else
-          :title="`恭喜您 ${this.gachaTime} 次许愿获得全部星辰馈赠！`"
-        />
+        <van-cell v-else :title="$t('wishsim.complete', [this.gachaTime])" />
       </van-cell-group>
 
-      <van-cell-group title="当前状态" inset>
+      <van-cell-group :title="$t('common.currentStatus')" inset>
         <van-cell
-          title="星辰馈赠概率"
+          :title="$t('wishsim.possibility')"
           :value="giftPossibilityString"
           is-link
           @click="possibilityShow = true"
         />
         <van-cell>
-          已许愿次数
+          {{ $t('wishsim.gachaTime') }}
           <van-progress
             :percentage="(gachaTime / 99) * 100"
             :pivot-text="`${gachaTime}`"
             pivot-color="#6c71c5"
             color="linear-gradient(135deg, #6c71c5, #93a9da)"
           />
-          <small>/ 88 / 95 / 99 抽各有一次保底</small>
+          <small v-t="'wishsim.gachaTimeDesc'" />
         </van-cell>
       </van-cell-group>
 
-      <van-cell-group title="星辰馈赠" inset>
+      <van-cell-group :title="$t('wishsim.gift')" inset>
         <van-cell v-for="v in gifts" :key="v" :title="v.name">
           <template #right-icon>
-            <template v-if="v.time"> （第 {{ v.time }} 抽） </template>
+            <template v-if="v.time">
+              {{ $t('wishsim.giftTime', [v.time]) }}
+            </template>
             <van-checkbox v-model="v.had" disabled />
           </template>
         </van-cell>
       </van-cell-group>
     </van-tab>
 
-    <van-tab title="设置">
+    <van-tab :title="$t('wishsim.tabbar[1]')">
       <van-radio-group v-model="maxFrame">
-        <van-cell-group title="动画速度" inset>
+        <van-cell-group :title="$t('wishsim.settings.maxFrame')" inset>
           <van-cell
-            v-for="v in maxFrameData"
+            v-for="v in maxFrames"
             :key="v"
-            :title="v.text"
+            :title="$t(`wishsim.settings.maxFrames[${v}]`)"
             clickable
-            @click="setMaxFrame(v.value)"
+            @click="setMaxFrame(v)"
           >
             <template #right-icon>
-              <van-radio :name="v.value" />
+              <van-radio :name="v" />
             </template>
           </van-cell>
         </van-cell-group>
       </van-radio-group>
 
-      <van-cell-group title="奖品权重" inset>
+      <van-cell-group :title="$t('wishsim.settings.weight')" inset>
         <van-cell
-          title="说明"
+          :title="$t('common.info')"
           icon="question-o"
           is-link
           @click="showWeightInfo"
@@ -88,9 +88,9 @@
     <van-dialog v-model:show="possibilityShow" closeOnClickOverlay>
       <div class="container">
         <van-row class="content center-row">
-          <van-col span="8"><strong>奖品</strong></van-col>
-          <van-col span="8"><strong>当前出率</strong></van-col>
-          <van-col span="8"><strong>剩余</strong></van-col>
+          <van-col v-for="i in [0, 1, 2]" :key="i" span="8">
+            <strong v-t="`wishsim.possibilityTitle[${i}]`" />
+          </van-col>
         </van-row>
         <van-divider dashed />
         <van-row v-for="(v, i) in rewards" :key="v" class="content center-row">
@@ -101,15 +101,9 @@
       </div>
       <van-divider />
       <div class="container">
-        <van-row class="content">
+        <van-row v-for="i in [0, 1]" :key="i" class="content">
           <van-col span="24" class="desc">
-            除了「恋心」数目无限外，其余奖励全部获得后，其概率会均摊增加到其余奖励上。
-          </van-col>
-        </van-row>
-        <van-row class="content">
-          <van-col span="24" class="desc">
-            若 3 颗球同时落入浅色区域，则可以随机获取 1
-            份「星辰馈赠」且不会重复。
+            {{ $t(`wishsim.possibilityDesc[${i}]`) }}
           </van-col>
         </van-row>
       </div>
@@ -117,12 +111,12 @@
 
     <van-dialog
       v-model:show="itemsGotShow"
-      title="恭喜获得"
+      :title="$t('wishsim.resultTitle')"
       closeOnClickOverlay
     >
       <div class="container" v-if="itemsGot">
         <div class="content" v-for="v in itemsGot" :key="v">
-          {{ v.name }} × {{ v.count }}
+          {{ $t('wishsim.giftNumber', [v.name, v.count]) }}
         </div>
       </div>
     </van-dialog>
@@ -152,30 +146,28 @@ export default {
       angles: [Math.PI, Math.PI, Math.PI],
       frame: 0,
       maxFrame_: undefined,
-      maxFrameData: [
-        { text: '慢慢速', value: 216 },
-        { text: '慢速', value: 144 },
-        { text: '中速', value: 72 },
-        { text: '快速', value: 36 },
-        { text: '光速', value: 1 },
-      ],
+      maxFrames: [216, 144, 72, 36, 1],
       rewards: [
-        { name: '恋心', count: 2, remain: undefined, weight: 166 },
-        { name: '极光币', count: 5000, remain: 38, weight: 100 },
-        { name: '小熊星座', count: 100, remain: 18, weight: 100 },
-        { name: '慕心', count: 3, remain: 28, weight: 100 },
-        { name: '星旅币', count: 40, remain: 39, weight: 100 },
-        { name: '眩光沙砾', count: 100, remain: 9, weight: 145 },
-        { name: '心愿海螺', count: 1, remain: 38, weight: 100 },
-        { name: '灵感结晶', count: 1, remain: 18, weight: 100 },
-        { name: '镜中身影', count: 10, remain: 30, weight: 100 },
-        { name: '光影留痕', count: 1, remain: 28, weight: 100 },
-      ],
-      gifts: [
-        { name: '限定灵犀', count: 1, remain: 1, had: false },
-        { name: '动态头像框', count: 1, remain: 1, had: false },
-        { name: '点击特效', count: 1, remain: 1, had: false },
-      ],
+        { id: '120003', count: 2, remain: undefined, weight: 166 },
+        { id: 'coin', count: 5000, remain: 38, weight: 100 },
+        { id: '100003', count: 100, remain: 18, weight: 100 },
+        { id: '120002', count: 3, remain: 28, weight: 100 },
+        { id: '100030', count: 40, remain: 39, weight: 100 },
+        { id: '230001', count: 100, remain: 9, weight: 145 },
+        { id: '231002', count: 1, remain: 38, weight: 100 },
+        { id: '110003', count: 1, remain: 18, weight: 100 },
+        { id: '300401', count: 10, remain: 30, weight: 100 },
+        { id: '100073', count: 1, remain: 28, weight: 100 },
+      ].map(v => {
+        v.name = this.$t(`items.${v.id}`)
+        return v
+      }),
+      gifts: [0, 1, 2].map(i => ({
+        name: this.$t(`wishsim.gifts[${i}]`),
+        count: 1,
+        remain: 1,
+        had: false,
+      })),
       itemsGot: [],
       itemsGotShow: false,
       possibilityShow: false,
@@ -256,13 +248,7 @@ export default {
     showWeightInfo() {
       showDialog({
         ...this.$root.dialogSettings,
-        message:
-          '由于官方未公示该活动概率具体计算规则，本工具中使用的概率数据是由面积比例估算而来，与实际情况不符。\n\n' +
-          '本工具默认假设：\n' +
-          '- 「恋心」占有 166 的权重；\n' +
-          '- 「眩光沙砾」占有 145 的权重；\n' +
-          '- 其他奖励均占有 100 的权重。\n' +
-          '所得到的概率数值与已记录的实际数值稍有偏差。如果您有更好的权重数据，可在此处更改。',
+        message: this.$t('hint.wishsim'),
       })
     },
     setMaxFrame(v) {
@@ -299,24 +285,27 @@ export default {
         if (this.frame <= this.maxFrame) requestAnimationFrame(animate)
         else {
           if (isGift)
-            showNotify({ type: 'success', message: '恭喜获得星辰馈赠！' })
+            showNotify({
+              type: 'success',
+              message: this.$t('wishsim.notify.success'),
+            })
           if (!isGift && this.remainGifts == 3 && this.gachaTime == 88) {
             isGift = true
             showNotify({
               type: 'success',
-              message: '您已经许愿 88 次，获得星辰馈赠！',
+              message: this.$t('wishsim.notify.protect', [88]),
             })
           } else if (!isGift && this.remainGifts == 2 && this.gachaTime == 95) {
             isGift = true
             showNotify({
               type: 'success',
-              message: '您已经许愿 95 次，获得星辰馈赠！',
+              message: this.$t('wishsim.notify.protect', [95]),
             })
           } else if (!isGift && this.remainGifts == 1 && this.gachaTime == 99) {
             isGift = true
             showNotify({
               type: 'success',
-              message: '您已经许愿 99 次，获得星辰馈赠！',
+              message: this.$t('wishsim.notify.protect', [99]),
             })
           }
 
@@ -452,7 +441,7 @@ export default {
       if (this.remainGifts == 0) {
         ctx.fillStyle = '#fff'
         ctx.fillText(
-          `恭喜您 ${this.gachaTime} 次许愿获得全部星辰馈赠！`,
+          this.$t('wishsim.complete', [this.gachaTime]),
           centerX,
           centerY
         )

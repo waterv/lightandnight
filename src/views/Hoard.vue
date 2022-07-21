@@ -1,15 +1,15 @@
 <template>
-  <navbar :title="$t('route.common.hoard')" hint="hoard" can-return />
+  <navbar :title="$t('route.hoard')" hint="hoard" can-return />
 
-  <van-cell-group inset :title="$t('common.tutorial')">
+  <van-cell-group :title="$t('common.tutorial')" inset>
     <tutorial-cell message="hoard" />
   </van-cell-group>
 
-  <van-cell-group inset title="月卡">
+  <van-cell-group :title="$t('hoard.card')" inset>
     <template v-for="(v, i) in card" :key="i">
       <van-cell
-        :title="`「${v.name}」已开通`"
-        :label="`${v.count}/${v.unit}・${v.aka}・${v.desc}`"
+        :title="v.name"
+        :label="$t('hoard.cardDesc', [v.count, v.unit, v.aka, v.desc])"
         center
       >
         <template #right-icon>
@@ -19,7 +19,7 @@
       <van-field
         v-if="v.level && v.on"
         v-model="v.level[v.curLevel].text"
-        label="等级"
+        :label="$t('hoard.level')"
         left-icon="arrow"
         readonly
         is-link
@@ -27,7 +27,7 @@
       />
       <van-cell
         v-if="v.on"
-        title="过期时间"
+        :title="$t('hoard.decline')"
         icon="arrow"
         :value="v.decString"
         clickable
@@ -41,7 +41,7 @@
       v-for="(u, j) in v.value"
       :key="j"
       :title="u.name"
-      :label="`${u.count}${u.desc ? `・${u.desc}` : ''}`"
+      :label="$t('hoard.itemDesc', [u.count, u.desc])"
       center
     >
       <template #right-icon>
@@ -51,8 +51,8 @@
     <van-field
       v-model="v.other"
       type="number"
-      label="其他"
-      :placeholder="`其他每${v.name}固定得到的小熊星座数`"
+      :label="$t('hoard.other')"
+      :placeholder="$t('hoard.otherDesc', [v.name])"
       autocomplete="off"
     />
   </van-cell-group>
@@ -61,7 +61,7 @@
     <van-field
       :left-icon="require('@/assets/img/items/100003.png')"
       :label="$t('items.100003')"
-      v-model="currentCoin"
+      v-model="currentBear"
       type="number"
       autocomplete="off"
     />
@@ -80,16 +80,19 @@
       autocomplete="off"
     />
     <van-cell
-      title="目标日期"
+      :title="$t('hoard.target')"
       :value="targetDateString"
       clickable
       @click="showCalendar(-1)"
     />
   </van-cell-group>
 
-  <van-cell-group inset title="计算结果">
-    <van-cell title="预计可攒到抽数" :value="gacha" />
-    <van-cell title="折合为小熊星座" :value="coin" />
+  <van-cell-group inset :title="$t('common.result')">
+    <van-cell :title="$t('hoard.resultGacha')" :value="gacha" />
+    <van-cell
+      :title="$t('common.equalsTo', [$t('items.100003')])"
+      :value="bear"
+    />
   </van-cell-group>
 
   <van-calendar
@@ -133,7 +136,7 @@ export default {
     return {
       card,
       data,
-      currentCoin: undefined,
+      currentBear: undefined,
       currentGachapon: undefined,
       currentGachapon10: undefined,
       currentCalendar: 0,
@@ -143,14 +146,15 @@ export default {
       calendarShow: false,
       startDate: dayjs().toDate(),
       targetDate: dayjs().add(1, 'month').toDate(),
-      targetDateString:
-        dayjs().add(1, 'month').format('M 月 D 日') + ' (一个月后)',
+      targetDateString: dayjs()
+        .add(1, 'month')
+        .format(this.$t('hoard.dateFormat', [this.$t('hoard.defaultRemain')])),
     }
   },
   computed: {
-    coin() {
+    bear() {
       let date = dayjs(this.targetDate)
-      let result = this.currentCoin ? Number(this.currentCoin) : 0
+      let result = this.currentBear ? Number(this.currentBear) : 0
       result += (this.currentGachapon ? Number(this.currentGachapon) : 0) * 300
       result +=
         (this.currentGachapon10 ? Number(this.currentGachapon10) : 0) * 3000
@@ -179,7 +183,7 @@ export default {
       return result
     },
     gacha() {
-      return Math.floor(this.coin / 300)
+      return Math.floor(this.bear / 300)
     },
   },
   methods: {
@@ -205,14 +209,16 @@ export default {
     },
     calendarFormatter(day) {
       if (day.type == 'selected')
-        day.bottomInfo = '余 ' + this.getDiff(day.date) + ' 天'
+        day.bottomInfo = this.$t('hoard.remain', [this.getDiff(day.date)])
       return day
     },
     calendarConfirm(v) {
       let i = this.currentCalendar
       this.calendarShow = false
       let diff = this.getDiff(v)
-      let str = dayjs(v).format('M 月 D 日') + ` (余 ${diff} 天)`
+      let str = dayjs(v).format(
+        this.$t('hoard.dateFormat', [this.$t('hoard.remain', [diff])])
+      )
       if (i == -1) {
         this.targetDate = v
         this.targetDateString = str

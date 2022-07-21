@@ -71,16 +71,8 @@
           is-link
           @click="showAddToHome = true"
         />
-        <van-cell
-          :title="$t('route.posts.statement')"
-          is-link
-          to="/posts/statement"
-        />
-        <van-cell
-          :title="$t('route.posts.changelog')"
-          is-link
-          to="/posts/changelog"
-        />
+        <van-cell :title="$t('route.statement')" is-link to="/statement" />
+        <van-cell :title="$t('route.changelog')" is-link to="/changelog" />
       </van-cell-group>
 
       <!-- Developer -->
@@ -142,6 +134,7 @@
       @confirm="onLangConfirm"
     />
   </van-popup>
+
   <van-popup
     v-model:show="showServerPicker"
     round
@@ -154,6 +147,7 @@
       @confirm="onServerConfirm"
     />
   </van-popup>
+
   <van-popup
     v-model:show="showAddToHome"
     round
@@ -207,39 +201,39 @@ export default {
         [
           {
             background: 'linear-gradient(135deg, #91c4cc, #b7ddc0)',
-            to: '/common/gacha',
+            to: '/gacha',
           },
           {
             background: 'linear-gradient(135deg, #6c71c5, #93a9da)',
-            to: '/events/wishsim',
+            to: '/wishsim',
           },
         ],
         [
           {
             background: 'linear-gradient(135deg, #bbe0f5, #e0f8e0)',
             color: 'rgba(69, 90, 100, .8)',
-            to: '/common/hoard',
+            to: '/hoard',
           },
           {
             background: 'linear-gradient(135deg, #fbe9c3, #e6d8be)',
             color: 'rgba(85, 76, 60, .8)',
-            to: '/common/cpr',
+            to: '/cpr',
           },
           {
             background: 'linear-gradient(135deg, #fbe4e2, #f3b0a6)',
             color: 'rgba(109, 46, 43, 0.8)',
-            to: '/common/level',
+            to: '/level',
           },
           {
             background: 'linear-gradient(135deg, #f3d7d3, #c4c7e8)',
             color: 'rgba(78, 68, 91, 0.8)',
-            to: '/common/item',
+            to: '/item',
           },
         ],
         [
           {
             background: 'linear-gradient(135deg, #6c71c5, #93a9da)',
-            to: '/events/wish',
+            to: '/wish',
           },
         ],
       ],
@@ -255,10 +249,7 @@ export default {
           url: 'https://lightandnight.vercel.app',
         },
       ],
-      langs: [
-        { text: '简体中文', value: 'zh-CN' },
-        { text: '???', value: '???' },
-      ],
+      langs: [{ text: '简体中文', value: 'zh-CN' }],
       servers: [{ text: 'CN', value: 'CN' }],
       langName_: undefined,
       showLangPicker: false,

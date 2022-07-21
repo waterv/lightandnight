@@ -8,40 +8,40 @@ const routes = [
     component: Home,
   },
   {
-    path: '/common/hoard',
-    component: () => import('../views/common/Hoard.vue'),
+    path: '/hoard',
+    component: () => import('../views/Hoard.vue'),
   },
   {
-    path: '/common/gacha',
-    component: () => import('../views/common/GachaSimulator.vue'),
+    path: '/gacha',
+    component: () => import('../views/GachaSimulator.vue'),
   },
   {
-    path: '/common/cpr',
-    component: () => import('../views/common/CPR.vue'),
+    path: '/cpr',
+    component: () => import('../views/CPR.vue'),
   },
   {
-    path: '/common/item',
-    component: () => import('../views/common/Item.vue'),
+    path: '/item',
+    component: () => import('../views/Item.vue'),
   },
   {
-    path: '/common/level',
-    component: () => import('../views/common/Level.vue'),
+    path: '/level',
+    component: () => import('../views/Level.vue'),
   },
   {
-    path: '/events/wish',
-    component: () => import('../views/events/Wish.vue'),
+    path: '/wish',
+    component: () => import('../views/Wish.vue'),
   },
   {
-    path: '/events/wishsim',
-    component: () => import('../views/events/WishSimulator.vue'),
+    path: '/wishsim',
+    component: () => import('../views/WishSimulator.vue'),
   },
   {
-    path: '/posts/changelog',
-    component: () => import('../views/posts/ChangeLog.vue'),
+    path: '/changelog',
+    component: () => import('../views/ChangeLog.vue'),
   },
   {
-    path: '/posts/statement',
-    component: () => import('../views/posts/Statement.vue'),
+    path: '/statement',
+    component: () => import('../views/Statement.vue'),
   },
   { path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFound },
 ]

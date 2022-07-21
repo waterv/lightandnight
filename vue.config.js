@@ -1,5 +1,6 @@
 const { VantResolver } = require('unplugin-vue-components/resolvers')
 const ComponentsPlugin = require('unplugin-vue-components/webpack')
+const path = require('path')
 
 module.exports = {
   publicPath: './',
@@ -12,6 +13,16 @@ module.exports = {
   },
 
   configureWebpack: () => ({
+    module: {
+      rules: [
+        {
+          test: /\.(json5?|ya?ml)$/,
+          type: 'javascript/auto',
+          loader: '@intlify/vue-i18n-loader',
+          include: [path.resolve(__dirname, 'src/i18n')],
+        },
+      ],
+    },
     plugins: [
       ComponentsPlugin({
         resolvers: [VantResolver()],
@@ -40,17 +51,5 @@ module.exports = {
     themeColor: '#212121',
     msTileColor: '#212121',
     appleMobileWebAppStatusBarStyle: 'black',
-  },
-
-  pluginOptions: {
-    i18n: {
-      locale: 'zh-CN',
-      fallbackLocale: '???',
-      localeDir: 'i18n',
-      enableLegacy: false,
-      runtimeOnly: false,
-      compositionOnly: false,
-      fullInstall: true,
-    },
   },
 }

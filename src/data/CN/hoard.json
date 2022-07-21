@@ -22,7 +22,12 @@
       "name": "周",
       "unit": "week",
       "value": [
-        { "name": "星座研究", "count": 800, "on": true },
+        {
+          "name": "星座研究",
+          "desc": "按第 6 章通关计",
+          "count": 800,
+          "on": true
+        },
         {
           "name": "QQ 游戏中心",
           "desc": "每周登陆礼包",

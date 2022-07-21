@@ -15,8 +15,6 @@ switch (locale) {
     dayjs.locale('en')
     Locale.use('en-US', enUS)
     break
-  case '???':
-    break
 }
 
 /**
@@ -41,7 +39,7 @@ function loadLocaleMessages() {
 export default createI18n({
   legacy: false,
   locale,
-  fallbackLocale: '???',
+  fallbackLocale: 'zh-CN',
   messages: loadLocaleMessages(),
   globalInjection: true,
   silentFallbackWarn: true,

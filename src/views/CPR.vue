@@ -1,5 +1,5 @@
 <template>
-  <navbar :title="$t('route.common.cpr')" hint="cpr" can-return />
+  <navbar :title="$t('route.cpr')" hint="cpr" can-return />
 
   <van-tabs v-model:active="active" sticky offset-top="46">
     <van-tab :title="$t('common.calculate')">
@@ -67,7 +67,7 @@
           autocomplete="off"
         />
         <van-field
-          v-model="coin"
+          v-model="bear"
           :left-icon="require('@/assets/img/items/100003.png')"
           :label="$t('items.100003')"
           type="number"
@@ -201,7 +201,7 @@ export default {
       name: '',
       price: undefined,
       star: undefined,
-      coin: undefined,
+      bear: undefined,
       gachapon: undefined,
       gachapon10: undefined,
       gachaCount: '',
@@ -221,7 +221,7 @@ export default {
             ? {
                 price: acc.price + v.price,
                 star: acc.star + v.star,
-                coin: acc.coin + v.coin,
+                bear: acc.bear + v.bear,
                 gachapon: acc.gachapon + v.gachapon,
                 gachapon10: acc.gachapon10 + v.gachapon10,
               }
@@ -229,7 +229,7 @@ export default {
         {
           price: 0,
           star: 0,
-          coin: 0,
+          bear: 0,
           gachapon: 0,
           gachapon10: 0,
         }
@@ -255,7 +255,7 @@ export default {
     },
     result(v) {
       let gachaCount =
-        (v.star * this.starRatio + v.coin) / 300 +
+        (v.star * this.starRatio + v.bear) / 300 +
         v.gachapon +
         10 * v.gachapon10
       let result = (gachaCount / v.price) * 18
@@ -271,7 +271,7 @@ export default {
       let v = {
         price: Number(this.price),
         star: Number(this.star || 0),
-        coin: Number(this.coin || 0),
+        bear: Number(this.bear || 0),
         gachapon: Number(this.gachapon || 0),
         gachapon10: Number(this.gachapon10 || 0),
       }
@@ -303,7 +303,7 @@ export default {
         name: this.name,
         price: Number(this.price),
         star: Number(this.star || 0),
-        coin: Number(this.coin || 0),
+        bear: Number(this.bear || 0),
         gachapon: Number(this.gachapon || 0),
         gachapon10: Number(this.gachapon10 || 0),
       })
@@ -314,7 +314,7 @@ export default {
     clear() {
       this.price = undefined
       this.star = undefined
-      this.coin = undefined
+      this.bear = undefined
       this.gachapon = undefined
       this.gachapon10 = undefined
       this.gachaCount = ''

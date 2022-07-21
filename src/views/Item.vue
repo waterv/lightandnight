@@ -1,12 +1,12 @@
 <template>
-  <navbar :title="$t('route.common.item')" can-return />
+  <navbar :title="$t('route.item')" can-return />
 
   <van-tabs v-model:active="active" sticky offset-top="46">
-    <van-tab title="设计师证明">
-      <van-cell-group title="合成目标" inset>
+    <van-tab :title="$t('item.a')">
+      <van-cell-group :title="$t('item.target')" inset>
         <van-field
           v-model="aTargetString"
-          label="合成目标"
+          :label="$t('item.target')"
           readonly
           is-link
           @click="showPicker = true"
@@ -34,7 +34,7 @@
         </template>
       </van-cell-group>
 
-      <van-cell-group title="合成路线" inset>
+      <van-cell-group :title="$t('item.path')" inset>
         <template v-for="i in [1, 2, 3, 4]" :key="i">
           <van-cell
             v-if="i <= aTarget"
@@ -46,7 +46,7 @@
       </van-cell-group>
     </van-tab>
 
-    <van-tab title="工艺学习">
+    <van-tab :title="$t('item.b')">
       <van-cell-group :title="$t('common.currentStatus')" inset>
         <van-cell
           v-for="i in [0, 1]"
@@ -65,10 +65,10 @@
             />
           </template>
         </van-cell>
-        <van-cell title="清空" is-link @click="b = [0, 0]" />
+        <van-cell :title="$t('common.clear')" is-link @click="b = [0, 0]" />
       </van-cell-group>
 
-      <van-cell-group title="合成路线" inset>
+      <van-cell-group :title="$t('item.path')" inset>
         <van-cell
           v-for="i in [1, 2]"
           :key="i"

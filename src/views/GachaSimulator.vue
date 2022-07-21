@@ -1,5 +1,5 @@
 <template>
-  <navbar :title="$t('route.common.gacha')" hint="gacha" can-return />
+  <navbar :title="$t('route.gacha')" hint="gacha" can-return />
 
   <van-tabs v-model:active="active" sticky offset-top="46">
     <van-tab :title="$t('gacha.tabbar[0]')">
@@ -74,7 +74,7 @@
         />
       </van-cell-group>
 
-      <van-cell-group :title="$t('gacha.gacha.title')" inset>
+      <van-cell-group :title="$t('common.gacha')" inset>
         <van-cell :title="$t('gacha.gacha.1')" is-link @click="gacha1" />
         <van-cell :title="$t('gacha.gacha.10')" is-link @click="gacha10" />
       </van-cell-group>

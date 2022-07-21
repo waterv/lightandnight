@@ -1,5 +1,5 @@
 <template>
-  <navbar :title="$t('route.common.level')" can-return>
+  <navbar :title="$t('route.level')" can-return>
     <van-icon
       v-if="card.length > 1 && active"
       name="delete-o"
@@ -9,7 +9,7 @@
   </navbar>
 
   <van-tabs v-model:active="active" sticky offset-top="46">
-    <van-tab title="计算">
+    <van-tab :title="$t('common.calculate')">
       <van-cell-group inset :title="$t('common.currentStatus')">
         <van-field
           :left-icon="require('@/assets/img/items/coin.png')"
@@ -60,7 +60,7 @@
           type="number"
           autocomplete="off"
         />
-        <van-cell title="外婆小铺双倍">
+        <van-cell :title="$t('level.double')">
           <template #right-icon>
             <van-switch v-model="grandmaDouble" size="24" />
           </template>
@@ -68,11 +68,16 @@
       </van-cell-group>
 
       <van-cell-group title=" " inset>
-        <van-cell title="添加灵犀" @click="addCard" center is-link />
-        <van-cell title="计算" @click="calculate" center is-link />
+        <van-cell :title="$t('level.add')" @click="addCard" center is-link />
+        <van-cell
+          :title="$t('common.calculate')"
+          @click="calculate"
+          center
+          is-link
+        />
       </van-cell-group>
 
-      <van-cell-group title="仍需资源" inset>
+      <van-cell-group :title="$t('level.need')" inset>
         <van-cell
           :icon="require('@/assets/img/items/coin.png')"
           :title="$t('items.coin')"
@@ -80,7 +85,7 @@
         />
         <van-cell
           :icon="require('@/assets/img/items/120001.png')"
-          title="经验"
+          :title="$t('level.exp')"
           :value="exp"
         />
         <van-cell
@@ -105,54 +110,65 @@
         />
       </van-cell-group>
 
-      <van-cell-group title="预计刷取" inset>
+      <van-cell-group :title="$t('level.plan')" inset>
+        <van-cell title="" :label="$t('level.planDesc')" />
         <van-cell
-          title=""
-          label="刷取副本及其掉落内容按日常副本及其保底计。注意：外婆小铺 6-7 使用「重现五次」才有保底。"
-        />
-        <van-cell
-          title="遇见极光 5"
-          label="10 灵感 = 7200 极光币"
+          :title="$t('level.遇见极光_5')"
+          :label="$t('level.equal', [10, 7200, $t('items.coin')])"
           :value="遇见极光"
           center
         />
         <van-cell
-          title="遇见初心 5"
-          label="10 灵感 = 4 慕心"
+          :title="$t('level.遇见初心_5')"
+          :label="$t('level.equal', [10, 4, $t('items.120002')])"
           :value="遇见初心"
           center
         />
         <van-cell
-          title="遇见铭迹 5"
-          label="10 灵感 = 30 眩光沙砾"
+          :title="$t('level.遇见初心_5')"
+          :label="$t('level.equal', [10, 30, $t('items.230001')])"
           :value="遇见铭迹"
           center
         />
         <van-cell
-          title="外婆小铺 3-7"
-          :label="`7 灵感 ≈ ${grandmaDouble ? 2 : 1} 稀愿珍宝`"
+          :title="$t('level.外婆小铺_3_7')"
+          :label="$t('level.sim', [7, grandmaDouble + 1, $t('items.231001')])"
           :value="外婆小铺3"
           center
         />
         <van-cell
-          title="外婆小铺 6-7"
-          :label="`40 灵感 ≈ ${grandmaDouble ? 2 : 1} 心愿海螺 + ${
-            grandmaDouble ? 10 : 5
-          } 眩光沙砾`"
+          :title="$t('level.外婆小铺_6_7')"
+          :label="
+            $t('level.sim2', [
+              40,
+              grandmaDouble + 1,
+              $t('items.231002'),
+              (grandmaDouble + 1) * 5,
+              $t('items.230001'),
+            ])
+          "
           :value="外婆小铺6"
           center
         />
         <van-cell
           :icon="require('@/assets/img/items/flower.png')"
-          title="花费灵感"
+          :title="$t('items.flower')"
           :value="灵感"
         />
       </van-cell-group>
     </van-tab>
     <template v-for="(v, i) in card" :key="v">
-      <van-tab :title="`灵犀 ${i + 1}`">
-        <van-cell-group title="当前状态" inset>
-          <van-cell title="星级" center>
+      <van-tab :title="v.name || $t('level.card', [i + 1])">
+        <van-cell-group title=" " inset>
+          <van-field
+            v-model="v.name"
+            :label="$t('common.name')"
+            :placeholder="$t('level.card', [i + 1])"
+            autocomplete="off"
+          />
+        </van-cell-group>
+        <van-cell-group :title="$t('common.currentStatus')" inset>
+          <van-cell :title="$t('level.star')" center>
             <template #right-icon>
               <van-stepper
                 v-model="v.current.star"
@@ -163,12 +179,12 @@
               />
             </template>
           </van-cell>
-          <van-cell title="开花" center>
+          <van-cell :title="$t('level.rank')" center>
             <template #right-icon>
               <van-stepper v-model="v.current.rank" integer min="0" max="5" />
             </template>
           </van-cell>
-          <van-cell title="等级" center>
+          <van-cell :title="$t('level.level')" center>
             <template #right-icon>
               <van-stepper
                 v-model="v.current.level"
@@ -178,18 +194,17 @@
               />
             </template>
           </van-cell>
-          <van-cell
-            v-if="isBreakAvailable(v.current)"
-            title="已突破"
-            icon="arrow"
-          >
-            <template #right-icon>
-              <van-switch v-model="v.current.isBreak" size="24" />
-            </template>
-          </van-cell>
+          <template v-if="isBreakAvailable(v.current)">
+            <van-cell :title="$t('level.break')" icon="arrow">
+              <template #right-icon>
+                <van-switch v-model="v.current.isBreak" size="24" />
+              </template>
+            </van-cell>
+          </template>
           <template v-for="i in [0, 1, 2]" :key="i">
             <template v-if="v.current.rank >= i">
-              <van-cell :title="`铭迹 ${i + 1} 星级`" center>
+              <van-cell :title="$t('level.skill', [i + 1])" />
+              <van-cell :title="$t('level.star')" icon="arrow" center>
                 <template #right-icon>
                   <van-stepper
                     v-model="v.current.skill[i].star"
@@ -199,26 +214,24 @@
                   />
                 </template>
               </van-cell>
-              <van-cell
-                v-if="v.current.skill[i].star"
-                :title="`铭迹 ${i + 1} 等级`"
-                center
-              >
-                <template #right-icon>
-                  <van-stepper
-                    v-model="v.current.skill[i].level"
-                    integer
-                    min="1"
-                    :max="maxSkillLevel(v.current.skill[i].star)"
-                  />
-                </template>
-              </van-cell>
+              <template v-if="v.current.skill[i].star">
+                <van-cell :title="$t('level.level')" icon="arrow" center>
+                  <template #right-icon>
+                    <van-stepper
+                      v-model="v.current.skill[i].level"
+                      integer
+                      min="1"
+                      :max="maxSkillLevel(v.current.skill[i].star)"
+                    />
+                  </template>
+                </van-cell>
+              </template>
             </template>
           </template>
         </van-cell-group>
 
-        <van-cell-group title="养成目标" inset>
-          <van-cell v-if="v.current.star > 3" title="星级" center>
+        <van-cell-group :title="$t('level.target')" inset>
+          <van-cell v-if="v.current.star > 3" :title="$t('level.star')" center>
             <template #right-icon>
               <van-stepper
                 v-model="v.target.star"
@@ -228,7 +241,7 @@
               />
             </template>
           </van-cell>
-          <van-cell title="开花" center>
+          <van-cell :title="$t('level.rank')" center>
             <template #right-icon>
               <van-stepper
                 v-model="v.target.rank"
@@ -238,7 +251,7 @@
               />
             </template>
           </van-cell>
-          <van-cell title="等级" center>
+          <van-cell :title="$t('level.level')" center>
             <template #right-icon>
               <van-stepper
                 v-model="v.target.level"
@@ -248,23 +261,22 @@
               />
             </template>
           </van-cell>
-          <van-cell
-            v-if="isBreakAvailable(v.target)"
-            title="已突破"
-            icon="arrow"
-          >
-            <template #right-icon>
-              <van-switch v-model="v.target.isBreak" size="24" />
-            </template>
-          </van-cell>
-          <van-cell v-if="v.current.star >= 5" title="二段光影">
+          <template v-if="isBreakAvailable(v.target)">
+            <van-cell :title="$t('level.break')" icon="arrow">
+              <template #right-icon>
+                <van-switch v-model="v.target.isBreak" size="24" />
+              </template>
+            </van-cell>
+          </template>
+          <van-cell v-if="v.current.star >= 5" :title="$t('level.second')">
             <template #right-icon>
               <van-switch v-model="v.target.second" size="24" />
             </template>
           </van-cell>
           <template v-for="i in [0, 1, 2]" :key="i">
             <template v-if="v.target.rank >= i">
-              <van-cell :title="`铭迹 ${i + 1} 星级`" center>
+              <van-cell :title="$t('level.skill', [i + 1])" />
+              <van-cell :title="$t('level.star')" icon="arrow" center>
                 <template #right-icon>
                   <van-stepper
                     v-model="v.target.skill[i].star"
@@ -274,24 +286,22 @@
                   />
                 </template>
               </van-cell>
-              <van-cell
-                v-if="v.target.skill[i].star"
-                :title="`铭迹 ${i + 1} 等级`"
-                center
-              >
-                <template #right-icon>
-                  <van-stepper
-                    v-model="v.target.skill[i].level"
-                    integer
-                    :min="
-                      v.current.skill[i].star < v.target.skill[i].star
-                        ? 1
-                        : v.current.skill[i].level
-                    "
-                    :max="maxSkillLevel(v.target.skill[i].star)"
-                  />
-                </template>
-              </van-cell>
+              <template v-if="v.target.skill[i].star">
+                <van-cell :title="$t('level.level')" icon="arrow" center>
+                  <template #right-icon>
+                    <van-stepper
+                      v-model="v.target.skill[i].level"
+                      integer
+                      :min="
+                        v.current.skill[i].star < v.target.skill[i].star
+                          ? 1
+                          : v.current.skill[i].level
+                      "
+                      :max="maxSkillLevel(v.target.skill[i].star)"
+                    />
+                  </template>
+                </van-cell>
+              </template>
             </template>
           </template>
         </van-cell-group>
@@ -365,7 +375,10 @@ export default {
       return 30 + (skillStar - 1) * 10
     },
     addCard() {
-      this.card.push(JSON.parse(JSON.stringify(levelInitial)))
+      this.card.push({
+        ...JSON.parse(JSON.stringify(levelInitial)),
+        name: this.$t('level.card', [this.card.length + 1]),
+      })
     },
     removeCard(i) {
       this.card.splice(i, 1)
