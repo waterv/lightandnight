@@ -23,13 +23,7 @@
     <van-field v-model="name" :label="$t('image.name')" autocomplete="off" />
     <van-cell :title="$t('image.star')" center>
       <template #right-icon>
-        <van-stepper
-          v-model="star"
-          integer
-          min="1"
-          max="8"
-          input-width="64px"
-        />
+        <van-stepper v-model="star" v-bind="stepper" min="1" max="8" />
       </template>
     </van-cell>
     <van-cell :title="$t('image.second')" center>
@@ -45,24 +39,12 @@
     <template v-if="isFlower">
       <van-cell :title="$t('image.star')" icon="arrow" center>
         <template #right-icon>
-          <van-stepper
-            v-model="flower"
-            integer
-            min="3"
-            max="6"
-            input-width="64px"
-          />
+          <van-stepper v-model="flower" v-bind="stepper" min="3" max="6" />
         </template>
       </van-cell>
       <van-cell :title="$t('image.flower.border')" icon="arrow" center>
         <template #right-icon>
-          <van-stepper
-            v-model="border"
-            integer
-            min="3"
-            max="6"
-            input-width="64px"
-          />
+          <van-stepper v-model="border" v-bind="stepper" min="3" max="6" />
         </template>
       </van-cell>
       <van-field
@@ -260,6 +242,10 @@ export default {
       cardThumb: [],
       width: Math.min(width.value, 425),
       dataURL: '',
+      stepper: {
+        integer: true,
+        'input-width': '48px',
+      },
     }
   },
   mounted() {

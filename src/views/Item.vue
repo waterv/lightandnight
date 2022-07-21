@@ -22,13 +22,7 @@
             center
           >
             <template #right-icon>
-              <van-stepper
-                v-model="a[i]"
-                integer
-                min="0"
-                input-width="64px"
-                @change="calculateA"
-              />
+              <van-stepper v-model="a[i]" v-bind="stepper" @change="aCalc" />
             </template>
           </van-cell>
         </template>
@@ -56,13 +50,7 @@
           center
         >
           <template #right-icon>
-            <van-stepper
-              v-model="b[i]"
-              integer
-              min="0"
-              input-width="64px"
-              @change="calculateB"
-            />
+            <van-stepper v-model="b[i]" v-bind="stepper" @change="bCalc" />
           </template>
         </van-cell>
         <van-cell :title="$t('common.clear')" is-link @click="b = [0, 0]" />
@@ -89,7 +77,7 @@
     <van-picker
       :columns="aColumns"
       :default-index="2"
-      @confirm="confirmA"
+      @confirm="onAConfirm"
       @cancel="showPicker = false"
     />
   </van-popup>
@@ -121,6 +109,11 @@ export default {
       bName,
       bId,
       bNeed: [0, 0, 0],
+      stepper: {
+        integer: true,
+        min: 0,
+        'input-width': '48px',
+      },
     }
   },
   computed: {
@@ -131,13 +124,13 @@ export default {
     },
   },
   methods: {
-    confirmA(v) {
+    onAConfirm(v) {
       this.showPicker = false
       this.aTargetString = v.selectedOptions[0].text
       this.aTarget = v.selectedOptions[0].value
-      this.calculateA()
+      this.aCalc()
     },
-    calculateA() {
+    aCalc() {
       this.aNeed = [0, 0, 0, 0, 0]
       let maxB = a => Math.floor(a / 2)
       let maxC = (a, b) =>
@@ -208,7 +201,7 @@ export default {
         this.aNeed = [0, B, C, D, E]
       }
     },
-    calculateB() {
+    bCalc() {
       let a = Number(this.b[0])
       let b = Number(this.b[1])
       let C = Math.min(Math.floor(a / 3), Math.floor((a + 3 * b) / 12))

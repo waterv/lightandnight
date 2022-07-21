@@ -76,7 +76,7 @@
               v-model="rewards[i].weight"
               min="140"
               max="175"
-              input-width="64px"
+              input-width="48px"
             />
           </template>
         </van-cell>

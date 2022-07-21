@@ -308,11 +308,11 @@ export default {
   },
   mounted() {
     let userVersion = Number(localStorage?.getItem('version') || 0)
-    let { version, message } = require('@/data/app/announce.json')
+    let { version, title, message } = require('@/data/app/announce.json')
     if (userVersion < version) {
       showDialog({
         ...this.$root.dialogSettings,
-        title: this.$t('common.announce'),
+        title: title || this.$t('common.announce'),
         message,
       }).then(() => {
         localStorage?.setItem('version', version)

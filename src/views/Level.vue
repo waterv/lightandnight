@@ -172,7 +172,7 @@
             <template #right-icon>
               <van-stepper
                 v-model="v.current.star"
-                integer
+                v-bind="stepper"
                 min="1"
                 max="6"
                 @change="v.target.star = v.current.star"
@@ -181,14 +181,19 @@
           </van-cell>
           <van-cell :title="$t('level.rank')" center>
             <template #right-icon>
-              <van-stepper v-model="v.current.rank" integer min="0" max="5" />
+              <van-stepper
+                v-model="v.current.rank"
+                v-bind="stepper"
+                min="0"
+                max="5"
+              />
             </template>
           </van-cell>
           <van-cell :title="$t('level.level')" center>
             <template #right-icon>
               <van-stepper
                 v-model="v.current.level"
-                integer
+                v-bind="stepper"
                 min="1"
                 :max="maxLevel(v.current.star)"
               />
@@ -208,7 +213,7 @@
                 <template #right-icon>
                   <van-stepper
                     v-model="v.current.skill[i].star"
-                    integer
+                    v-bind="stepper"
                     min="0"
                     max="4"
                   />
@@ -219,7 +224,7 @@
                   <template #right-icon>
                     <van-stepper
                       v-model="v.current.skill[i].level"
-                      integer
+                      v-bind="stepper"
                       min="1"
                       :max="maxSkillLevel(v.current.skill[i].star)"
                     />
@@ -235,7 +240,7 @@
             <template #right-icon>
               <van-stepper
                 v-model="v.target.star"
-                integer
+                v-bind="stepper"
                 :min="v.current.star"
                 max="6"
               />
@@ -245,7 +250,7 @@
             <template #right-icon>
               <van-stepper
                 v-model="v.target.rank"
-                integer
+                v-bind="stepper"
                 :min="v.current.rank"
                 max="5"
               />
@@ -255,7 +260,7 @@
             <template #right-icon>
               <van-stepper
                 v-model="v.target.level"
-                integer
+                v-bind="stepper"
                 :min="v.current.level"
                 :max="maxLevel(v.target.star)"
               />
@@ -280,7 +285,7 @@
                 <template #right-icon>
                   <van-stepper
                     v-model="v.target.skill[i].star"
-                    integer
+                    v-bind="stepper"
                     :min="v.current.skill[i].star"
                     max="4"
                   />
@@ -291,7 +296,7 @@
                   <template #right-icon>
                     <van-stepper
                       v-model="v.target.skill[i].level"
-                      integer
+                      v-bind="stepper"
                       :min="
                         v.current.skill[i].star < v.target.skill[i].star
                           ? 1
@@ -345,6 +350,10 @@ export default {
       遇见铭迹: undefined,
       外婆小铺3: undefined,
       外婆小铺6: undefined,
+      stepper: {
+        integer: true,
+        'input-width': '48px',
+      },
     }
   },
   mounted() {

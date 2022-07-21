@@ -21,7 +21,7 @@
       </van-cell>
       <van-cell :title="$t('common.customize')" center>
         <template #right-icon>
-          <van-stepper v-model="target" integer min="64" max="99" />
+          <van-stepper v-model="target" v-bind="stepper" min="64" max="99" />
         </template>
       </van-cell>
     </van-cell-group>
@@ -37,27 +37,27 @@
         </div>
       </template>
       <template #right-icon>
-        <van-stepper v-model="nextMinigame" integer min="1" />
+        <van-stepper v-model="nextMinigame" v-bind="stepper" min="1" />
       </template>
     </van-cell>
     <van-cell :title="$t('wish.freeHad')" center>
       <template #right-icon>
-        <van-stepper v-model="freeHad" integer min="0" />
+        <van-stepper v-model="freeHad" v-bind="stepper" min="0" />
       </template>
     </van-cell>
     <van-cell :title="$t('wish.paidHad')" center>
       <template #right-icon>
-        <van-stepper v-model="paidHad" integer min="0" />
+        <van-stepper v-model="paidHad" v-bind="stepper" min="0" />
       </template>
     </van-cell>
     <van-cell :title="$t('wish.shop')" center>
       <template #right-icon>
-        <van-stepper v-model="shop" integer min="0" max="20" />
+        <van-stepper v-model="shop" v-bind="stepper" min="0" max="20" />
       </template>
     </van-cell>
     <van-cell :title="$t('wish.wished')" center>
       <template #right-icon>
-        <van-stepper v-model="wished" integer min="0" max="99" />
+        <van-stepper v-model="wished" v-bind="stepper" min="0" max="99" />
       </template>
     </van-cell>
     <van-cell
@@ -78,7 +78,7 @@
     </van-cell>
     <van-cell :title="$t('wish.lost')" center>
       <template #right-icon>
-        <van-stepper v-model="lost" integer min="0" />
+        <van-stepper v-model="lost" v-bind="stepper" min="0" />
       </template>
     </van-cell>
   </van-cell-group>
@@ -164,6 +164,10 @@ export default {
       showResult: false,
       theme: {
         dialogFontSize: 'var(--van-font-size-md)',
+      },
+      stepper: {
+        integer: true,
+        'input-width': '48px',
       },
     }
   },
