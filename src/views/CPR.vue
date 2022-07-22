@@ -95,7 +95,7 @@
         <van-cell :title="$t('cpr.cpr')" :value="ratio" />
         <van-cell :title="$t('cpr.pricePerGacha')" :value="pricePerGacha" />
       </van-cell-group>
-      <van-cell-group title="" inset>
+      <van-cell-group title=" " inset>
         <van-cell :title="$t('cpr.add')" is-link @click="add" />
         <van-cell :title="$t('cpr.clear')" is-link @click="clear" />
       </van-cell-group>

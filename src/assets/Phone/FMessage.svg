@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Created with Vectornator (http://vectornator.io/) -->
+<svg stroke-miterlimit="10" style="fill-rule:nonzero;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;" version="1.1" viewBox="0 0 220 220" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<defs/>
+<g id="图层-1">
+<path d="M110 10C52.0187 10 5 54.7923 5 110.031C5 165.27 52.0187 210.062 110 210.062C129.442 210.062 147.635 205.026 163.25 196.25C208.846 200.614 208.844 200.594 208.844 200.594C208.844 200.594 208.855 200.6 199.75 161.938C209.413 146.805 214.969 129.039 214.969 110.031C214.969 54.7923 167.981 10 110 10ZM140.906 121.969C148.913 121.969 155.406 128.457 155.406 136.469C155.406 144.476 148.918 150.969 140.906 150.969C132.899 150.969 126.406 144.48 126.406 136.469C126.406 128.462 132.895 121.969 140.906 121.969ZM74.7188 122.469C82.7259 122.469 89.2188 128.957 89.2188 136.969C89.2187 144.976 82.7304 151.469 74.7188 151.469C66.7117 151.469 60.2188 144.98 60.2188 136.969C60.2188 128.962 66.7071 122.469 74.7188 122.469Z" fill="#ef8d98" fill-rule="evenodd" opacity="1" stroke="#ef8d98" stroke-linecap="round" stroke-linejoin="round" stroke-width="10"/>
+</g>
+</svg>

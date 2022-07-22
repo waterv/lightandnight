@@ -85,11 +85,11 @@
   <canvas id="canvas" :width="512" :height="1024" style="display: none" />
   <img v-if="dataURL" :src="dataURL" style="width: 100%" />
 
-  <van-popup v-model:show="showSignPicker" round position="bottom">
+  <van-popup v-model:show="showSignPicker" v-bind="popup">
     <van-picker :columns="signColumn" @confirm="onSignConfirm" />
   </van-popup>
 
-  <van-popup v-model:show="showMarkPicker" round position="bottom">
+  <van-popup v-model:show="showMarkPicker" v-bind="popup">
     <van-picker :columns="markColumn" @confirm="onMarkConfirm" />
   </van-popup>
 </template>
@@ -245,6 +245,11 @@ export default {
       stepper: {
         integer: true,
         'input-width': '48px',
+      },
+      popup: {
+        round: true,
+        position: 'bottom',
+        'safe-area-inset-bottom': true,
       },
     }
   },

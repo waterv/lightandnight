@@ -1,6 +1,8 @@
 <template>
-  <navbar v-if="active != 'events'" :title="$t('app.title')" />
-  <navbar v-else :title="$t('app.title')" hint="events" />
+  <navbar
+    :title="$t('app.title')"
+    :hint="active == 'events' ? 'events' : undefined"
+  />
 
   <div class="home">
     <template v-if="active == 'events'">
@@ -100,6 +102,13 @@
             <van-switch v-model="$root.vConsoleOpen" />
           </template>
         </van-cell>
+      </van-cell-group>
+      <van-cell-group
+        v-if="$root.developerMode"
+        :title="$t('settings.lab')"
+        inset
+      >
+        <van-cell :title="$t('route.phone')" is-link to="/phone" />
       </van-cell-group>
     </template>
   </div>
@@ -314,6 +323,7 @@ export default {
         ...this.$root.dialogSettings,
         title: title || this.$t('common.announce'),
         message,
+        confirmButtonText: this.$t('common.announceNoMore'),
       }).then(() => {
         localStorage?.setItem('version', version)
       })

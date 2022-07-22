@@ -11,6 +11,7 @@ const routes = [
   { path: '/image', component: () => import('../views/Image.vue') },
   { path: '/item', component: () => import('../views/Item.vue') },
   { path: '/level', component: () => import('../views/Level.vue') },
+  { path: '/phone', component: () => import('../views/Phone.vue') },
   { path: '/statement', component: () => import('../views/Statement.vue') },
   { path: '/wish', component: () => import('../views/Wish.vue') },
   { path: '/wishsim', component: () => import('../views/WishSimulator.vue') },

@@ -1,11 +1,10 @@
 <template>
-  <navbar :title="$t('route.level')" can-return>
-    <van-icon
-      v-if="card.length > 1 && active"
-      name="delete-o"
-      color="red"
-      @click="removeCard(active - 1)"
-    />
+  <navbar
+    :title="$t('route.level')"
+    can-return
+    @click-right="removeCard(active - 1)"
+  >
+    <van-icon v-if="card.length > 1 && active" name="delete-o" color="red" />
   </navbar>
 
   <van-tabs v-model:active="active" sticky offset-top="46">
@@ -390,8 +389,10 @@ export default {
       })
     },
     removeCard(i) {
-      this.card.splice(i, 1)
-      this.active = 0
+      if (this.card.length > 1 && this.active) {
+        this.card.splice(i, 1)
+        this.active = 0
+      }
     },
     calculate() {
       this.coin = 0

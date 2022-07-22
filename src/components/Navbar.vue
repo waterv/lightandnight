@@ -1,39 +1,18 @@
 <template>
   <van-nav-bar
-    v-if="canReturn"
     :title="title"
     fixed
     safe-area-inset-top
     placeholder
-    :left-text="$t('common.back')"
-    left-arrow
-    @click-left="back"
+    :left-text="canReturn ? $t('common.back') : undefined"
+    :left-arrow="canReturn"
+    @click="click"
+    @click-left="leftClick"
+    @click-right="rightClick"
   >
     <template #right>
-      <template v-if="hint">
-        <van-icon name="question-o" @click="showInfo" />
-      </template>
-      <template v-else>
-        <slot />
-      </template>
-    </template>
-  </van-nav-bar>
-
-  <van-nav-bar
-    v-else
-    :title="title"
-    fixed
-    safe-area-inset-top
-    placeholder
-    @click="developerMode"
-  >
-    <template #right>
-      <template v-if="hint">
-        <van-icon name="question-o" @click="showInfo" />
-      </template>
-      <template v-else>
-        <slot />
-      </template>
+      <van-icon v-if="hint" name="question-o" />
+      <slot v-else />
     </template>
   </van-nav-bar>
 </template>
@@ -50,22 +29,25 @@ export default {
     title: String,
     canReturn: Boolean,
     hint: String,
+    clickRight: Function,
   },
   data: () => ({
     count: 0,
   }),
   methods: {
-    back() {
-      this.$router.back()
+    leftClick() {
+      if (this.canReturn) this.$router.back()
     },
-    showInfo() {
-      showDialog({
-        ...this.$root.dialogSettings,
-        message: this.$t(`hint.${this.hint}`),
-      })
+    rightClick(args) {
+      if (this.hint)
+        showDialog({
+          ...this.$root.dialogSettings,
+          message: this.$t(`hint.${this.hint}`),
+        })
+      else if (this.clickRight) this.clickRight(args)
     },
-    developerMode() {
-      if (++this.count > 10) this.$root.developerMode = true
+    click() {
+      if (!this.canReturn && ++this.count > 10) this.$root.developerMode = true
     },
   },
 }

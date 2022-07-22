@@ -101,11 +101,7 @@
         <van-image class="content" :src="require('@/assets/wish.jpg')" />
       </div>
     </van-dialog>
-    <van-dialog
-      v-model:show="showResult"
-      closeOnClickOverlay
-      safe-area-inset-bottom
-    >
+    <van-dialog v-model:show="showResult" closeOnClickOverlay>
       <div class="container">
         <van-row class="content">
           <van-col v-for="(span, i) in [16, 4, 4]" :key="span" :span="span">

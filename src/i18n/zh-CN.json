@@ -12,7 +12,7 @@
     "item": "道具合成计算器",
     "level": "灵犀养成计算器",
     "notfound": "404 Not Found",
-    "phone": "手机模拟器",
+    "phone": "手机模拟器 [WIP]",
     "statement": "关于与声明",
     "wish": "羁梦星愿计算器",
     "wishsim": "羁梦星愿模拟器"
@@ -41,6 +41,7 @@
   },
   "common": {
     "announce": "公告",
+    "announceNoMore": "不再提醒",
     "back": "返回",
     "calculate": "计算",
     "clear": "清空",
@@ -322,6 +323,20 @@
     "skill": "铭迹 {0}",
     "target": "养成目标",
     "second": "二段光影"
+  },
+  "phone": {
+    "wip": "本页面正在施工中，敬请期待！",
+    "tabbar": ["短信", "发现", "视频", "通讯录"],
+    "pages": [
+      ["短信", "Message"],
+      ["发现", "Discover"],
+      ["视频", "Facetime"],
+      ["通讯录", "Contacts"],
+      ["朋友圈", "Moments"],
+      ["树洞时刻", "Secrets"],
+      ["头像", "Avatar"]
+    ],
+    "backDesc": "退出后，所有输入的内容都不会被保存。若要保留您的创作内容，请导出 JSON 并将其妥善保存。您确定要退出吗？"
   },
   "statement": {
     "title": ["关于", "声明", "后事…？"],

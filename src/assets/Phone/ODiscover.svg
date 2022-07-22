@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Created with Vectornator (http://vectornator.io/) -->
+<svg stroke-miterlimit="10" style="fill-rule:nonzero;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;" version="1.1" viewBox="0 0 220 220" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<defs/>
+<clipPath id="ArtboardFrame">
+<rect height="220" width="220" x="0" y="0"/>
+</clipPath>
+<g clip-path="url(#ArtboardFrame)" id="图层-1">
+<path d="M5 112.5C5 97.5 57.7838 37.541 110 37.5C162.216 37.459 215 92.5 215.1 112.631C215.201 132.762 162.525 182.533 110 182.5C57.4749 182.467 5 127.5 5 112.5Z" fill="none" fill-rule="evenodd" opacity="1" stroke="#858585" stroke-linecap="butt" stroke-linejoin="round" stroke-width="10"/>
+<path d="M60 112.5C60 84.8858 82.3858 62.5 110 62.5C137.614 62.5 160 84.8858 160 112.5C160 140.114 137.614 162.5 110 162.5C82.3858 162.5 60 140.114 60 112.5Z" fill="none" fill-rule="evenodd" opacity="1" stroke="#858585" stroke-linecap="round" stroke-linejoin="round" stroke-width="5"/>
+<path d="M129.75 90.0625C128.427 105.407 115.692 117.5 100 117.5C92.4037 117.5 85.5356 114.592 80.25 109.938C80.1759 110.798 80 111.621 80 112.5C80 129.069 93.4315 142.5 110 142.5C126.569 142.5 140 129.069 140 112.5C140 103.528 135.992 95.5601 129.75 90.0625Z" fill="#858585" fill-rule="evenodd" opacity="1" stroke="#858585" stroke-linecap="round" stroke-linejoin="round" stroke-width="5"/>
+</g>
+</svg>
