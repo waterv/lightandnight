@@ -13,7 +13,7 @@
         center
       >
         <template #right-icon>
-          <van-switch v-model="v.on" size="24" />
+          <van-switch v-model="v.on" />
         </template>
       </van-cell>
       <van-field
@@ -45,7 +45,7 @@
       center
     >
       <template #right-icon>
-        <van-switch v-model="u.on" size="24" />
+        <van-switch v-model="u.on" />
       </template>
     </van-cell>
     <van-field

@@ -9,7 +9,7 @@
   <van-cell-group :title="$t('image.card')" inset>
     <van-cell :title="$t('image.new')" center>
       <template #right-icon>
-        <van-switch v-model="isNew" size="24" />
+        <van-switch v-model="isNew" />
       </template>
     </van-cell>
     <van-field
@@ -28,12 +28,12 @@
     </van-cell>
     <van-cell :title="$t('image.second')" center>
       <template #right-icon>
-        <van-switch v-model="isSecond" size="24" />
+        <van-switch v-model="isSecond" />
       </template>
     </van-cell>
     <van-cell :title="$t('image.flower.name')" center>
       <template #right-icon>
-        <van-switch v-model="isFlower" size="24" @change="onFlowerChange" />
+        <van-switch v-model="isFlower" @change="onFlowerChange" />
       </template>
     </van-cell>
     <template v-if="isFlower">

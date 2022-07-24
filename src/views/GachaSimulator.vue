@@ -158,7 +158,7 @@
           </van-cell>
           <van-cell v-if="animationType" :title="$t('gacha.settings.shining')">
             <template #right-icon>
-              <van-switch v-model="shiningType" size="24" />
+              <van-switch v-model="shiningType" />
             </template>
           </van-cell>
         </van-cell-group>

@@ -1,26 +1,45 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import Home from '../views/Home.vue'
 import NotFound from '../views/NotFound.vue'
+import i18n from '../i18n'
 
 const routes = [
-  { path: '/', component: Home },
-  { path: '/changelog', component: () => import('../views/ChangeLog.vue') },
-  { path: '/cpr', component: () => import('../views/CPR.vue') },
-  { path: '/gacha', component: () => import('../views/GachaSimulator.vue') },
-  { path: '/hoard', component: () => import('../views/Hoard.vue') },
-  { path: '/image', component: () => import('../views/Image.vue') },
-  { path: '/item', component: () => import('../views/Item.vue') },
-  { path: '/level', component: () => import('../views/Level.vue') },
-  { path: '/phone', component: () => import('../views/Phone.vue') },
-  { path: '/statement', component: () => import('../views/Statement.vue') },
-  { path: '/wish', component: () => import('../views/Wish.vue') },
-  { path: '/wishsim', component: () => import('../views/WishSimulator.vue') },
-  { path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFound },
+  {
+    path: '/',
+    component: Home,
+    meta: { title: i18n.global.t('route.home') },
+  },
+  ...[
+    ['changelog', 'ChangeLog'],
+    ['cpr', 'CPR'],
+    ['gacha', 'GachaSimulator'],
+    ['hoard', 'Hoard'],
+    ['image', 'Image'],
+    ['item', 'Item'],
+    ['level', 'Level'],
+    ['phone', 'Phone'],
+    ['statement', 'Statement'],
+    ['wish', 'Wish'],
+    ['wishsim', 'WishSimulator'],
+  ].map(item => ({
+    path: `/${item[0]}`,
+    component: () => import(`../views/${item[1]}.vue`),
+    meta: { title: i18n.global.t(`route.${item[0]}`) },
+  })),
+  {
+    path: '/:pathMatch(.*)*',
+    component: NotFound,
+    meta: { title: i18n.global.t('route.notfound') },
+  },
 ]
 
 const router = createRouter({
   history: createWebHashHistory(),
   routes,
+})
+
+router.beforeEach(to => {
+  document.title = i18n.global.t('app.documentTitle', [to.meta.title])
 })
 
 export default router

@@ -61,7 +61,7 @@
         />
         <van-cell :title="$t('level.double')">
           <template #right-icon>
-            <van-switch v-model="grandmaDouble" size="24" />
+            <van-switch v-model="grandmaDouble" />
           </template>
         </van-cell>
       </van-cell-group>
@@ -201,7 +201,7 @@
           <template v-if="isBreakAvailable(v.current)">
             <van-cell :title="$t('level.break')" icon="arrow">
               <template #right-icon>
-                <van-switch v-model="v.current.isBreak" size="24" />
+                <van-switch v-model="v.current.isBreak" />
               </template>
             </van-cell>
           </template>
@@ -268,13 +268,13 @@
           <template v-if="isBreakAvailable(v.target)">
             <van-cell :title="$t('level.break')" icon="arrow">
               <template #right-icon>
-                <van-switch v-model="v.target.isBreak" size="24" />
+                <van-switch v-model="v.target.isBreak" />
               </template>
             </van-cell>
           </template>
           <van-cell v-if="v.current.star >= 5" :title="$t('level.second')">
             <template #right-icon>
-              <van-switch v-model="v.target.second" size="24" />
+              <van-switch v-model="v.target.second" />
             </template>
           </van-cell>
           <template v-for="i in [0, 1, 2]" :key="i">

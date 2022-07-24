@@ -68,12 +68,12 @@
     />
     <van-cell :title="$t('wish.dailyBought')">
       <template #right-icon>
-        <van-switch v-model="dailyBought" size="24" />
+        <van-switch v-model="dailyBought" />
       </template>
     </van-cell>
     <van-cell :title="$t('wish.packBought')">
       <template #right-icon>
-        <van-switch v-model="packBought" size="24" />
+        <van-switch v-model="packBought" />
       </template>
     </van-cell>
     <van-cell :title="$t('wish.lost')" center>
