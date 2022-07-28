@@ -1,6 +1,13 @@
 [
   {
     "year": 2022,
+    "week": 30,
+    "changes": {
+      "updates": ["[信使花园模拟器] 添加限定卡池「长梦烬余痕」。"]
+    }
+  },
+  {
+    "year": 2022,
     "week": 29,
     "changes": {
       "deprecated": ["[添加到主屏幕] 移除了对 Android App 与桌面快捷方式的介绍。"],

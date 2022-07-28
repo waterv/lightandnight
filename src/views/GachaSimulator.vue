@@ -440,9 +440,7 @@ export default {
       }
     },
     poolLetterName() {
-      return this.pool.limitedLetter
-        ? this.$t(`items.${this.pool.limitedLetter}`)
-        : this.$t('items.100013')
+      return this.getPoolLetterName(this.pool)
     },
     limitedShopPrice() {
       let price = {}
@@ -541,6 +539,11 @@ export default {
         char,
       }
     },
+    getPoolLetterName(pool) {
+      return pool.limitedLetter
+        ? this.$t(`items.${pool.limitedLetter}`)
+        : this.$t('items.100013')
+    },
     getRandomCardFromList(list) {
       return list[Math.floor(list.length * Math.random())]
     },
@@ -620,7 +623,9 @@ export default {
       if (pool.inherit)
         poolDetail += this.$t('gacha.desc.inherit', [pool.inherit])
       if (pool.limitedLetter)
-        poolDetail += this.$t('gacha.desc.limitedLetter', [this.poolLetterName])
+        poolDetail += this.$t('gacha.desc.limitedLetter', [
+          this.getPoolLetterName(pool),
+        ])
       if (pool.randomTime)
         poolDetail += this.$t('gacha.desc.randomTime', [pool.randomTime])
       if (pool.pickTime)

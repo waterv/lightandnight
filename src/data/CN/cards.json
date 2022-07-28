@@ -525,6 +525,18 @@
         "common": 6,
         "up": { "6": [53] },
         "maxBuy": 5
+      },
+      {
+        "name": "长梦烬余痕",
+        "desc": "08/04 - 08/14",
+        "common": 6,
+        "up": { "6": [54, 55, 56, 57, 58] },
+        "p": 75,
+        "limitedLetter": 400000,
+        "price": { "6": 140 },
+        "maxBuy": 2,
+        "pickTime": 200,
+        "randomTime": 100
       }
     ]
   }
