@@ -633,9 +633,9 @@ export default {
       if (pool.pickPrice)
         poolDetail += this.$t('gacha.desc.pickTime', [
           pool.pickPrice,
-          this.poolLetterName,
+          this.getPoolLetterName(pool),
         ])
-      return poolDetail + (pool.detail ? pool.detail : '')
+      return poolDetail + (pool.detail || '')
     },
     initLimitedShop(pool) {
       let shop = {}
