@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Created with Vectornator (http://vectornator.io/) -->
+<svg stroke-miterlimit="10" style="fill-rule:nonzero;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;" version="1.1" viewBox="0 0 220 220" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<defs/>
+<g id="图层-1">
+<path d="M165 65L165 150L202.646 165.058C209.469 167.788 215 164.043 215 156.694L215 63.3622C215 55.9825 209.27 51.7191 202.201 53.8396L165 65Z" fill="none" fill-rule="evenodd" opacity="1" stroke="#858585" stroke-linecap="butt" stroke-linejoin="round" stroke-width="10"/>
+<path d="M35 30C20 30 5 45 5 60C5 75 5 150 5 165C5 180 20 190 35 190C50 190 120 190 135 190C150 190 165 175 165 160C165 145 165 75 165 60C165 45 150 30 135 30C120 30 50 30 35 30ZM67.4375 63.6562C70.8521 64.1046 74.5906 65.5424 78.5312 68.0312L116.469 91.9688C132.231 101.924 132.231 118.076 116.469 128.031L78.5312 151.969C62.7686 161.924 50 154.893 50 136.25L50 83.75C50 69.7676 57.1938 62.3111 67.4375 63.6562Z" fill="none" fill-rule="evenodd" opacity="1" stroke="#858585" stroke-linecap="butt" stroke-linejoin="round" stroke-width="10"/>
+</g>
+</svg>
