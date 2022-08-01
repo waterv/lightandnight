@@ -36,7 +36,9 @@ export default {
   }),
   methods: {
     leftClick() {
-      if (this.canReturn) this.$router.back()
+      if (this.canReturn)
+        if (history.length > 1) this.$router.back()
+        else this.$router.replace('/')
     },
     rightClick(args) {
       if (this.hint)
