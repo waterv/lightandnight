@@ -1,10 +1,16 @@
 <template>
-  <navbar :title="$t('route.wishsim')" can-return />
+  <navbar
+    :title="$t('route.wishsim')"
+    can-return
+    @click-right="volumesShow = true"
+  >
+    <van-icon name="exchange" />
+  </navbar>
 
   <van-tabs v-model:active="active" sticky offset-top="46">
     <canvas v-show="active == 0" id="canvas" :width="width" :height="width">
     </canvas>
-    <van-tab :title="$t('wishsim.tabbar[0]')">
+    <van-tab :title="data[volume].name">
       <van-cell-group :title="$t('common.gacha')" inset>
         <van-cell
           v-if="remainGifts"
@@ -12,12 +18,15 @@
           is-link
           @click="gacha3Times"
         />
-        <van-cell v-else :title="$t('wishsim.complete', [this.gachaTime])" />
+        <van-cell
+          v-else
+          :title="$t('wishsim.complete', [gachaTime, data[volume].gift])"
+        />
       </van-cell-group>
 
       <van-cell-group :title="$t('common.currentStatus')" inset>
         <van-cell
-          :title="$t('wishsim.possibility')"
+          :title="$t('wishsim.possibility', [data[volume].gift])"
           :value="giftPossibilityString"
           is-link
           @click="possibilityShow = true"
@@ -25,16 +34,16 @@
         <van-cell>
           {{ $t('wishsim.gachaTime') }}
           <van-progress
-            :percentage="(gachaTime / 99) * 100"
+            :percentage="(gachaTime / data[volume].must[2]) * 100"
             :pivot-text="`${gachaTime}`"
             pivot-color="#6c71c5"
             color="linear-gradient(135deg, #6c71c5, #93a9da)"
           />
-          <small v-t="'wishsim.gachaTimeDesc'" />
+          <small v-text="$t('wishsim.gachaTimeDesc', data[volume].must)" />
         </van-cell>
       </van-cell-group>
 
-      <van-cell-group :title="$t('wishsim.gift')" inset>
+      <van-cell-group :title="data[volume].gift" inset>
         <van-cell v-for="v in gifts" :key="v" :title="v.name">
           <template #right-icon>
             <template v-if="v.time">
@@ -46,7 +55,7 @@
       </van-cell-group>
     </van-tab>
 
-    <van-tab :title="$t('wishsim.tabbar[1]')">
+    <van-tab :title="$t('common.settings')">
       <van-radio-group v-model="maxFrame">
         <van-cell-group :title="$t('wishsim.settings.maxFrame')" inset>
           <van-cell
@@ -63,7 +72,11 @@
         </van-cell-group>
       </van-radio-group>
 
-      <van-cell-group :title="$t('wishsim.settings.weight')" inset>
+      <van-cell-group
+        v-if="volume === 0"
+        :title="$t('wishsim.settings.weight')"
+        inset
+      >
         <van-cell
           :title="$t('common.info')"
           icon="question-o"
@@ -103,7 +116,7 @@
       <div class="container">
         <van-row v-for="i in [0, 1]" :key="i" class="content">
           <van-col span="24" class="desc">
-            {{ $t(`wishsim.possibilityDesc[${i}]`) }}
+            {{ $t(`wishsim.possibilityDesc[${i}]`, [data[volume].gift]) }}
           </van-col>
         </van-row>
       </div>
@@ -121,60 +134,90 @@
       </div>
     </van-dialog>
   </van-config-provider>
+
+  <van-action-sheet
+    v-model:show="volumesShow"
+    :actions="volumes"
+    :cancel-text="$t('common.back')"
+    close-on-click-action
+    @select="selectVolume"
+  />
 </template>
 
 <script>
-import { showDialog, showNotify, Progress } from 'vant'
+import { showDialog, showNotify, ActionSheet, Progress } from 'vant'
 import { useWindowSize } from '@vant/use'
 import Navbar from '@/components/Navbar.vue'
+let data = require('@/data/CN/wish.json')
+
+let preset = {
+  gachaTime: 0,
+  initialAngle_: Math.PI,
+  initialAngle: Math.PI,
+  angles_: [Math.PI, Math.PI, Math.PI],
+  angles: [Math.PI, Math.PI, Math.PI],
+  frame: 0,
+  maxFrame_: undefined,
+  gifts: [0, 1, 2].map(i => ({
+    name: data[data.length - 1].gifts[i],
+    count: 1,
+    remain: 1,
+    had: false,
+  })),
+  itemsGot: [],
+}
+
+let easeInOut = (t, b, c, d) => {
+  if ((t /= d / 2) < 1) return (c / 2) * t * t + b
+  return (-c / 2) * (--t * (t - 2) - 1) + b
+} // 网上搜的
 
 export default {
   name: 'WishSimulator',
   components: {
+    [ActionSheet.name]: ActionSheet,
     [Progress.name]: Progress,
     Navbar,
   },
   data() {
     const { width } = useWindowSize()
     return {
-      active: 0,
-      width: Math.min(width.value, 425),
-      gachaTime: 0,
-      initialAngle_: Math.PI,
-      initialAngle: Math.PI,
-      angles_: [Math.PI, Math.PI, Math.PI],
-      angles: [Math.PI, Math.PI, Math.PI],
-      frame: 0,
-      maxFrame_: undefined,
-      maxFrames: [216, 144, 72, 36, 1],
-      rewards: [
-        { id: '120003', count: 2, remain: undefined, weight: 166 },
-        { id: 'coin', count: 5000, remain: 38, weight: 100 },
-        { id: '100003', count: 100, remain: 18, weight: 100 },
-        { id: '120002', count: 3, remain: 28, weight: 100 },
-        { id: '100030', count: 40, remain: 39, weight: 100 },
-        { id: '230001', count: 100, remain: 9, weight: 145 },
-        { id: '231002', count: 1, remain: 38, weight: 100 },
-        { id: '110003', count: 1, remain: 18, weight: 100 },
-        { id: '300401', count: 10, remain: 30, weight: 100 },
-        { id: '100073', count: 1, remain: 28, weight: 100 },
-      ].map(v => {
-        v.name = this.$t(`items.${v.id}`)
-        return v
-      }),
-      gifts: [0, 1, 2].map(i => ({
-        name: this.$t(`wishsim.gifts[${i}]`),
-        count: 1,
-        remain: 1,
-        had: false,
+      ...preset,
+      data,
+      rewards: data[data.length - 1].rewards.map(v => ({
+        ...v,
+        name: this.$t(`items.${v.id}`),
       })),
-      itemsGot: [],
+      active: 0,
+      volume: data.length - 1,
+      volumes: data.map((v, i) => ({ name: v.name, index: i })),
+      width: Math.min(width.value, 425),
+      maxFrames: [216, 144, 72, 36, 1],
+      volumesShow: false,
       itemsGotShow: false,
       possibilityShow: false,
       dialogTheme: {
         dialogFontSize: 'var(--van-font-size-md)',
       },
     }
+  },
+  watch: {
+    volume(v) {
+      Object.assign(this, {
+        ...preset,
+        gifts: [0, 1, 2].map(i => ({
+          name: data[v].gifts[i],
+          count: 1,
+          remain: 1,
+          had: false,
+        })),
+        rewards: data[v].rewards.map(v => ({
+          ...v,
+          name: this.$t(`items.${v.id}`),
+        })),
+      })
+      this.updateCanvas()
+    },
   },
   computed: {
     totalWeight() {
@@ -251,13 +294,16 @@ export default {
         message: this.$t('hint.wishsim'),
       })
     },
+    selectVolume(v) {
+      this.volume = v.index
+    },
     setMaxFrame(v) {
       this.maxFrame = v
       this.frame = 0
     },
     gacha3Times() {
       if (this.frame && this.frame <= this.maxFrame) return
-      if (this.gachaTime > 99) return
+      if (this.gachaTime > data[this.volume].must[2]) return
       if (this.remainGifts == 0) return
       this.gachaTime += 1
       this.initialAngle_ = this.initialAngle
@@ -287,26 +333,27 @@ export default {
           if (isGift)
             showNotify({
               type: 'success',
-              message: this.$t('wishsim.notify.success'),
+              message: this.$t('wishsim.notify.success', [
+                data[this.volume].gift,
+              ]),
             })
-          if (!isGift && this.remainGifts == 3 && this.gachaTime == 88) {
-            isGift = true
-            showNotify({
-              type: 'success',
-              message: this.$t('wishsim.notify.protect', [88]),
-            })
-          } else if (!isGift && this.remainGifts == 2 && this.gachaTime == 95) {
-            isGift = true
-            showNotify({
-              type: 'success',
-              message: this.$t('wishsim.notify.protect', [95]),
-            })
-          } else if (!isGift && this.remainGifts == 1 && this.gachaTime == 99) {
-            isGift = true
-            showNotify({
-              type: 'success',
-              message: this.$t('wishsim.notify.protect', [99]),
-            })
+          if (!isGift) {
+            for (let i of [0, 1, 2]) {
+              if (
+                this.remainGifts == 3 - i &&
+                this.gachaTime == data[this.volume].must[i]
+              ) {
+                isGift = true
+                showNotify({
+                  type: 'success',
+                  message: this.$t('wishsim.notify.protect', [
+                    data[this.volume].must[i],
+                    data[this.volume].gift,
+                  ]),
+                })
+                break
+              }
+            }
           }
 
           if (isGift) {
@@ -334,25 +381,19 @@ export default {
     },
     gacha1Time() {
       let random = Math.random()
-      for (let i in this.rewards) {
-        let item = this.rewards[i]
+      for (let [index, item] of this.rewards.entries()) {
         if (item.remain === 0) continue
-        if (random <= this.possibilities[i]) {
-          if (item.remain) item.remain -= 1
-          return i
+        if (random <= this.possibilities[index]) {
+          if (item.remain > 0) item.remain -= 1
+          return index
         }
-        random -= this.possibilities[i]
+        random -= this.possibilities[index]
       }
     },
     updateCanvas() {
       let width = this.width
       let canvas = document.getElementById('canvas')
       let ctx = canvas.getContext('2d')
-
-      let easeInOut = (t, b, c, d) => {
-        if ((t /= d / 2) < 1) return (c / 2) * t * t + b
-        return (-c / 2) * (--t * (t - 2) - 1) + b
-      } // 网上搜的
 
       let centerX = width * 0.5
       let centerY = width * 0.5
@@ -364,7 +405,7 @@ export default {
       let initialAngle = easeInOut(
         this.frame,
         this.initialAngle_,
-        this.initialAngle - this.initialAngle_ + 10 * Math.PI,
+        this.initialAngle - this.initialAngle_ - 10 * Math.PI,
         this.maxFrame
       )
 
@@ -372,7 +413,7 @@ export default {
         easeInOut(
           this.frame,
           this.angles_[i],
-          angle - this.angles_[i] - (6 + 4 * i) * Math.PI,
+          angle - this.angles_[i] + (6 + 4 * i) * Math.PI,
           this.maxFrame
         )
       )
@@ -441,7 +482,7 @@ export default {
       if (this.remainGifts == 0) {
         ctx.fillStyle = '#fff'
         ctx.fillText(
-          this.$t('wishsim.complete', [this.gachaTime]),
+          this.$t('wishsim.complete', [this.gachaTime, data[this.volume].gift]),
           centerX,
           centerY
         )

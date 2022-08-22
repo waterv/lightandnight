@@ -1,0 +1,40 @@
+[
+  {
+    "name": "羁梦星愿",
+    "gift": "星辰馈赠",
+    "gifts": ["限定灵犀", "动态头像框", "点击特效"],
+    "progress": [64, 68, 72, 76, 80],
+    "must": [88, 95, 99],
+    "rewards": [
+      { "id": "120003", "count": 2, "weight": 166 },
+      { "id": "coin", "count": 5000, "remain": 38, "weight": 100 },
+      { "id": "100003", "count": 100, "remain": 18, "weight": 100 },
+      { "id": "120002", "count": 3, "remain": 28, "weight": 100 },
+      { "id": "100030", "count": 40, "remain": 39, "weight": 100 },
+      { "id": "230001", "count": 100, "remain": 9, "weight": 145 },
+      { "id": "231002", "count": 1, "remain": 38, "weight": 100 },
+      { "id": "110003", "count": 1, "remain": 18, "weight": 100 },
+      { "id": "300401", "count": 10, "remain": 30, "weight": 100 },
+      { "id": "100073", "count": 1, "remain": 28, "weight": 100 }
+    ]
+  },
+  {
+    "name": "羁梦花事",
+    "gift": "浮花馈赠",
+    "gifts": ["限定灵犀", "情侣头像", "陪伴氛围音"],
+    "progress": [50, 55, 60, 63, 66],
+    "must": [72, 78, 84],
+    "rewards": [
+      { "id": "120003", "count": 2, "weight": 150 },
+      { "id": "400001", "count": 10, "remain": 28, "weight": 90 },
+      { "id": "100003", "count": 100, "remain": 18, "weight": 90 },
+      { "id": "120002", "count": 3, "remain": 38, "weight": 100 },
+      { "id": "400002", "count": 10, "remain": 38, "weight": 100 },
+      { "id": "110003", "count": 1, "remain": 18, "weight": 90 },
+      { "id": "coin", "count": 5000, "remain": 38, "weight": 90 },
+      { "id": "231002", "count": 1, "remain": 28, "weight": 100 },
+      { "id": "400003", "count": 150, "remain": 32, "weight": 90 },
+      { "id": "230001", "count": 100, "remain": 9, "weight": 100 }
+    ]
+  }
+]
