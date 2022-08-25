@@ -222,7 +222,7 @@ export default {
             star += 9
             addResultItem('pack', 6, 9)
           }
-          if (need && dailyRemain) {
+          if (need > 0 && dailyRemain) {
             let daily = Math.min(need, dailyRemain)
             need -= daily
             star += daily * 2
@@ -234,7 +234,9 @@ export default {
           }
         }
         result.push([this.$t('wish.result.type[2]')])
-        addResultItem('total', this.target - wished, star)
+        addResultItem('total', this.target - wished - need, star)
+        // 购买 9 北极星礼盒可能导致星愿瓶溢出 (need < 0)
+        // 因此此处减去 need 以得到实际可得抽数
       } else {
         result.push([this.$t('wish.result.type[2]')])
         addResultItem('total', have - wished, 0)
